@@ -1,0 +1,52 @@
+.form-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background: linear-gradient(45deg, #4B6CB7, #182848);
+    animation: gradientAnimation 10s infinite alternate;
+
+    >h1 {
+        color:cornsilk;
+
+    }
+}
+
+
+
+form {
+    display: grid;
+    gap: 15px;
+}
+
+label {
+    font-size: 1em;
+    color: cornsilk
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 2px solid black;
+    border-radius: 5px;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #2c3e50;
+}

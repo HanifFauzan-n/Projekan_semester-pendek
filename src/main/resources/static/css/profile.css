@@ -1,0 +1,141 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.profile-ket {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-picture {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 5px solid #2c3e50;
+    margin-bottom: 20px;
+    position: relative;
+    >h4{
+        margin-top: 5px;
+        >span{
+            font-size: 15px;
+            display: inline;
+        }
+    }
+}
+
+.profile-picture img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+
+}
+
+.profile-name {
+    font-size: 2em;
+    margin-left: 150px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.profile-title {
+    color: #777;
+    margin-left: 150px;
+    margin-bottom: 20px;
+}
+
+.product-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.product-list li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+.dana{
+    display: flex;
+    flex-direction: column;
+    
+    >p,h3{
+        margin-bottom: 0px;
+    }
+}
+
+.product-list img {
+    border-radius: 8px;
+    background-size: cover;
+    width: 100px;
+    height: 60px;
+    /* object-fit: cover; */
+    margin-right: 10px;
+}
+
+.product-info {
+    flex-grow: 1;
+}
+.merk{
+    display: block;
+}
+
+.note{
+    display: inline;
+    >h3,p{
+        display: inherit;
+    }
+}
+
+.product-info h3 {
+    margin: 0;
+    color: #333;
+}
+
+.product-info p {
+    color: #777;
+    margin: 5px 0;
+}
+
+.statistics {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.statistics div {
+    display: inline-block;
+    margin: 0 20px;
+}
+
+.statistics h2 {
+    color: #3498db;
+    margin-bottom: 5px;
+}
+
+.statistics p {
+    color: #777;
+}
