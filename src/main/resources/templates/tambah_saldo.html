@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <title>Beli</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+
+
+</head>
+
+<body>
+    <div class="card-container">
+        <img class="card-image" th:src="@{/img/logo-orange.jpg}" alt="Card Image">
+        <div class="card-content">
+            <h2>Isi Top up</h2>
+            <h4>No Dana : <span th:text="${user.dana}"></span></h4>
+            <form th:action="@{/tambah-saldo}" method="post">
+                <input type="hidden" th:field="${user.id}">
+                <input type="hidden" th:field="${user.username}">
+                <input type="hidden" th:field="${user.password}">
+                <input type="hidden" th:field="${user.nomer}">
+                <input type="hidden" th:field="${user.dana}">
+                <input type="number" th:field="${user.saldo}" pattern="[0-9]+">
+                <p>Klik Yakin untuk melakukan Top up</p>
+
+                <button class="card-button">Yakin</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

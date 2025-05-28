@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Penjual</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+
+
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/home-user}">
+                    <img th:src="@{/img/flag.jpg}" alt="">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/home-user}">Home</a></li>
+                    <li><a th:href="@{/tambah-saldo/{id}(id=${user.id})}">Tambah Saldo</a></li>
+                </ul>
+            </nav>
+
+            <div class="user-menu">
+                <a th:href="@{/login}">Logout</a>
+            </div>
+        </div>
+        <!-- <div class="slogan-container">
+            <p class="slogan">Your Slogan Here</p>
+        </div> -->
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-picture">
+                <img th:src="@{/img/profile.png}" alt="Foto Profil">
+                <h4>No : <span th:text="${user.nomer}"></span></h4>
+            </div>
+            <div class="profile-ket">
+                <div class="profile-name">Profile User</div>
+                <div class="profile-title" th:text="${user.username}"></div>
+            </div>
+        </div>
+
+        <h2>Produk yang Dibeli</h2>
+        <ul class="product-list" th:each="h : ${histori}">
+            <li>
+                <div class="product-info">
+                    <div class="merk">
+                        <img th:src="${h.konter.gambar}" alt="Produk 1">
+                    </div>
+                    <div class="note">
+                        <h3 th:text="${h.konter.kodeKategori.tipe}"></h3>
+                        <h3 th:text="${h.konter.kuota}"></h3><br>
+                    </div>
+                    <div class="note">
+                        <p>Harga : </p>
+                        <p th:text="${h.konter.harga}"></p><br>
+                    </div>
+                    <div class="note">
+                        <p>Waktu : </p>
+                        <p th:text="${h.tanggal}"></p>
+                    </div>
+                </div>
+                <div class="dana">
+                    <h3>Lunas</h3>
+                    <p>Metode Dana</p>
+                    <p th:text="${h.user.dana}"></p>
+                </div>
+            </li>
+
+            <!-- Tambahkan produk lainnya sesuai kebutuhan -->
+        </ul>
+
+        <div class="statistics">
+            <div>
+                <h2>Total Pembelian</h2>
+                <p th:text="${jumlah}"></p>
+            </div>
+            <div>
+                <h2>Saldo Anda</h2>
+                <p>Rp. <span th:text="${user.saldo}"></span></p>
+            </div>
+            <div>
+                <h2>Pengeluaran</h2>
+                <p>Rp. <span th:text="${banyak}"></span></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

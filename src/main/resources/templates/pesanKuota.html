@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <title>Beli</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/card.css}">
+
+
+</head>
+
+<body>
+    <div class="card-container">
+        <img class="card-image" th:src="${ktr.gambar}" alt="Card Image">
+        <div class="card-content">
+            <h3><span th:text="${ktr.kodeKategori.tipe}"></span><span th:text="${ktr.kuota}"></span></h3>
+            <h4>Rp. <span th:text="${ktr.harga}"></span></h4>
+            <p>Klik Yakin untuk melanjutkan transaksi</p>
+            <form th:action="@{/beli}" method="post">
+                <input type="hidden" th:field="${ktr.id}">
+                <input type="hidden" th:field="${ktr.nama}">
+                <input type="hidden" th:field="${ktr.harga}">
+                <input type="hidden" th:field="${ktr.kuota}">
+                <input type="hidden" th:field="${ktr.stok}">
+                <input type="hidden" th:field="${ktr.gambar}">
+                <input type="hidden" th:field="${ktr.kodeKategori}">
+
+                <button class="card-button">Click Me</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

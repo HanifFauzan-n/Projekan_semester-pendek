@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Admin</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+
+
+</head>
+
+<body>
+
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/home-user}">
+                    <img th:src="@{/img/flag.jpg}" alt="">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/home-admin}">Home</a></li>
+                    <!-- <li><a th:href="@{/kategori-pulsa}">Pulsa</a></li>
+                    <li><a th:href="@{/kategori-kuota}">Kuota</a></li> -->
+                </ul>
+            </nav>
+
+            <div class="user-menu">
+                <a th:href="@{/login}">Logout</a>
+            </div>
+        </div>
+
+    </header>
+
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-picture">
+                <img th:src="@{/img/profile-admin.jpeg}" alt="Foto Profil">
+                <h4>No : <span>083103262885</span></h4>
+            </div>
+            <div class="profile-ket">
+                <div class="profile-name">Profile admin</div>
+                <div class="profile-title">Hanif Fauzan Nurrahman</div>
+            </div>
+        </div>
+
+        <h2>Tentang Admin & Website</h2>
+        <ul class="product-list">
+            <li>
+                <div class="product-info">
+
+                    <div class="note">
+                        <h3>Pemilik Web : </h3>
+                        <h3>"Hanif Fauzan Nurrahman"</h3><br><br>
+                    </div>
+                    <div class="note">
+                        <h3>Tujuan Web : </h3>
+                        <p>Saya membuat Website konter yang cukup sederhana agar dapat membantu memudahkan para pengguna
+                            untuk membeli pulsa maupun kuota </p><br><br>
+                    </div>
+                    <div class="note">
+                        <h3>Website : </h3>
+                        <p>"Flash Cell" tempat untuk membeli pulsa dan kuota secepat flash</p><br><br><br>
+                    </div>
+                    <div class="note">
+                        <p>Email : </p>
+                        <p>haniffauzann@gmail.com</p><br>
+                    </div>
+                    <div class="note">
+                        <p>Asal : </p>
+                        <p>Cilacap, Jawa Tengah</p><br>
+                    </div>
+                    <div class="note">
+                        <p>Website version (beta) : 1.1.3 </p><br>
+                    </div>
+                    <div class="note">
+                        <p>Website dibuat : 07 - 12 - 2023 </p>
+                    </div>
+
+                </div>
+                <!-- <div class="dana">
+                    <h3>Lunas</h3>
+                    <p>Metode Dana</p>
+                    <p th:text="${h.user.dana}"></p>
+                </div> -->
+            </li>
+
+            <!-- Tambahkan produk lainnya sesuai kebutuhan -->
+        </ul>
+
+        <div class="statistics">
+            <div>
+                <h2>Total Produk</h2>
+                <p th:text="${jumlah}"></p>
+            </div>
+            <div>
+                <h2>Rating Toko</h2>
+                <p>Rahasia</p>
+            </div>
+            <div>
+                <h2>Pendapatan</h2>
+                <p>Rp. <span th:text="${banyak}"></span></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

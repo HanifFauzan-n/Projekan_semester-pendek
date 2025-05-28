@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <title>Update Barang</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+
+<body>
+    <div class="form-container">
+        <h1>Update Barang</h1>
+        <form action="#" th:action="@{/save-konter}" method="post" enctype="multipart/form-data">
+            <input placeholder="Masukan id" type="hidden" th:field="${ktr.id}" required>
+            <label for="">Kategori :</label>
+            <input type="hidden" th:field="${ktr.kodeKategori}">
+            <label for="">Kartu :</label>
+            <select th:field="${ktr.nama}">
+                <option value="Axis">Axis</option>
+                <option value="Telkomsel">Telkomsel</option>
+                <option value="Indosat">Indosat</option>
+                <option value="Tri">Tri</option>
+                <option value="Smartfren">Smartfren</option>
+                <option value="XL">XL</option>
+
+            </select>
+            <label for="">Harga :</label>
+            <input placeholder="Masukan Harga" type="text" th:field="${ktr.harga}" required>
+            <label for="">Pulsa / Kuota :</label>
+            <input placeholder="Masukan Tipe Kuota" type="text" th:field="${ktr.kuota}" required>
+            <label for="">Stok :</label>
+            <input placeholder="Masukan Stok Kuota" type="number" th:field="${ktr.stok}" required>
+
+            <button type="submit">Save</butto>
+        </form>
+    </div>
+
+</body>
+
+</html>

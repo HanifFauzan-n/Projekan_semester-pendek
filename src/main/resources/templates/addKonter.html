@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <title>Toko Kuota</title>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <link rel="stylesheet" th:href="@{/css/form.css}">
+</head>
+
+<body>
+    <div class="form-container">
+        <h1>Tambah Barang</h1>
+        <form action="#" th:action="@{/save-konter}" method="post" enctype="multipart/form-data">
+            <!-- <input type="hidden" th:field="${ktr.id}"> -->
+            <label for="">Id :</label>
+            <input placeholder="Masukan id" type="text" th:field="${ktr.id}" pattern="[0-9]+" required>
+            <label for="">Kategori :</label>
+            <select th:field="${ktr.kodeKategori.kode}">
+                <option th:each="k : ${kategori}" th:value="${k.kode}" th:text="${k.tipe}"></option>
+            </select>
+            <label for="">Kartu :</label>
+            <select th:field="${ktr.nama}">
+                <option value="Axis">Axis</option>
+                <option value="Telkomsel">Telkomsel</option>
+                <option value="Indosat">Indosat</option>
+                <option value="Tri">Tri</option>
+                <option value="Smartfren">Smartfren</option>
+                <option value="XL">XL</option>
+
+            </select>
+            <label for="">Pulsa / Kuota :</label>
+            <select th:field="${ktr.kuota}">
+                <option value="1 GB / Bulan">1 GB / Bulan</option>
+                <option value="1.5 GB / Minggu">1 GB / Minggu</option>
+                <option value="2 GB / Bulan">2 GB / Bulan</option>
+                <option value="2.5 GB / Minggu">3 GB / Minggu</option>
+                <option value="3 GB / Bulan">3 GB / Bulan</option>
+                <option value="5 GB / Minggu">5 GB / Bulan</option>
+                <option value="10 GB / Bulan">10 GB / Bulan</option>
+                <option value="10000">5000</option>
+                <option value="10000">10000</option>
+                <option value="20000">20000</option>
+                <option value="50000">50000</option>
+
+            </select> <label for="">Harga :</label>
+            <input placeholder="Masukan Harga" type="text" th:field="${ktr.harga}" pattern="[0-9]+" required>
+            <label for="">Stok :</label>
+            <input placeholder="Masukan Stok Kuota" type="text" th:field="${ktr.stok}" pattern="[0-9]+" required>
+
+            <button type="submit">Add</butto>
+        </form>
+    </div>
+
+</body>
+
+</html>
