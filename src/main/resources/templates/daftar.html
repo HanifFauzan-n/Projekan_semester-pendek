@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi</title>
+    <link rel="stylesheet" th:href="@{/css/daftar.css}">
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+
+
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Registrasi</h2>
+        </div>
+        <div class="login-form">
+            <form th:action="@{/save-akun}" method="post">
+                <label for="username">Username:</label>
+                <input type="text" th:field="${user.username}" id="username" pattern="[a-zA-Z0-9]+"
+                    placeholder="(Minimal 8 Charakter)" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" th:field="${user.password}" id="password" pattern="[a-zA-Z0-9]+"
+                    placeholder="(Minimal 8 Charakter)" name="password" required>
+
+                <label for="Nomer">Nomer Hp:</label>
+                <input type="number" th:field="${user.nomer}" id="Nomer" placeholder="Masukan Nomer" name="Nomer"
+                    pattern="[0-9]+" required>
+
+                <label for="Dana">Dana :</label>
+                <input type="number" th:field="${user.dana}" id="Dana" placeholder="Masukan Nomer Dana" name="Dana"
+                    pattern="[0-9]+" required>
+                <label for="Saldo">Isi Saldo :</label>
+                <input type="text" th:field="${user.saldo}" id="Saldo" placeholder="Masukan Saldo untuk di isi"
+                    pattern="[0-9]+" name="Saldo" required>
+
+                <p style="color: red;" th:text="${ket}"></p>
+                <button type="submit">Daftar</button>
+            </form>
+        </div>
+        <div class="additional-links">
+            <div class="register-link">
+                <a th:href="@{/login}">Back to Login</a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
