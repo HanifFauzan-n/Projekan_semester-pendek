@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+
+    <title>Login</title>
+
+</head>
+<body>
+
+    <div class="background"></div>
+    
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Login</h2>
+        </div>
+        <div class="login-form">
+            <form th:action="@{/cek}" method="post">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Masukan Username" th:field="${user.username}" name="username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Masukan Password" th:field="${user.password}" name="password" required>
+
+                <p class="err" th:text="${ket}"></p>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div class="additional-links">
+            <div class="register-link">
+                <a th:href="@{/add-akun}">Register</a>
+            </div>
+            <div class="forgot-link">
+                <a th:href="@{/no-akun}">Anonim</a>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
