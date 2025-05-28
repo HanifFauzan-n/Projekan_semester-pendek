@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <link rel="icon" th:href="@{/img/flag.jpg}">
+    <link rel="stylesheet" th:href="@{/css/home.css}">
+
+    <title>Flash Cell Home</title>
+
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a th:href="@{/home-user}">
+                    <img th:src="@{/img/flag.jpg}" alt="">
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/home-user}">Home</a></li>
+                    <li><a th:href="@{/profile-user}">Profile</a></li>
+                    <li><a th:href="@{/kategori-pulsa}">Pulsa</a></li>
+                    <li><a th:href="@{/kategori-kuota}">Kuota</a></li>
+                </ul>
+            </nav>
+            <div class="search-bar">
+                <form action="#" th:action="@{/search}" method="get">
+                    <input type="text" name="search" placeholder="Search Kartu">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            <div class="user-menu">
+                <a th:href="@{/login}">Logout</a>
+            </div>
+        </div>
+        <!-- <div class="slogan-container">
+            <p class="slogan">Your Slogan Here</p>
+        </div> -->
+    </header>
+
+    <main>
+        <div class="main-content">
+            <div class="background-image"></div>
+            <div class="description">
+                <h2>Selamat Datang di Flash Cell</h2>
+                <p class="slogan">Flash Cells adalah aplikasi yang dirancang untuk mempermudah membeli pulsa bagi orang
+                    dewasa maupun
+                    Anak GenZ (Jaman Now) .Mengapa ? , Karna aplikasi ini dapat digunakan oleh siapa saja dan dimana
+                    saja Selain itu Flash Cells cepat dalam memproses Transaksi Pulsa Maupun Voucher Apalagi Biayanya
+                    yang terjangkau , </p>
+                <p class="slogan" style="color: orangered;">Flash Cells pengiriman Pulsa Secepat Flash</p>
+            </div>
+        </div>
+    </main>
+    <button class="judul-button">
+        <h1 class="judul" th:text="${add}"></h1>
+    </button>
+    <div class="garis-bawah"></div>
+
+    <div class="main3">
+        <figure th:each="konter : ${ktr}">
+            <div class="kotak1">
+                <img th:src="${konter.gambar}" alt="">
+            </div>
+            <div class="kotak2">
+                <h3 style="text-transform: uppercase;" th:text="${konter.kodeKategori.tipe}"></h3>
+                <h3 th:text="${konter.kuota}"></h3>
+                <h3>Harga : Rp. <span style="text-transform: uppercase;" th:text="${konter.harga}"></span></h3><br>
+                <span>Stok : </span><span th:text="${konter.stok}"></span><br>
+                <a th:href="@{/pesan-konter/{id}(id=${konter.id})}">
+                    <button class="button">Pesan</button>
+                </a>
+            </div>
+        </figure>
+
+    </div>
+
+    <!-- Your page content goes here -->
+
+</body>
+
+</html>

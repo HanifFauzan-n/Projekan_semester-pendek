@@ -1,0 +1,299 @@
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('/img/background.jpg');
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #f8f9fa00;
+    padding: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    >a {
+        >img {
+            height: 65px;
+            width: 65px;
+            border-radius: 35px;
+
+        }
+    }
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li:hover {
+    color: cadetblue;
+    text-decoration: underline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #bbc9d7;
+}
+nav a:hover {
+    color: cadetblue;
+    text-decoration: underline;
+}
+
+nav select {
+    font-size: 16px;
+    text-decoration: none;
+    color: #bbc9d7;
+    border: none;
+    background-color: rgba(0, 0, 0, 0);
+
+    >option {
+        color: black;
+    }
+}nav select:hover {
+    color: cadetblue;
+    text-decoration: underline;
+}
+
+
+.search-bar {
+    display: flex;
+}
+
+.search-bar input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ced4da;
+}
+
+.search-bar button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.user-menu a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #cad2db;
+}
+
+.user-menu a:hover {
+    color: orangered;
+    text-decoration: underline;
+}
+
+.slogan-container {
+    background-color: #007bff;
+    padding: 20px;
+    text-align: center;
+}
+
+/* .slogan {
+    color: #fff;
+    font-size: 18px;
+    margin: 0;
+} */
+
+main {
+    background-color: #f8f9fa00;
+}
+
+.main-content {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: flex;
+}
+
+.background-image {
+    flex: 1;
+    height: 300px;
+    /* Adjust the height as needed */
+    background-image: url('/img/logo-orange.jpg');
+    /* Replace 'your-background-image.jpg' with your image file */
+    background-size: 415px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.description {
+    flex: 1;
+    padding: 20px;
+}
+
+.description h2 {
+    font-size: 24px;
+    color: #8e9eae;
+}
+
+.description p {
+    font-size: 16px;
+    color: #d8d3d3;
+    word-spacing: 7px;
+}
+
+.for-table {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    min-height: 100vh;
+}
+
+/* Style untuk tombol */
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-top: 25px;
+    margin-left: 15px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 2px solid #3498db;
+    border-radius: 5px;
+    color: #3498db;
+    background-color: #ffffff;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect */
+.button:hover {
+    background-color: #3498db;
+    color: #ffffff;
+}
+
+
+.judul-button {
+    background: linear-gradient(45deg, darkblue, maroon);
+    /* Ganti warna sesuai kebutuhan */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 15px;
+    cursor: auto;
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+/* Gaya untuk judul di dalam tombol */
+.judul {
+    font-family: 'YourAwesomeFont', sans-serif;
+    /* Ganti 'YourAwesomeFont' dengan nama font yang diinginkan */
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+    /* Warna teks di dalam tombol */
+    text-align: center;
+    margin: 0;
+}
+
+/* Garis di bawah judul */
+.garis-bawah {
+    width: 100%;
+    height: 4px;
+    background-color: #7d1313;
+    margin-bottom: 15px;
+    /* Ganti dengan warna yang diinginkan */
+}
+
+.main3 {
+    /* background-color: black; */
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    color: aliceblue;
+
+    min-width: fit-content;
+    min-height: 500px;
+
+    >figure {
+        padding: 0;
+        margin: 0;
+        width: 33%;
+        height: 10%;
+        display: flex;
+        flex-direction: row;
+        border-top: 1px solid rgb(228, 241, 254);
+        border-left: 1px solid rgb(235, 245, 255);
+        border-right: 1px solid rgb(235, 245, 255);
+        background-color: rgba(235, 245, 255, 0.3);
+        ;
+
+
+
+        /* TEMPAT PENGEDITAN TULISAN JUDUL DAN SYNOPSIS */
+        >.kotak2 {
+            width: 50%;
+            aspect-ratio: 3/3;
+            /* border: 2px solid rgb(17, 0, 158); */
+            overflow-x: auto;
+            overflow-y: auto;
+            margin: 10px 12px;
+
+            >h3 {
+                color: goldenrod;
+                padding: 5px;
+                margin: 3px;
+                text-align: left;
+                display: inline-block;
+                text-decoration: underline;
+            }
+
+            >p {
+                padding: 15px;
+                text-align: justify;
+                display: inline-block;
+                overflow-x: auto;
+                overflow-y: auto;
+            }
+        }
+
+        /* TEMPAT PENGEDITAN UKURAN GAMBAR ANIME */
+        >.kotak1 {
+            width: 50%;
+            aspect-ratio: 5/3;
+
+            >img {
+                margin: 10px 12px;
+                padding: 10px;
+                width: 100%;
+                aspect-ratio: 5/5;
+                transition: all .4s;
+            }
+
+            >img:hover {
+                border-radius: 10px;
+                cursor: none;
+                padding: 3px;
+            }
+        }
+
+    }
+}
