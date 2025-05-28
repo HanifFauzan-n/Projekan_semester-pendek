@@ -53,7 +53,7 @@ public class UserController {
     }
 
     @PostMapping("/cek")
-    public String cek(@ModelAttribute("user") User user) {
+    public String cek(@ModelAttribute User user) {
         {
             List<User> users = userRepository.findAll();
             String admin = "Hanif18";
@@ -94,7 +94,7 @@ public class UserController {
     }
 
     @PostMapping("/save-akun")
-    public String registerAkun(@ModelAttribute("user") User user) {
+    public String registerAkun(@ModelAttribute User user) {
         List<User> users = userRepository.findAll();
         String admin = "Hanif18";
         benar = true;

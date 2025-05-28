@@ -6,10 +6,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "Produk")
 public class Konter {
     @Id
@@ -26,17 +30,6 @@ public class Konter {
     @JoinColumn(name = "kode_kategori",referencedColumnName = "kode")
     private Kategori kodeKategori;
 
-    public Konter() {
-
-    }
-
-    public Konter(Integer id, String nama, Integer harga, String kuota, Integer stok) {
-        this.id = id;
-        this.nama = nama;
-        this.harga = harga;
-        this.kuota = kuota;
-        this.stok = stok;
-    }
 
     public void setImagePath(String url) {
     }

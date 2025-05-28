@@ -75,7 +75,7 @@ public class KonterController {
     }
 
     @PostMapping("/post-login")
-    public String loginAkun(@ModelAttribute("user") User user) {
+    public String loginAkun(@ModelAttribute User user) {
         List<User> users = userRepository.findAll();
         String admin = "Hanif18";
         String pass = "FlashCell";
@@ -137,7 +137,7 @@ public class KonterController {
     }
 
     @GetMapping("/update-konter/{id}")
-    public String updateKonter(@PathVariable(value = "id") Integer id, Model data) {
+    public String updateKonter(@PathVariable Integer id, Model data) {
         if (yanglogin == 10) {
             Konter konter = konterRepository.getReferenceById(id);
             data.addAttribute("ktr", konter);
@@ -147,7 +147,7 @@ public class KonterController {
     }
 
     @GetMapping("/tambah-saldo/{id}")
-    public String saldo(@PathVariable(value = "id") Integer id, Model data) {
+    public String saldo(@PathVariable Integer id, Model data) {
         if (yanglogin == 5) {
             User user = userRepository.getReferenceById(id);
             data.addAttribute("user", user);
@@ -157,7 +157,7 @@ public class KonterController {
     }
 
     @GetMapping("/pesan-konter/{id}")
-    public String pesanKuota(@PathVariable(value = "id") Integer id, Model data) {
+    public String pesanKuota(@PathVariable Integer id, Model data) {
         if (yanglogin == 5) {
             Konter konter = konterRepository.getReferenceById(id);
             if (konter.getStok() == 0) {
@@ -170,7 +170,7 @@ public class KonterController {
     }
 
     @GetMapping("/delete-konter/{id}")
-    public String deletekonter(@PathVariable(value = "id") Integer id) {
+    public String deletekonter(@PathVariable Integer id) {
         Konter konter = konterRepository.getReferenceById(id);
         List<Histori> historis = historiRepository.findAll();
         for (Histori h : historis) {
@@ -227,7 +227,7 @@ public class KonterController {
     }
 
     @PostMapping("/tambah-saldo")
-    public String saveSaldo(@ModelAttribute("user") User user) {
+    public String saveSaldo(@ModelAttribute User user) {
         User usr = userRepository.getReferenceById(lagilogin);
         if (yanglogin == 5) {
             if (user.getSaldo() < 0) {

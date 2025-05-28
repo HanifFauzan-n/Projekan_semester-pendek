@@ -26,6 +26,5 @@ public class Histori {
     @JoinColumn(name = "id_produk", referencedColumnName = "id")
     private Konter konter;
 
-    public void setTanggal(Object cu) {
-    }
+    
 }
