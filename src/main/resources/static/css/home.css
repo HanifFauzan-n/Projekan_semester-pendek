@@ -8,8 +8,9 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-image: url('/img/background.jpg');
-    background-size: cover;
+    background: linear-gradient(-45deg, #add8e6, #3498db, #1f618d, #3498db, #1f618d);
+    background-size: 400% 400%;
+    animation: backgroundMove 10s ease-in-out infinite;
     margin: 0;
     padding: 0;
 }
@@ -58,6 +59,7 @@ nav a {
     text-decoration: none;
     color: #bbc9d7;
 }
+
 nav a:hover {
     color: cadetblue;
     text-decoration: underline;
@@ -73,7 +75,9 @@ nav select {
     >option {
         color: black;
     }
-}nav select:hover {
+}
+
+nav select:hover {
     color: cadetblue;
     text-decoration: underline;
 }
@@ -134,7 +138,7 @@ main {
     flex: 1;
     height: 300px;
     /* Adjust the height as needed */
-    background-image: url('/img/logo-orange.jpg');
+    /* background-image: url('/img/logo-orange.jpg'); */
     /* Replace 'your-background-image.jpg' with your image file */
     background-size: 415px;
     background-repeat: no-repeat;
@@ -192,7 +196,7 @@ main {
 
 
 .judul-button {
-    background: linear-gradient(45deg, darkblue, maroon);
+    background: linear-gradient(45deg, darkblue, cyan);
     /* Ganti warna sesuai kebutuhan */
     border: none;
     padding: 10px 20px;
@@ -218,7 +222,7 @@ main {
 .garis-bawah {
     width: 100%;
     height: 4px;
-    background-color: #7d1313;
+    background-color: darkblue;
     margin-bottom: 15px;
     /* Ganti dengan warna yang diinginkan */
 }
@@ -240,11 +244,10 @@ main {
         height: 10%;
         display: flex;
         flex-direction: row;
-        border-top: 1px solid rgb(228, 241, 254);
+        /* border-top: 1px solid rgb(228, 241, 254);
         border-left: 1px solid rgb(235, 245, 255);
         border-right: 1px solid rgb(235, 245, 255);
-        background-color: rgba(235, 245, 255, 0.3);
-        ;
+        background-color: rgba(235, 245, 255, 0.3); */
 
 
 
