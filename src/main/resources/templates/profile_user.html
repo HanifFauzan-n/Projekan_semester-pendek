@@ -1,100 +1,117 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <link rel="icon" th:href="@{/img/flag.jpg}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Penjual</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <title>Profil Pengguna - FlashCell</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <link rel="stylesheet" th:href="@{/css/profile.css}">
-
-
 </head>
+<body class="bg-light profile-user-page">
 
-<body>
-
-    <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
-            <div class="logo">
-                <a th:href="@{/home-user}">
-                    <img th:src="@{/img/flag.jpg}" alt="">
-                </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a th:href="@{/home-user}">Home</a></li>
-                    <li><a th:href="@{/tambah-saldo/{id}(id=${user.id})}">Tambah Saldo</a></li>
-                </ul>
-            </nav>
-
-            <div class="user-menu">
-                <a th:href="@{/login}">Logout</a>
-            </div>
+            <a class="navbar-brand fw-bold" th:href="@{/home-user}">
+                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle me-2">
+                FlashCell
+            </a>
+            <ul class="navbar-nav ms-auto flex-row align-items-center">
+                <li class="nav-item me-3">
+                    <a class="nav-link active" th:href="@{/profile-user}">
+                        <i class="fas fa-user me-1"></i>
+                        <span sec:authentication="name" th:text="${user.username}">User</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-warning" th:href="@{/login}">Logout</a>
+                </li>
+            </ul>
         </div>
-        <!-- <div class="slogan-container">
-            <p class="slogan">Your Slogan Here</p>
-        </div> -->
-    </header>
+    </nav>
 
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-picture">
-                <img th:src="@{/img/profile.png}" alt="Foto Profil">
-                <h4>No : <span th:text="${user.nomer}"></span></h4>
-            </div>
-            <div class="profile-ket">
-                <div class="profile-name">Profile User</div>
-                <div class="profile-title" th:text="${user.username}"></div>
-            </div>
-        </div>
-
-        <h2>Produk yang Dibeli</h2>
-        <ul class="product-list" th:each="h : ${histori}">
-            <li>
-                <div class="product-info">
-                    <div class="merk">
-                        <img th:src="${h.konter.gambar}" alt="Produk 1">
-                    </div>
-                    <div class="note">
-                        <h3 th:text="${h.konter.kodeKategori.tipe}"></h3>
-                        <h3 th:text="${h.konter.kuota}"></h3><br>
-                    </div>
-                    <div class="note">
-                        <p>Harga : </p>
-                        <p th:text="${h.konter.harga}"></p><br>
-                    </div>
-                    <div class="note">
-                        <p>Waktu : </p>
-                        <p th:text="${h.tanggal}"></p>
+    <main class="container py-5">
+        
+        <div class="row mb-4">
+            <div class="col-lg-8">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex align-items-center">
+                        <img th:src="@{/img/profile.png}" alt="Foto Profil" class="profile-picture me-4">
+                        <div>
+                            <h2 class="h4 mb-1" th:text="${user.username}">Username Pengguna</h2>
+                            <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span th:text="${user.nomer}">081234567890</span></p>
+                            <p class="text-muted mb-0"><i class="fas fa-wallet me-2"></i>DANA: <span th:text="${user.dana}">081234567890</span></p>
+                        </div>
                     </div>
                 </div>
-                <div class="dana">
-                    <h3>Lunas</h3>
-                    <p>Metode Dana</p>
-                    <p th:text="${h.user.dana}"></p>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card shadow-sm h-100 bg-primary text-white">
+                    <div class="card-body text-center d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-white-75">SALDO ANDA</h5>
+                        <p class="card-text display-5 fw-bold mb-2" th:text="'Rp ' + ${#numbers.formatDecimal(user.saldo, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        <a th:href="@{/tambah-saldo/{id}(id=${user.id})}" class="btn btn-light stretched-link mt-2">
+                            <i class="fas fa-plus-circle me-1"></i> Top Up Saldo
+                        </a>
+                    </div>
                 </div>
-            </li>
-
-            <!-- Tambahkan produk lainnya sesuai kebutuhan -->
-        </ul>
-
-        <div class="statistics">
-            <div>
-                <h2>Total Pembelian</h2>
-                <p th:text="${jumlah}"></p>
-            </div>
-            <div>
-                <h2>Saldo Anda</h2>
-                <p>Rp. <span th:text="${user.saldo}"></span></p>
-            </div>
-            <div>
-                <h2>Pengeluaran</h2>
-                <p>Rp. <span th:text="${banyak}"></span></p>
             </div>
         </div>
-    </div>
 
+        <div class="row mb-4 text-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Total Transaksi</h6>
+                        <p class="h4 fw-bold mb-0" th:text="${jumlah}">0</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6>Total Pengeluaran</h6>
+                        <p class="h4 fw-bold mb-0" th:text="'Rp ' + ${#numbers.formatDecimal(banyak, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h3 class="h5 mb-0">Riwayat Transaksi</h3>
+            </div>
+            <div class="list-group list-group-flush">
+                <div th:if="${#lists.isEmpty(histori)}" class="list-group-item text-center text-muted p-4">
+                    Belum ada transaksi.
+                </div>
+                
+                <div th:each="h : ${histori}" class="list-group-item">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <img th:src="${h.konter.gambar}" alt="Logo" class="history-logo">
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-0" th:text="${h.konter.nama} + ' - ' + ${h.konter.kuota}">Telkomsel - 1 GB / Minggu</h6>
+                            <small class="text-muted" th:text="${#temporals.format(h.tanggal, 'dd MMMM yyyy, HH:mm')}">06 September 2025, 06:03</small>
+                        </div>
+                        <div class="col-auto text-end">
+                            <span class="fw-bold text-danger" th:text="'- Rp ' + ${#numbers.formatDecimal(h.konter.harga, 0, 'POINT', 0, 'COMMA')}">- Rp 11.000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <p class="mb-0">&copy; 2025 FlashCell. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

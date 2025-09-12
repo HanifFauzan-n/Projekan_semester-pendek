@@ -284,7 +284,7 @@ public class KonterController {
         return "redirect:/login";
     }
 
-    @GetMapping("profile-admin")
+    @GetMapping("/profile-admin")
     public String profiles(Model model) {
         if (yanglogin == 10) {
             List<Histori> historis = historiRepository.findAll();

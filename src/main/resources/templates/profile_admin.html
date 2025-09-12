@@ -1,113 +1,104 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <link rel="icon" th:href="@{/img/flag.jpg}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Admin</title>
-    <link rel="stylesheet" th:href="@{/css/home.css}">
+    <title>Profil Admin - FlashCell</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
     <link rel="stylesheet" th:href="@{/css/profile.css}">
-
-
 </head>
+<body class="bg-light profile-admin-page">
 
-<body>
-
-    <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
-            <div class="logo">
-                <a th:href="@{/home-user}">
-                    <img th:src="@{/img/flag.jpg}" alt="">
-                </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a th:href="@{/home-admin}">Home</a></li>
-                    <!-- <li><a th:href="@{/kategori-pulsa}">Pulsa</a></li>
-                    <li><a th:href="@{/kategori-kuota}">Kuota</a></li> -->
-                </ul>
-            </nav>
-
-            <div class="user-menu">
-                <a th:href="@{/login}">Logout</a>
-            </div>
+            <a class="navbar-brand fw-bold" th:href="@{/home-admin}">
+                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle me-2">
+                FlashCell [Admin]
+            </a>
+            <ul class="navbar-nav ms-auto flex-row align-items-center">
+                <li class="nav-item me-3">
+                    <a class="nav-link active" th:href="@{/profile-admin}">
+                        <span sec:authentication="name" class="fw-semibold">Admin</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-sm btn-outline-warning" th:href="@{/login}">Logout</a>
+                </li>
+            </ul>
         </div>
+    </nav>
 
-    </header>
-
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-picture">
-                <img th:src="@{/img/profile-admin.jpeg}" alt="Foto Profil">
-                <h4>No : <span>083103262885</span></h4>
-            </div>
-            <div class="profile-ket">
-                <div class="profile-name">Profile admin</div>
-                <div class="profile-title">Hanif Fauzan Nurrahman</div>
-            </div>
-        </div>
-
-        <h2>Tentang Admin & Website</h2>
-        <ul class="product-list">
-            <li>
-                <div class="product-info">
-
-                    <div class="note">
-                        <h3>Pemilik Web : </h3>
-                        <h3>"Hanif Fauzan Nurrahman"</h3><br><br>
+    <main class="container py-5">
+        
+        <div class="card shadow-sm profile-header-card mb-4">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <img th:src="@{/img/profile-admin.jpeg}" alt="Foto Profil Admin" class="profile-picture">
                     </div>
-                    <div class="note">
-                        <h3>Tujuan Web : </h3>
-                        <p>Saya membuat Website konter yang cukup sederhana agar dapat membantu memudahkan para pengguna
-                            untuk membeli pulsa maupun kuota </p><br><br>
+                    <div class="col">
+                        <h2 class="h4 mb-1">Hanif Fauzan Nurrahman</h2>
+                        <p class="text-muted mb-0">Administrator</p>
                     </div>
-                    <div class="note">
-                        <h3>Website : </h3>
-                        <p>"Flash Cell" tempat untuk membeli pulsa dan kuota secepat flash</p><br><br><br>
-                    </div>
-                    <div class="note">
-                        <p>Email : </p>
-                        <p>haniffauzann@gmail.com</p><br>
-                    </div>
-                    <div class="note">
-                        <p>Asal : </p>
-                        <p>Cilacap, Jawa Tengah</p><br>
-                    </div>
-                    <div class="note">
-                        <p>Website version (beta) : 1.1.3 </p><br>
-                    </div>
-                    <div class="note">
-                        <p>Website dibuat : 07 - 12 - 2023 </p>
-                    </div>
-
                 </div>
-                <!-- <div class="dana">
-                    <h3>Lunas</h3>
-                    <p>Metode Dana</p>
-                    <p th:text="${h.user.dana}"></p>
-                </div> -->
-            </li>
-
-            <!-- Tambahkan produk lainnya sesuai kebutuhan -->
-        </ul>
-
-        <div class="statistics">
-            <div>
-                <h2>Total Produk</h2>
-                <p th:text="${jumlah}"></p>
-            </div>
-            <div>
-                <h2>Rating Toko</h2>
-                <p>Rahasia</p>
-            </div>
-            <div>
-                <h2>Pendapatan</h2>
-                <p>Rp. <span th:text="${banyak}"></span></p>
             </div>
         </div>
-    </div>
 
+        <section class="mb-4">
+            <h3 class="h5 mb-3">Statistik Website</h3>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="stat-icon text-primary">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <h5 class="card-title">Total Produk</h5>
+                            <p class="card-text display-6 fw-bold" th:text="${jumlah}">0</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="card text-center h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="stat-icon text-success">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <h5 class="card-title">Total Pendapatan</h5>
+                            <p class="card-text display-6 fw-bold" th:text="'Rp ' + ${#numbers.formatDecimal(banyak, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h3 class="h5 mb-3">Tentang Website</h3>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <p class="card-text"><strong>FlashCell</strong> adalah website konter sederhana yang dibuat untuk memudahkan pengguna dalam membeli pulsa maupun kuota. Tempat untuk membeli pulsa dan kuota secepat kilat!</p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Email:</strong> haniffauzann@gmail.com</li>
+                        <li class="list-group-item"><strong>Asal:</strong> Cilacap, Jawa Tengah</li>
+                        <li class="list-group-item"><strong>Website Dibuat:</strong> 07 - 12 - 2023</li>
+                        <li class="list-group-item"><strong>Versi (Beta):</strong> 1.1.3</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-dark text-white text-center py-4 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; 2025 FlashCell. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
