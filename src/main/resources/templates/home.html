@@ -3,53 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selamat Datang di FlashCell</title>
+    <title>Welcome to FlashCell</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}">⚡ FlashCell</a>
+            <a class="navbar-brand fw-bold" th:href="@{/}">
+                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle me-2">
+                FlashCell
+            </a>
             <div class="d-flex">
-                <a th:href="@{/login}" class="btn btn-outline-light me-2">Masuk</a>
-                <a th:href="@{/daftar}" class="btn btn-primary">Daftar</a>
+                <a th:href="@{/login}" class="btn btn-outline-light me-2">Login</a>
+                <a th:href="@{/register}" class="btn btn-primary">Register</a>
             </div>
         </div>
     </nav>
 
     <header class="hero-section text-white text-center">
         <div class="container">
-            <h1 class="display-3 fw-bold">Isi Ulang Kuota Cepat dan Mudah</h1>
-            <p class="lead my-4">Platform terpercaya untuk semua kebutuhan paket data Anda. Harga terbaik, transaksi aman.</p>
-            <a th:href="@{/daftar}" class="btn btn-primary btn-lg">Mulai Sekarang</a>
+            <h1 class="display-3 fw-bold">Fast and Easy Top-Up</h1>
+            <p class="lead my-4">The most reliable platform for all your data package needs. Best prices, secure transactions.</p>
+            <a th:href="@{/register}" class="btn btn-primary btn-lg">Get Started Now</a>
         </div>
     </header>
 
-    <section class="container py-5">
-        <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon bg-primary text-white mb-3">
-                    <i class="fas fa-bolt"></i>
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Our Available Products</h2>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <div class="col" th:each="product : ${products}">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <img th:src="${product.imageUrl}" class="mb-3" style="height: 60px; object-fit: contain;" alt="Operator Logo">
+                            <h5 class="card-title" th:text="${product.name}">Product Name</h5>
+                            <p class="card-text text-muted" th:text="${product.description}">Product Description</p>
+                            <h6 class="card-subtitle mt-2 fw-bold" th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">Price</h6>
+                        </div>
+                    </div>
                 </div>
-                <h3>Transaksi Cepat</h3>
-                <p class="text-muted">Proses instan, kuota langsung masuk dalam hitungan detik.</p>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon bg-primary text-white mb-3">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>Aman & Terpercaya</h3>
-                <p class="text-muted">Garansi keamanan transaksi dengan teknologi enkripsi terbaru.</p>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="feature-icon bg-primary text-white mb-3">
-                    <i class="fas fa-tags"></i>
-                </div>
-                <h3>Harga Terbaik</h3>
-                <p class="text-muted">Dapatkan penawaran dan harga paling kompetitif di pasar.</p>
+            <div class="text-center mt-4">
+                <p class="text-muted">And many more... <a th:href="@{/login}">Login</a> or <a th:href="@{/register}">Register</a> to see all products!</p>
             </div>
         </div>
     </section>

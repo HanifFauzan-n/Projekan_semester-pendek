@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Kategori {
+public class Category {
     @Id
-    private Integer kode;
-
-    private String tipe;
-
+    private Integer code;
+    private String type;
 }

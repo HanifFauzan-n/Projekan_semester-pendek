@@ -1,6 +1,15 @@
 /* ================================== */
 /* ATURAN UMUM PROFIL        */
 /* ================================== */
+
+:root::-webkit-scrollbar {
+    display: none;
+}
+
+:root {
+  -ms-overflow-style: none;  /* Untuk IE dan Edge */
+  scrollbar-width: none;     /* Untuk Firefox */
+}
 body {
     min-height: 100vh;
     display: flex;

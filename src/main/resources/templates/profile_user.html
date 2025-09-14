@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Pengguna - FlashCell</title>
+    <title>User Profile - FlashCell</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -27,7 +27,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-sm btn-outline-warning" th:href="@{/login}">Logout</a>
+                    <a class="btn btn-sm btn-outline-warning" th:href="@{/logout}">Logout</a>
                 </li>
             </ul>
         </div>
@@ -39,11 +39,11 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-body d-flex align-items-center">
-                        <img th:src="@{/img/profile.png}" alt="Foto Profil" class="profile-picture me-4">
+                        <img th:src="@{/img/profile.png}" alt="Profile Picture" class="profile-picture me-4">
                         <div>
-                            <h2 class="h4 mb-1" th:text="${user.username}">Username Pengguna</h2>
-                            <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span th:text="${user.nomer}">081234567890</span></p>
-                            <p class="text-muted mb-0"><i class="fas fa-wallet me-2"></i>DANA: <span th:text="${user.dana}">081234567890</span></p>
+                            <h2 class="h4 mb-1" th:text="${user.username}">Username </h2>
+                            <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span th:text="${user.phoneNumber}">081234567890</span></p>
+                            <p class="text-muted mb-0"><i class="fas fa-wallet me-2"></i>DANA: <span th:text="${user.danaNumber}">081234567890</span></p>
                         </div>
                     </div>
                 </div>
@@ -52,10 +52,10 @@
             <div class="col-lg-4">
                 <div class="card shadow-sm h-100 bg-primary text-white">
                     <div class="card-body text-center d-flex flex-column justify-content-center">
-                        <h5 class="card-title text-white-75">SALDO ANDA</h5>
-                        <p class="card-text display-5 fw-bold mb-2" th:text="'Rp ' + ${#numbers.formatDecimal(user.saldo, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
-                        <a th:href="@{/tambah-saldo/{id}(id=${user.id})}" class="btn btn-light stretched-link mt-2">
-                            <i class="fas fa-plus-circle me-1"></i> Top Up Saldo
+                        <h5 class="card-title text-white-75">YOUR BALANCE</h5>
+                        <p class="card-text display-5 fw-bold mb-2" th:text="'Rp ' + ${#numbers.formatDecimal(user.balance, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        <a th:href="@{/add-balance/{id}(id=${user.id})}" class="btn btn-light stretched-link mt-2">
+                            <i class="fas fa-plus-circle me-1"></i> Top Up Balance
                         </a>
                     </div>
                 </div>
@@ -66,16 +66,16 @@
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h6>Total Transaksi</h6>
-                        <p class="h4 fw-bold mb-0" th:text="${jumlah}">0</p>
+                        <h6>Total Transactions</h6>
+                        <p class="h4 fw-bold mb-0" th:text="${totalTransactions}">0</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h6>Total Pengeluaran</h6>
-                        <p class="h4 fw-bold mb-0" th:text="'Rp ' + ${#numbers.formatDecimal(banyak, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        <h6>Total Spending</h6>
+                        <p class="h4 fw-bold mb-0" th:text="'Rp ' + ${#numbers.formatDecimal(totalSpending, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
                     </div>
                 </div>
             </div>
@@ -83,24 +83,24 @@
 
         <div class="card shadow-sm">
             <div class="card-header bg-white">
-                <h3 class="h5 mb-0">Riwayat Transaksi</h3>
+                <h3 class="h5 mb-0">Transaction History</h3>
             </div>
             <div class="list-group list-group-flush">
-                <div th:if="${#lists.isEmpty(histori)}" class="list-group-item text-center text-muted p-4">
-                    Belum ada transaksi.
+                <div th:if="${#lists.isEmpty(history)}" class="list-group-item text-center text-muted p-4">
+                    No transactions yet.
                 </div>
                 
-                <div th:each="h : ${histori}" class="list-group-item">
+                <div th:each="tx : ${history}" class="list-group-item">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <img th:src="${h.konter.gambar}" alt="Logo" class="history-logo">
+                            <img th:src="${tx.product.imageUrl}" alt="Logo" class="history-logo">
                         </div>
                         <div class="col">
-                            <h6 class="mb-0" th:text="${h.konter.nama} + ' - ' + ${h.konter.kuota}">Telkomsel - 1 GB / Minggu</h6>
-                            <small class="text-muted" th:text="${#temporals.format(h.tanggal, 'dd MMMM yyyy, HH:mm')}">06 September 2025, 06:03</small>
+                            <h6 class="mb-0" th:text="${tx.product.name} + ' - ' + ${tx.product.description}">Product Info</h6>
+                            <small class="text-muted" th:text="${#temporals.format(tx.timestamp, 'dd MMMM yyyy, HH:mm')}">Transaction Date</small>
                         </div>
                         <div class="col-auto text-end">
-                            <span class="fw-bold text-danger" th:text="'- Rp ' + ${#numbers.formatDecimal(h.konter.harga, 0, 'POINT', 0, 'COMMA')}">- Rp 11.000</span>
+                            <span class="fw-bold text-danger" th:text="'- Rp ' + ${#numbers.formatDecimal(tx.product.price, 0, 'POINT', 0, 'COMMA')}">- Rp 11.000</span>
                         </div>
                     </div>
                 </div>

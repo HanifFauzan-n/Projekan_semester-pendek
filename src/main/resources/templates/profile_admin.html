@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Admin - FlashCell</title>
+    <title>Admin Profile - FlashCell</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
@@ -26,7 +26,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-sm btn-outline-warning" th:href="@{/login}">Logout</a>
+                    <a class="btn btn-sm btn-outline-warning" th:href="@{/logout}">Logout</a>
                 </li>
             </ul>
         </div>
@@ -38,18 +38,18 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col-auto">
-                        <img th:src="@{/img/profile-admin.jpeg}" alt="Foto Profil Admin" class="profile-picture">
+                        <img th:src="@{/img/profile-admin.jpeg}" alt="Admin Profile Picture" class="profile-picture">
                     </div>
                     <div class="col">
                         <h2 class="h4 mb-1">Hanif Fauzan Nurrahman</h2>
-                        <p class="text-muted mb-0">Administrator</p>
+                        <p class="text-muted mb-0">Website Administrator</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <section class="mb-4">
-            <h3 class="h5 mb-3">Statistik Website</h3>
+            <h3 class="h5 mb-3">Website Statistics</h3>
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <div class="card text-center h-100 shadow-sm">
@@ -57,8 +57,8 @@
                             <div class="stat-icon text-primary">
                                 <i class="fas fa-box-open"></i>
                             </div>
-                            <h5 class="card-title">Total Produk</h5>
-                            <p class="card-text display-6 fw-bold" th:text="${jumlah}">0</p>
+                            <h5 class="card-title">Total Products</h5>
+                            <p class="card-text display-6 fw-bold" th:text="${totalProducts}">0</p>
                         </div>
                     </div>
                 </div>
@@ -68,8 +68,8 @@
                             <div class="stat-icon text-success">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <h5 class="card-title">Total Pendapatan</h5>
-                            <p class="card-text display-6 fw-bold" th:text="'Rp ' + ${#numbers.formatDecimal(banyak, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                            <h5 class="card-title">Total Revenue</h5>
+                            <p class="card-text display-6 fw-bold" th:text="'Rp ' + ${#numbers.formatDecimal(totalRevenue, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
                         </div>
                     </div>
                 </div>
@@ -77,15 +77,15 @@
         </section>
 
         <section>
-            <h3 class="h5 mb-3">Tentang Website</h3>
+            <h3 class="h5 mb-3">About The Website</h3>
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <p class="card-text"><strong>FlashCell</strong> adalah website konter sederhana yang dibuat untuk memudahkan pengguna dalam membeli pulsa maupun kuota. Tempat untuk membeli pulsa dan kuota secepat kilat!</p>
+                    <p class="card-text"><strong>FlashCell</strong> is a simple e-commerce website created to facilitate users in purchasing digital products like data packages and mobile credits quickly and easily.</p>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item"><strong>Email:</strong> haniffauzann@gmail.com</li>
-                        <li class="list-group-item"><strong>Asal:</strong> Cilacap, Jawa Tengah</li>
-                        <li class="list-group-item"><strong>Website Dibuat:</strong> 07 - 12 - 2023</li>
-                        <li class="list-group-item"><strong>Versi (Beta):</strong> 1.1.3</li>
+                        <li class="list-group-item"><strong>Origin:</strong> Cilacap, Jawa Tengah</li>
+                        <li class="list-group-item"><strong>Date Created:</strong> 07 - 12 - 2023</li>
+                        <li class="list-group-item"><strong>Version (Beta):</strong> 1.2.0</li>
                     </ul>
                 </div>
             </div>
@@ -94,9 +94,7 @@
     </main>
 
     <footer class="bg-dark text-white text-center py-4 mt-auto">
-        <div class="container">
-            <p class="mb-0">&copy; 2025 FlashCell. All Rights Reserved.</p>
-        </div>
+        <p class="mb-0">&copy; 2025 FlashCell. All Rights Reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
