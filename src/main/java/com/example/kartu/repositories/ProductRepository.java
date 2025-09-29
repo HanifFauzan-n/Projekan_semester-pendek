@@ -8,6 +8,7 @@ import com.example.kartu.models.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByNameContainingIgnoreCase(String name);
-    List<Product> findByCategoryTipe(String type);
-    List<Product> findAllOrderByCategoryAsc();
+    List<Product> findByCategoryType(String type);
+
+    // List<Product> findAllOrderByCategoryAsc();
 }

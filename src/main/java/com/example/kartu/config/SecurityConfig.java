@@ -21,40 +21,39 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            // 1. Konfigurasi Aturan Otorisasi untuk setiap request HTTP
             .authorizeHttpRequests(authorize -> authorize
-                // A. URL Publik yang bisa diakses siapa saja
+                // 1. URL Publik (dapat diakses tanpa login)
                 .requestMatchers(
-                    "/", 
-                    "/login", 
-                    "/daftar", 
-                    "/save-akun", 
-                    "/no-akun",
-                    "/css/**",      // Aset statis
-                    "/img/**"       // Aset statis
+                    "/",
+                    "/login",
+                    "/register", // URL untuk GET (menampilkan form) dan POST (memproses registrasi)
+                    "/css/**",   // Aset statis
+                    "/img/**"    // Aset statis
                 ).permitAll()
-                
-                // B. URL khusus untuk Admin
+
+                // 2. URL Khusus Admin
                 .requestMatchers(
-                    "/home-admin/**", 
-                    "/add-konter", 
-                    "/update-konter/**", 
-                    "/delete-konter/**"
+                    "/home-admin",
+                    "/profile-admin",
+                    "/add-product",       // Sebelumnya /add-konter
+                    "/save-product",      // URL baru untuk menyimpan produk
+                    "/update-product/**", // Sebelumnya /update-konter/**
+                    "/delete-product/**"  // Sebelumnya /delete-konter/**
                 ).hasRole("ADMIN")
-                
-                // C. URL khusus untuk User
+
+                // 3. URL Khusus User
                 .requestMatchers(
-                    "/home-user/**", 
-                    "/profile-user/**", 
-                    "/pesan-konter/**", 
-                    "/tambah-saldo/**", 
-                    "/beli"
+                    "/home-user",
+                    "/profile-user",
+                    "/purchase-product/**", // Sebelumnya /pesan-konter/**
+                    "/add-balance/**",      // Sebelumnya /tambah-saldo/**
+                    "/purchase"             // Sebelumnya /beli
                 ).hasRole("USER")
-                
-                // D. Semua URL lain harus diautentikasi (login terlebih dahulu)
+
+                // 4. Semua URL lainnya harus diautentikasi
                 .anyRequest().authenticated()
             )
-            // 2. Konfigurasi Halaman Login
+            // Konfigurasi Halaman Login
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -62,12 +61,12 @@ public class SecurityConfig {
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
-            // 3. Konfigurasi Proses Logout
+            // Konfigurasi Proses Logout
             .logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login?logout=true")
-                .invalidateHttpSession(true) // Menghapus sesi setelah logout
-                .deleteCookies("JSESSIONID") // Menghapus cookie sesi
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
                 .permitAll()
             );
 
