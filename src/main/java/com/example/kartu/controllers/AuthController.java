@@ -44,7 +44,7 @@ public class AuthController {
         if (!model.containsAttribute("user")) {
             model.addAttribute("user", new User());
         }
-        return "daftar";
+        return "registration";
     }
 
     // Memproses data dari form registrasi

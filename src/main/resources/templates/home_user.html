@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - FlashCell</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
     <link rel="stylesheet" th:href="@{/css/home_user.css}">
 </head>
+
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" th:href="@{/home-user}">
-                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle me-2">
+                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30"
+                    class="d-inline-block align-text-top rounded-circle me-2">
                 FlashCell
             </a>
             <ul class="navbar-nav ms-auto flex-row align-items-center">
@@ -34,37 +37,45 @@
     </nav>
 
     <main class="container py-5">
-        
+
         <header class="text-center mb-4">
             <h1 class="display-6 fw-bold">Available Products</h1>
             <p class="lead text-muted">Please choose your desired package.</p>
         </header>
-        
+
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+                <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}">
+                </div>
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
             </div>
         </div>
 
         <div class="product-list-container mt-3">
             <div class="list-group shadow-sm">
-                
-                <a th:href="@{/purchase-product/{id}(id=${product.id})}"
-                   class="list-group-item list-group-item-action"
-                   th:each="product : ${products}">
-                    
+
+                <a th:href="@{/purchase-product/{id}(id=${product.id})}" class="list-group-item list-group-item-action"
+                    th:each="product : ${products}">
+
                     <div class="row align-items-center">
                         <div class="col-2 col-md-1 text-center">
-                            <img th:src="${product.imageUrl}" alt="Logo" class="product-logo">
+                            <img th:if="${product.provider != null && product.provider.logo != null}"
+                                th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}"
+                                alt="Logo Provider" class="product-logo">
+
+                            <img th:unless="${product.provider != null && product.provider.logo != null}"
+                                th:src="@{/img/default.png}" class="product-logo">
                         </div>
                         <div class="col-6 col-md-7">
                             <h5 class="mb-1" th:text="${product.name}">Card Name</h5>
-                            <p class="mb-0 text-muted" th:text="${product.description}">Quota/Pulse Info</p>
+                            <p class="mb-0 text-muted" th:text="${product.description}">Description Info</p>
                         </div>
                         <div class="col-4 col-md-4 text-end">
-                            <h5 class="product-price mb-1" th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">Rp 12.000</h5>
-                            <span class="badge bg-success" th:if="${product.stock > 0}" th:text="'Stock: ' + ${product.stock}">Stock: 50</span>
+                            <h5 class="product-price mb-1"
+                                th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">Rp
+                                12.000</h5>
+                            <span class="badge bg-success" th:if="${product.stock > 0}"
+                                th:text="'Stock: ' + ${product.stock}">Stock: 50</span>
                             <span class="badge bg-danger" th:if="${product.stock <= 0}">Out of Stock</span>
                         </div>
                     </div>
@@ -73,7 +84,7 @@
             </div>
         </div>
     </main>
-    
+
     <footer class="bg-dark text-white text-center py-4 mt-auto">
         <div class="container">
             <p class="mb-0">&copy; 2025 FlashCell. All Rights Reserved.</p>
@@ -82,4 +93,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

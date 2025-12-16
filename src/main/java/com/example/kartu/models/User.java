@@ -17,13 +17,13 @@ public class User {
     private String username;
     private String password;
 
-    @Column(name = "nomer")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "Nomer_dana")
+    @Column(name = "dana_number")
     private String danaNumber;
 
-    @Column(name = "saldo")
+    @Column(name = "balance")
     private Integer balance;
 
     private String role;

@@ -28,13 +28,8 @@
                         <h2 class="h4 mb-0">Add New Product</h2>
                     </div>
                     <div class="card-body">
-                        <form th:action="@{/save-product}" th:object="${product}" method="post">
+                        <form th:action="@{/save-product}" th:object="${products}" method="post">
                             
-                            <div class="mb-3">
-                                <label for="id" class="form-label">Product ID</label>
-                                <input type="number" class="form-control" id="id" th:field="*{id}" placeholder="Enter a unique product ID" required>
-                            </div>
-
                             <div class="mb-3">
                                 <label for="name" class="form-label">Product Name</label>
                                 <select class="form-select" id="name" th:field="*{name}">
@@ -48,7 +43,7 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="description" class="form-label">Description (Quota/Pulse Info)</label>
+                                <label for="description" class="form-label">Description</label>
                                 <input type="text" class="form-control" id="description" th:field="*{description}" placeholder="e.g., 5 GB / 30 Days" required>
                             </div>
 
@@ -68,8 +63,8 @@
                             
                             <div class="mb-3">
                                 <label for="category" class="form-label">Category</label>
-                                <select class="form-select" id="category" th:field="*{category.kode}">
-                                    <option th:each="cat : ${categories}" th:value="${cat.kode}" th:text="${cat.tipe}"></option>
+                                <select class="form-select" id="category" th:field="*{category.code}">
+                                    <option th:each="cat : ${categories}" th:value="${cat.code}" th:text="${cat.type}"></option>
                                 </select>
                             </div>
 

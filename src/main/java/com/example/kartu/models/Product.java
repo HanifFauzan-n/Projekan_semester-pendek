@@ -5,25 +5,30 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "Produk") // Nama tabel di database bisa tetap sama
+@Table(name = "product") // Nama tabel di database bisa tetap sama
 public class Product {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "nama_kartu")
+    @Column(name = "product_name")
     private String name;
 
+    @Column(name = "price")
     private Integer price;
 
-    @Column(name = "Pulsa / Kuota")
+    @Column(name = "description")
     private String description; // Lebih generik daripada "kuota"
 
+    @Column(name = "stock")
     private Integer stock;
 
-    @Column(name = "gambar")
-    private String imageUrl;
+    @ManyToOne
+    @JoinColumn(name = "provider_id")
+    private Provider provider;
+
 
     @ManyToOne
-    @JoinColumn(name = "kode_kategori")
+    @JoinColumn(name = "category_id")
     private Category category;
 }

@@ -8,12 +8,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.kartu.services.ProductService;
+import com.example.kartu.services.TransactionHistoryService;
 
 @Controller
 public class HomeController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private TransactionHistoryService transactionService;
 
     @GetMapping("/")
     public String showPublicHomePage(Model model) {
@@ -32,5 +36,18 @@ public class HomeController {
             }
         }
         return "redirect:/login";
+    }
+
+    @GetMapping("/profile-admin")
+    public String showAdminProfile(Model model) {
+        // Ambil data statistik dari Service
+        long totalProducts = productService.countTotalProducts();
+        long totalRevenue = transactionService.calculateTotalRevenue();
+
+        // Kirim ke HTML
+        model.addAttribute("totalProducts", totalProducts);
+        model.addAttribute("totalRevenue", totalRevenue);
+        
+        return "profile_admin";
     }
 }

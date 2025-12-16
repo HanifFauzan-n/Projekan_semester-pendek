@@ -27,7 +27,6 @@ public class ProductService {
     }
 
     public void save(Product product) {
-        product.setImageUrl("/img/" + product.getName() + ".png");
         productRepository.save(product);
     }
 
@@ -43,5 +42,9 @@ public class ProductService {
     
     public List<Product> searchByName(String name) {
         return productRepository.findByNameContainingIgnoreCase(name);
+    }
+
+    public long countTotalProducts() {
+        return productRepository.count();
     }
 }

@@ -23,9 +23,7 @@ public class AuthService {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new Exception("Username is already taken, please choose another.");
         }
-        if (user.getUsername().equalsIgnoreCase("Hanif18")) {
-            throw new Exception("This username is not valid.");
-        }
+
         if (user.getUsername().length() < 8) {
             throw new Exception("Username must be at least 8 characters long.");
         }

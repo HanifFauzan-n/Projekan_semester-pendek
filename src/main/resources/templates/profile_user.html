@@ -1,22 +1,25 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Profile - FlashCell</title>
-    
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    
+
     <link rel="stylesheet" th:href="@{/css/profile.css}">
 </head>
+
 <body class="bg-light profile-user-page">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
         <div class="container">
             <a class="navbar-brand fw-bold" th:href="@{/home-user}">
-                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top rounded-circle me-2">
+                <img th:src="@{/img/flag.jpg}" alt="Logo" width="30" height="30"
+                    class="d-inline-block align-text-top rounded-circle me-2">
                 FlashCell
             </a>
             <ul class="navbar-nav ms-auto flex-row align-items-center">
@@ -34,7 +37,7 @@
     </nav>
 
     <main class="container py-5">
-        
+
         <div class="row mb-4">
             <div class="col-lg-8">
                 <div class="card shadow-sm h-100">
@@ -42,18 +45,21 @@
                         <img th:src="@{/img/profile.png}" alt="Profile Picture" class="profile-picture me-4">
                         <div>
                             <h2 class="h4 mb-1" th:text="${user.username}">Username </h2>
-                            <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span th:text="${user.phoneNumber}">081234567890</span></p>
-                            <p class="text-muted mb-0"><i class="fas fa-wallet me-2"></i>DANA: <span th:text="${user.danaNumber}">081234567890</span></p>
+                            <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span
+                                    th:text="${user.phoneNumber}">081234567890</span></p>
+                            <p class="text-muted mb-0"><i class="fas fa-wallet me-2"></i>DANA: <span
+                                    th:text="${user.danaNumber}">081234567890</span></p>
                         </div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-4">
                 <div class="card shadow-sm h-100 bg-primary text-white">
                     <div class="card-body text-center d-flex flex-column justify-content-center">
                         <h5 class="card-title text-white-75">YOUR BALANCE</h5>
-                        <p class="card-text display-5 fw-bold mb-2" th:text="'Rp ' + ${#numbers.formatDecimal(user.balance, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        <p class="card-text display-5 fw-bold mb-2"
+                            th:text="'Rp ' + ${#numbers.formatDecimal(user.balance, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
                         <a th:href="@{/add-balance/{id}(id=${user.id})}" class="btn btn-light stretched-link mt-2">
                             <i class="fas fa-plus-circle me-1"></i> Top Up Balance
                         </a>
@@ -75,7 +81,8 @@
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h6>Total Spending</h6>
-                        <p class="h4 fw-bold mb-0" th:text="'Rp ' + ${#numbers.formatDecimal(totalSpending, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
+                        <p class="h4 fw-bold mb-0"
+                            th:text="'Rp ' + ${#numbers.formatDecimal(totalSpending, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
                     </div>
                 </div>
             </div>
@@ -89,18 +96,35 @@
                 <div th:if="${#lists.isEmpty(history)}" class="list-group-item text-center text-muted p-4">
                     No transactions yet.
                 </div>
-                
+
                 <div th:each="tx : ${history}" class="list-group-item">
                     <div class="row align-items-center">
                         <div class="col-auto">
-                            <img th:src="${tx.product.imageUrl}" alt="Logo" class="history-logo">
+                            <img th:if="${tx.product.provider != null && tx.product.provider.logo != null}"
+                                th:src="'data:image/png;base64,' + ${tx.product.provider.getLogoBase64()}"
+                                alt="Logo Provider" class="product-logo">
+
+                            <img th:unless="${tx.product.provider != null && tx.product.provider.logo != null}"
+                                th:src="@{/img/default.png}" class="product-logo">
                         </div>
                         <div class="col">
-                            <h6 class="mb-0" th:text="${tx.product.name} + ' - ' + ${tx.product.description}">Product Info</h6>
-                            <small class="text-muted" th:text="${#temporals.format(tx.timestamp, 'dd MMMM yyyy, HH:mm')}">Transaction Date</small>
+                            <h6 class="mb-0" th:text="${tx.product.name} + ' - ' + ${tx.product.description}">Product
+                                Info</h6>
+                            <small class="text-muted"
+                                th:text="${#temporals.format(tx.timestamp, 'dd MMMM yyyy, HH:mm')}">Transaction
+                                Date</small>
                         </div>
                         <div class="col-auto text-end">
-                            <span class="fw-bold text-danger" th:text="'- Rp ' + ${#numbers.formatDecimal(tx.product.price, 0, 'POINT', 0, 'COMMA')}">- Rp 11.000</span>
+                            <div class="fw-bold text-danger mb-1"
+                                th:text="'- Rp ' + ${#numbers.formatDecimal(tx.product.price, 0, 'POINT', 0, 'COMMA')}">
+                                - Rp 11.000
+                            </div>
+
+                            <span class="badge rounded-pill"
+                                th:classappend="${tx.status.name() == 'SUCCESS' ? 'bg-success' : (tx.status.name() == 'FAILED' ? 'bg-danger' : 'bg-warning text-dark')}"
+                                th:text="${tx.status}">
+                                STATUS
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -114,4 +138,5 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
