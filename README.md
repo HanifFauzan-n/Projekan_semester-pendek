@@ -94,7 +94,7 @@ Pastikan perangkat Anda telah terinstal:
 
 1.  **Clone Repositori**
     ```bash
-    git clone [https://github.com/your-username/FlashCell.git](https://github.com/your-username/FlashCell.git)
+    git clone https://github.com/HanifFauzan-n/Projekan_semester-pendek.git
     cd FlashCell
     ```
 
