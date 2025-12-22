@@ -7,6 +7,6 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RequestCategori {
+public class CategoryRequest {
     private String type;
 }

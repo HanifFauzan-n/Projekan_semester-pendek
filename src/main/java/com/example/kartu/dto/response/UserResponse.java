@@ -7,8 +7,10 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ResponseUser {
+public class UserResponse {
+
     private String username;
+    
     private String password;
 
     private String phoneNumber;

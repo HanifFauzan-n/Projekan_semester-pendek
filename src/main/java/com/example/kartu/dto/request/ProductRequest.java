@@ -1,5 +1,6 @@
 package com.example.kartu.dto.request;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class RequestProduct {
+public class ProductRequest {
 
     private String name;
 
@@ -17,8 +18,10 @@ public class RequestProduct {
 
     private Integer stock;
 
+    @NotNull
     private Integer provider;
 
+    @NotNull
     private Integer category;
 
 }

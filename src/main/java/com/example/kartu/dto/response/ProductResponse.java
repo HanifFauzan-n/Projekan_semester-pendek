@@ -10,7 +10,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ResponseProduct {
+public class ProductResponse {
     private String name;
 
     private Integer price;

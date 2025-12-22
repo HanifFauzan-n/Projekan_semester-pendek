@@ -1,5 +1,6 @@
 package com.example.kartu.dto.response;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ResponseCategory {
+public class CategoryResponse {
+    @NotBlank
     private String type;
 }

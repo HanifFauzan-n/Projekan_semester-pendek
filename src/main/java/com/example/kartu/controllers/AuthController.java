@@ -1,10 +1,15 @@
 package com.example.kartu.controllers;
 
+import com.example.kartu.dto.request.UserRequest;
 import com.example.kartu.models.User;
 import com.example.kartu.services.AuthService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,21 +55,27 @@ public class AuthController {
     // Memproses data dari form registrasi
     // Perubahan: Mengganti "/save-akun" menjadi "/register" dengan metode POST
     @PostMapping("/register")
-    public String processRegistration(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
-        try {
-            // Memanggil service untuk melakukan validasi dan penyimpanan
-            authService.registerUser(user);
-            
-            // Mengirim pesan sukses ke halaman login setelah registrasi berhasil
-            redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
-            return "redirect:/login";
-
-        } catch (Exception e) {
-            // Jika terjadi error validasi dari service
-            // Mengirim pesan error dan data yang sudah diisi kembali ke form registrasi
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            redirectAttributes.addFlashAttribute("user", user);
-            return "redirect:/register";
-        }
+public String processRegistration(@Valid @ModelAttribute("user") UserRequest requestUser, 
+                                  BindingResult result, // Buat nangkep error validasi
+                                  RedirectAttributes redirectAttributes,
+                                  Model model) {
+    
+    // 1. Cek Validasi DTO (Otomatis dari anotasi @Size, @Pattern tadi)
+    if (result.hasErrors()) {
+        // Kalau error, balikin ke halaman register beserta pesan errornya
+        return "registration"; 
     }
+
+    try {
+        // 2. Kirim DTO ke Service
+        authService.registerUser(requestUser);
+        
+        redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
+        return "redirect:/login";
+
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        return "redirect:/register";
+    }
+}
 }
