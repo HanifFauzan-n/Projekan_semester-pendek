@@ -1,5 +1,7 @@
 package com.example.kartu.controllers;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,8 +9,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.kartu.enums.TransactionStatus;
+import com.example.kartu.models.TransactionHistory;
+import com.example.kartu.models.User;
+import com.example.kartu.repositories.TransactionHistoryRepository;
+import com.example.kartu.repositories.UserRepository;
 import com.example.kartu.services.ProductService;
 import com.example.kartu.services.TransactionHistoryService;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -18,6 +27,12 @@ public class HomeController {
 
     @Autowired
     private TransactionHistoryService transactionService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private TransactionHistoryRepository transactionHistoryRepository;
 
     @GetMapping("/")
     public String showPublicHomePage(Model model) {
@@ -49,5 +64,34 @@ public class HomeController {
         model.addAttribute("totalRevenue", totalRevenue);
         
         return "profile_admin";
+    }
+
+    @GetMapping("/profile-user")
+    public String showUserProfile(Model model, Principal principal) {
+        // 1. Ambil username yang sedang login
+        String username = principal.getName();
+
+        // 2. Cari User lengkap dari database (agar saldonya update)
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 3. Ambil riwayat transaksi user tersebut
+        List<TransactionHistory> history = transactionHistoryRepository.findByUserId(user.getId());
+
+        // 4. Hitung Statistik (Opsional: Hitung hanya yang SUKSES untuk Total Spending)
+        long totalTransactions = history.size();
+        
+        long totalSpending = history.stream()
+                .filter(tx -> tx.getStatus() == TransactionStatus.SUCCESS) // Hanya hitung yang sukses
+                .mapToLong(tx -> tx.getProduct().getPrice())
+                .sum();
+
+        // 5. Kirim data ke HTML
+        model.addAttribute("user", user);
+        model.addAttribute("history", history);
+        model.addAttribute("totalTransactions", totalTransactions);
+        model.addAttribute("totalSpending", totalSpending);
+
+        return "profile_user";
     }
 }
