@@ -25,9 +25,9 @@ public class AuthController {
     // Menampilkan halaman login
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
-                                @RequestParam(value = "logout", required = false) String logout,
-                                Model model) {
-        
+            @RequestParam(value = "logout", required = false) String logout,
+            Model model) {
+
         // Menampilkan pesan error jika login gagal
         if (error != null) {
             model.addAttribute("errorMessage", "Invalid username or password.");
@@ -37,7 +37,7 @@ public class AuthController {
             model.addAttribute("successMessage", "You have been logged out successfully.");
         }
 
-        model.addAttribute("user", new User());
+        model.addAttribute("userRequest", new User());
         return "login";
     }
 
@@ -45,9 +45,8 @@ public class AuthController {
     // Perubahan: Mengganti "/daftar" menjadi "/register"
     @GetMapping("/register")
     public String showRegisterPage(Model model) {
-        // Memastikan selalu ada objek user kosong untuk diisi form
-        if (!model.containsAttribute("user")) {
-            model.addAttribute("user", new User());
+        if (!model.containsAttribute("userRequest")) {
+            model.addAttribute("userRequest", new UserRequest()); // Ganti User() jadi UserRequest()
         }
         return "registration";
     }
@@ -55,27 +54,27 @@ public class AuthController {
     // Memproses data dari form registrasi
     // Perubahan: Mengganti "/save-akun" menjadi "/register" dengan metode POST
     @PostMapping("/register")
-public String processRegistration(@Valid @ModelAttribute("user") UserRequest requestUser, 
-                                  BindingResult result, // Buat nangkep error validasi
-                                  RedirectAttributes redirectAttributes,
-                                  Model model) {
-    
-    // 1. Cek Validasi DTO (Otomatis dari anotasi @Size, @Pattern tadi)
-    if (result.hasErrors()) {
-        // Kalau error, balikin ke halaman register beserta pesan errornya
-        return "registration"; 
-    }
+    public String processRegistration(@Valid @ModelAttribute("userRequest") UserRequest requestUser,
+            BindingResult result, // Buat nangkep error validasi
+            RedirectAttributes redirectAttributes,
+            Model model) {
 
-    try {
-        // 2. Kirim DTO ke Service
-        authService.registerUser(requestUser);
-        
-        redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
-        return "redirect:/login";
+        // 1. Cek Validasi DTO (Otomatis dari anotasi @Size, @Pattern tadi)
+        if (result.hasErrors()) {
+            // Kalau error, balikin ke halaman register beserta pesan errornya
+            return "registration";
+        }
 
-    } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-        return "redirect:/register";
+        try {
+            // 2. Kirim DTO ke Service
+            authService.registerUser(requestUser);
+
+            redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
+            return "redirect:/login";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+            return "redirect:/register";
+        }
     }
-}
 }

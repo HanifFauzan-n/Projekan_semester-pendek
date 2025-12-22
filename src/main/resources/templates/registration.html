@@ -16,7 +16,7 @@
                 <h2 class="card-title text-center mb-4">Create New Account</h2>
                 <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
                 
-                <form th:action="@{/register}" th:object="${user}" method="post">
+                <form th:action="@{/register}" th:object="${userRequest}" method="post">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="username" class="form-label">Username</label>
