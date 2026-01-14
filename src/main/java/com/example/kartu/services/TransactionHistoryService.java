@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TransactionHistoryService {
@@ -26,6 +27,7 @@ public class TransactionHistoryService {
     @Autowired
     private TransactionHistoryRepository transactionHistoryRepository;
 
+    @Transactional(rollbackFor = Exception.class)
     public void purchaseProduct(Integer productId, String username) throws Exception {
 
         User user = userRepository.findByUsername(username)

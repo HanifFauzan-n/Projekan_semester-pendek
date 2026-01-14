@@ -51,30 +51,32 @@ public class AuthController {
         return "registration";
     }
 
-    // Memproses data dari form registrasi
-    // Perubahan: Mengganti "/save-akun" menjadi "/register" dengan metode POST
     @PostMapping("/register")
-    public String processRegistration(@Valid @ModelAttribute("userRequest") UserRequest requestUser,
-            BindingResult result, // Buat nangkep error validasi
+    public String processRegistration(
+            @Valid @ModelAttribute("userRequest") UserRequest userRequest, // Tetep pake DTO
+            BindingResult result,
             RedirectAttributes redirectAttributes,
-            Model model) {
+            Model model) { // Tambah Model di sini
 
-        // 1. Cek Validasi DTO (Otomatis dari anotasi @Size, @Pattern tadi)
+        // 1. Cek Error DTO
         if (result.hasErrors()) {
-            // Kalau error, balikin ke halaman register beserta pesan errornya
+            // == TRIK RAHASIA ==
+            // Ambil pesan error PERTAMA aja dari list error DTO
+            String pesanError = result.getAllErrors().get(0).getDefaultMessage();
+
+            // Masukin ke variabel 'errorMessage' biar HTML lo nampilin kayak biasa
+            model.addAttribute("errorMessage", pesanError);
+
             return "registration";
         }
 
         try {
-            // 2. Kirim DTO ke Service
-            authService.registerUser(requestUser);
-
-            redirectAttributes.addFlashAttribute("successMessage", "Registration successful! Please log in.");
+            authService.registerUser(userRequest);
+            redirectAttributes.addFlashAttribute("successMessage", "Registration successful!");
             return "redirect:/login";
-
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/register";
+            model.addAttribute("errorMessage", e.getMessage());
+            return "registration";
         }
     }
 }
