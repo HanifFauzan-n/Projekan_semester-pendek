@@ -22,17 +22,17 @@ public class ProviderController {
     public String listProviders(Model model) {
         model.addAttribute("providers", providerService.findAll());
         model.addAttribute("newProvider", new Provider());
-        return "admin/manage_providers";
+        return "manage_provider";
     }
 
     @PostMapping("/save")
     public String saveProvider(@ModelAttribute("newProvider") Provider provider,
-                               @RequestParam("image") MultipartFile multipartFile,
-                               RedirectAttributes redirectAttributes) {
+            @RequestParam("image") MultipartFile multipartFile,
+            RedirectAttributes redirectAttributes) {
         try {
             // Panggil Service untuk menangani logika penyimpanan
             providerService.saveProvider(provider, multipartFile);
-            
+
             redirectAttributes.addFlashAttribute("successMessage", "Provider berhasil disimpan!");
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,7 +40,18 @@ public class ProviderController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Terjadi kesalahan: " + e.getMessage());
         }
-        
+
+        return "redirect:/admin/providers";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteProvider(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            providerService.deleteProvider(id);
+            redirectAttributes.addFlashAttribute("successMessage", "Provider berhasil dihapus!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
         return "redirect:/admin/providers";
     }
 }

@@ -2,6 +2,8 @@ package com.example.kartu.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+
 import java.util.Base64; // Import untuk konversi ke HTML nanti
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class Provider {
     private byte[] logo;
 
     @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<Product> products;
     
     // Helper method untuk menampilkan gambar di HTML

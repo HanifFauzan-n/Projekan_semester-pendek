@@ -16,12 +16,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "category")
 public class Category {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer code;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
+
+    private String code;
 
     private String type;
 
-    public Category(String type) {
+    public Category(String code,String type) {
+        this.code = code;
         this.type = type;
     }
 }

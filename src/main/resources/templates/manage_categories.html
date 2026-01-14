@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Manage Categories - FlashCell Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
+
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container">
             <a class="navbar-brand fw-bold" th:href="@{/home-admin}">FlashCell [Admin]</a>
-             <div class="d-flex">
-                <a th:href="@{/home-admin}" class="btn btn-outline-light btn-sm">Kembali ke Dashboard</a>
+            <div class="d-flex">
+                <a th:href="@{/home-admin}" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
             </div>
         </div>
     </nav>
@@ -22,17 +24,22 @@
             <div class="col-md-4">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">Tambah Kategori Baru</h5>
+                        <h5 class="mb-0">Add New Category</h5>
                     </div>
                     <div class="card-body">
                         <form th:action="@{/categories/save}" th:object="${newCategory}" method="post">
-                            
                             <div class="mb-3">
-                                <label class="form-label">Nama Kategori</label>
-                                <input type="text" class="form-control" th:field="*{type}" placeholder="Contoh: GAME VOUCHER" required>
+                                <label class="form-label">Code</label>
+                                <input type="text" class="form-control" th:field="*{code}"
+                                    placeholder="Example: CD-00" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Type</label>
+                                <input type="text" class="form-control" th:field="*{type}"
+                                    placeholder="Example: GAME VOUCHER" required>
                             </div>
                             <button type="submit" class="btn btn-success w-100">
-                                <i class="fas fa-save me-1"></i> Simpan
+                                <i class="fas fa-save me-1"></i> Save
                             </button>
                         </form>
                     </div>
@@ -45,26 +52,26 @@
 
                 <div class="card shadow-sm">
                     <div class="card-header">
-                        <h5 class="mb-0">Daftar Kategori Tersedia</h5>
+                        <h5 class="mb-0">Existing Categories</h5>
                     </div>
                     <div class="card-body">
                         <table class="table table-hover">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Kode</th>
-                                    <th>Nama Kategori</th>
-                                    <th>Aksi</th>
+                                    <th>Code</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="cat : ${categories}">
                                     <td th:text="${cat.code}">1</td>
-                                    <td th:text="${cat.type}">PULSE</td>
+                                    <td th:text="${cat.type}">Mobile credit</td>
                                     <td>
-                                        <a th:href="@{/categories/delete/{id}(id=${cat.code})}" 
-                                           class="btn btn-sm btn-danger"
-                                           onclick="return confirm('Yakin hapus kategori ini? Produk terkait mungkin akan error.')">
-                                            <i class="fas fa-trash"></i> Hapus
+                                        <a th:href="@{/categories/delete/{id}(id=${cat.id})}"
+                                            class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this category?')">
+                                            <i class="fas fa-trash"></i> Delete
                                         </a>
                                     </td>
                                 </tr>
@@ -77,4 +84,5 @@
     </main>
 
 </body>
+
 </html>

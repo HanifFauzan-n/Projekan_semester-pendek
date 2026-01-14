@@ -73,6 +73,7 @@ public class TransactionHistoryService {
         }
     }
 
+    @Transactional
     public Long calculateTotalRevenue() {
         List<TransactionHistory> transactions = transactionHistoryRepository.findAll();
         // Menjumlahkan harga produk dari setiap transaksi

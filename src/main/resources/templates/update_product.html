@@ -32,52 +32,60 @@
                     </div>
                     <div class="card-body">
                         <form th:action="@{/save-product}" th:object="${products}" method="post">
+
                             <input type="hidden" th:field="*{id}">
 
                             <div class="mb-3">
-                                <label for="name" class="form-label">Product Name</label>
-                                <select class="form-select" id="name" th:field="*{name}">
-                                    <option value="Axis">Axis</option>
-                                    <option value="Telkomsel">Telkomsel</option>
-                                    <option value="Indosat">Indosat</option>
-                                    <option value="Tri">Tri</option>
-                                    <option value="Smartfren">Smartfren</option>
-                                    <option value="XL">XL</option>
+                                <label for="provider" class="form-label fw-bold">Select Provider</label>
+
+                                <select class="form-select" id="provider" th:field="*{provider}">
+                                    <option th:each="prov : ${providers}" th:value="${prov.id}" th:text="${prov.name}"
+                                        th:selected="${products.provider != null && prov.id == products.provider.id}">
+                                    </option>
                                 </select>
                             </div>
 
                             <div class="mb-3">
+                                <label for="category" class="form-label fw-bold">Select Category</label>
+
+                                <select class="form-select" id="category" th:field="*{category}">
+                                    <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.type}"
+                                        th:selected="${products.category != null && cat.id == products.category.id}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <input type="text" class="form-control" id="description" th:field="*{description}"
-                                    placeholder="e.g., 5 GB / 30 Days" required>
+                                <input type="text" class="form-control" id="description" th:field="*{description}">
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="price" class="form-label">Price</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">Rp</span>
-                                        <input type="number" class="form-control" id="price" th:field="*{price}"
-                                            placeholder="e.g., 25000" required>
-                                    </div>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="stock" class="form-label">Stock</label>
-                                    <input type="number" class="form-control" id="stock" th:field="*{stock}"
-                                        placeholder="e.g., 100" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="category" class="form-label">Category</label>
-                                    <select class="form-select" id="category" th:field="*{category.code}">
-                                        <option th:each="cat : ${categories}" th:value="${cat.code}"
-                                            th:text="${cat.type}"></option>
-                                    </select>
-                                </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <input type="number" class="form-control" id="price" th:field="*{price}" required>
                             </div>
 
-                            <div class="d-flex justify-content-end">
-                                <a th:href="@{/home-admin}" class="btn btn-secondary me-2">Cancel</a>
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <div class="mb-3">
+                                <label for="stock" class="form-label">Stock</label>
+                                <input type="number" class="form-control" id="stock" th:field="*{stock}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="category" class="form-label">Category</label>
+                                <select class="form-select" id="category" th:field="*{category}">
+                                    <option th:each="cat : ${categories}" th:value="${cat.code}" th:text="${cat.type}">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Update Product</button>
+                                <a th:href="@{/home-admin}" class="btn btn-secondary">Cancel</a>
                             </div>
                         </form>
                     </div>

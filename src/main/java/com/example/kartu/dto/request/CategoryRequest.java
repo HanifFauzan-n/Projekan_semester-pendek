@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CategoryRequest {
+    private String code;
     private String type;
 }

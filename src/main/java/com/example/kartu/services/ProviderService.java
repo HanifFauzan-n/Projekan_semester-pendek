@@ -1,6 +1,7 @@
 package com.example.kartu.services;
 
 import com.example.kartu.models.Provider;
+import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ public class ProviderService {
 
     @Autowired
     private ProviderRepository providerRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     // Ambil semua provider
     public List<Provider> findAll() {
@@ -42,13 +46,22 @@ public class ProviderService {
                 }
             }
         }
-        
+
         // Simpan ke database
         providerRepository.save(provider);
     }
 
     // Hapus provider
-    public void deleteProvider(Integer id) {
+    public void deleteProvider(Integer id) throws Exception {
+        long productCount = productRepository.countByProviderId(id);
+
+        if (productCount > 0) {
+            // 2. Jika ada, LEMPAR ERROR (Jangan dihapus!)
+            throw new Exception(
+                    "Gagal menghapus! Provider ini masih digunakan oleh " + productCount + " produk aktif.");
+        }
+
+        // 3. Jika aman (0 produk), baru hapus
         providerRepository.deleteById(id);
     }
 }

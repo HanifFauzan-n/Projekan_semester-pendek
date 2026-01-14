@@ -1,7 +1,7 @@
 package com.example.kartu.controllers;
 
 import com.example.kartu.models.Category;
-import com.example.kartu.repositories.CategoryRepository;
+import com.example.kartu.services.CategoryService; // Import Service
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,26 +9,28 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/categories") // Prefix URL agar rapi
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService; // Ganti Repository dengan Service
 
     // 1. READ: Tampilkan halaman daftar kategori
     @GetMapping
     public String listCategories(Model model) {
-        model.addAttribute("categories", categoryRepository.findAll());
-        model.addAttribute("newCategory", new Category()); // Untuk form tambah
-        return "manage_categories"; // Mengarah ke template HTML
+        // Panggil service
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("newCategory", new Category());
+        return "manage_categories";
     }
 
     // 2. CREATE: Simpan kategori baru
     @PostMapping("/save")
     public String saveCategory(@ModelAttribute("newCategory") Category category, RedirectAttributes redirectAttributes) {
         try {
-            category.setType(category.getType().toUpperCase());
-            categoryRepository.save(category);
+            // Logika "toUpperCase" sudah diurus oleh Service
+            categoryService.saveCategory(category);
+            
             redirectAttributes.addFlashAttribute("successMessage", "Kategori berhasil disimpan!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal menyimpan kategori: " + e.getMessage());
@@ -38,16 +40,16 @@ public class CategoryController {
 
     // 3. DELETE: Hapus kategori
     @GetMapping("/delete/{id}")
-    public String deleteCategory(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+    public String deleteCategory(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         try {
-            categoryRepository.deleteById(id);
+            // Service akan melempar error jika kategori masih dipakai produk
+            categoryService.deleteCategory(id);
+            
             redirectAttributes.addFlashAttribute("successMessage", "Kategori berhasil dihapus!");
         } catch (Exception e) {
-            // Error biasanya terjadi jika kategori masih dipakai oleh Produk
-            redirectAttributes.addFlashAttribute("errorMessage", "Tidak bisa menghapus kategori yang sedang digunakan oleh produk.");
+            // Tangkap pesan error dari Service ("Gagal! Kategori ini sedang digunakan...")
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/categories";
     }
-    
-    // Opsional: Edit (Bisa digabung dengan save jika ID-nya ada)
 }

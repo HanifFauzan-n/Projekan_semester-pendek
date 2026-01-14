@@ -7,9 +7,7 @@
     <title>Home - FlashCell</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-
     <link rel="stylesheet" th:href="@{/css/home_user.css}">
 </head>
 
@@ -44,45 +42,91 @@
         </header>
 
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}">
+            <div class="col-md-10">
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
         </div>
 
-        <div class="product-list-container mt-3">
-            <div class="list-group shadow-sm">
+        <div class="table-responsive mt-3">
+            <table class="table table-hover align-middle shadow-sm bg-white rounded">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 20%;">Provider</th>
+                        <th style="width: 15%;">Category</th>
+                        <th style="width: 20%;">Product Name</th>
+                        <th style="width: 20%;">Description</th>
+                        <th style="width: 15%;">Price</th>
+                        <th class="text-center" style="width: 10%;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img th:if="${product.provider != null && product.provider.logo != null}"
+                                     th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}" 
+                                     style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;"
+                                     class="rounded bg-light p-1 border">
+                                
+                                <img th:unless="${product.provider != null && product.provider.logo != null}"
+                                     th:src="@{/img/default.png}" 
+                                     style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
 
-                <a th:href="@{/purchase-product/{id}(id=${product.id})}" class="list-group-item list-group-item-action"
-                    th:each="product : ${products}">
+                                <span th:text="${product.provider != null} ? ${product.provider.name} : 'Unknown'" 
+                                      class="fw-bold text-dark">Provider</span>
+                            </div>
+                        </td>
 
-                    <div class="row align-items-center">
-                        <div class="col-2 col-md-1 text-center">
-                            <img th:if="${product.provider != null && product.provider.logo != null}"
-                                th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}"
-                                alt="Logo Provider" class="product-logo">
+                        <td class="fw-bold text-dark" th:text="${product.category != null} ? ${product.category.type} : 'Unknown'" ></td>
 
-                            <img th:unless="${product.provider != null && product.provider.logo != null}"
-                                th:src="@{/img/default.png}" class="product-logo">
-                        </div>
-                        <div class="col-6 col-md-7">
-                            <h5 class="mb-1" th:text="${product.name}">Card Name</h5>
-                            <p class="mb-0 text-muted" th:text="${product.description}">Description Info</p>
-                        </div>
-                        <div class="col-4 col-md-4 text-end">
-                            <h5 class="product-price mb-1"
-                                th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">Rp
-                                12.000</h5>
-                            <span class="badge bg-success" th:if="${product.stock > 0}"
-                                th:text="'Stock: ' + ${product.stock}">Stock: 50</span>
-                            <span class="badge bg-danger" th:if="${product.stock <= 0}">Out of Stock</span>
-                        </div>
-                    </div>
-                </a>
+                        <td class="fw-semibold text-primary" th:text="${product.name}">
+                            Internet 10GB
+                        </td>
 
-            </div>
+                        <td th:text="${product.description}" class="text-muted small">
+                            Valid for 30 days
+                        </td>
+
+                        <td class="fw-bold text-success">
+                            <span th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">
+                                Rp 50.000
+                            </span>
+                        </td>
+
+                        <td class="text-center">
+                            <a th:if="${product.stock > 0}" 
+                               th:href="@{/purchase-confirmation/{id}(id=${product.id})}" 
+                               class="btn btn-sm btn-primary w-100 fw-bold shadow-sm">
+                                <i class="fas fa-shopping-cart me-1"></i> Buy
+                            </a>
+
+                            <button th:if="${product.stock == 0}" 
+                                    class="btn btn-sm btn-secondary w-100" disabled>
+                                Sold Out
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr th:if="${#lists.isEmpty(products)}">
+                        <td colspan="5" class="text-center py-5 text-muted">
+                            <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i><br>
+                            Sorry, no products available at the moment.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
+
     </main>
 
     <footer class="bg-dark text-white text-center py-4 mt-auto">
