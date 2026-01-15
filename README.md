@@ -58,12 +58,8 @@ Aplikasi ini mencakup fitur-fitur esensial dari sebuah website e-commerce:
     * Fitur pencarian produk.
     * Filter produk berdasarkan kategori.
 
-* 🛒 **Keranjang Belanja**:
-    * Menambah, menghapus, dan memperbarui jumlah produk di keranjang.
-    * Ringkasan total belanja secara dinamis.
 
 * 💳 **Proses Checkout**:
-    * Formulir pengisian alamat pengiriman.
     * Simulasi proses pembayaran.
     * Pembuatan pesanan setelah checkout berhasil.
 
