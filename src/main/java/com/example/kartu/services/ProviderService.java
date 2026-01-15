@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -29,25 +29,45 @@ public class ProviderService {
         return providerRepository.findById(id).orElse(null);
     }
 
-    // Logika Simpan Provider (Create / Update)
-    public void saveProvider(Provider provider, MultipartFile file) throws IOException {
-        // Cek apakah ada file gambar yang diupload
-        if (file != null && !file.isEmpty()) {
-            // Konversi file gambar ke byte[] (BLOB)
-            provider.setLogo(file.getBytes());
-        } else {
-            // Logika Tambahan (Opsional):
-            // Jika ini proses UPDATE (id tidak null) dan user TIDAK upload gambar baru,
-            // kita harus pertahankan gambar lama agar tidak hilang (jadi null).
-            if (provider.getId() != null) {
-                Provider oldProvider = providerRepository.findById(provider.getId()).orElse(null);
-                if (oldProvider != null) {
-                    provider.setLogo(oldProvider.getLogo());
-                }
+    public void saveProvider(Provider provider, MultipartFile file) throws Exception {
+
+        // 1. Cek Apakah Ada File yang Diupload?
+        if (!file.isEmpty()) {
+
+            // A. Validasi Tipe File (MIME Type)
+            String contentType = file.getContentType();
+            List<String> allowedTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
+
+            if (!allowedTypes.contains(contentType)) {
+                throw new Exception("File harus berupa gambar (PNG/JPG)!");
             }
+
+            // B. Validasi Ukuran File (Max 1MB)
+            if (file.getSize() > 1024 * 1024) {
+                throw new Exception("Ukuran gambar maksimal 1MB!");
+            }
+
+            // C. Konversi ke Base64
+            provider.setLogo(file.getBytes()); // Simpan string panjang ini ke entity
+
+        } else {
+            // Jika File Kosong...
+
+            // Kasus: Tambah Baru (Wajib ada logo)
+            if (provider.getId() == null) {
+                throw new Exception("Wajib upload logo provider untuk data baru!");
+            }
+
+            // Kasus: Update (Edit)
+            // Jika user tidak upload gambar baru, kita HARUS pertahankan gambar lama.
+            // Ambil data lama dari database:
+            Provider oldData = providerRepository.findById(provider.getId())
+                    .orElseThrow(() -> new Exception("Provider tidak ditemukan"));
+
+            provider.setLogo(oldData.getLogo()); // Pakai logo lama
         }
 
-        // Simpan ke database
+        // 2. Simpan ke Database
         providerRepository.save(provider);
     }
 

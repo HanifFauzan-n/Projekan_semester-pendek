@@ -55,8 +55,26 @@ public class ProductController {
     }
 
     @PostMapping("/save-product")
-    public String saveProduct(@ModelAttribute("products") Product product) {
-        productService.save(product);
+    public String saveProduct(@ModelAttribute("products") Product product, RedirectAttributes redirectAttributes) {
+        if (product.getStock() == null || product.getStock() < 0) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: Stok tidak boleh negatif!");
+
+            // --- LOGIKA PINTAR DI SINI ---
+            if (product.getId() != null) {
+                // Kalau punya ID, berarti lagi UPDATE. Balikin ke form update produk tersebut.
+                return "redirect:/update-product/" + product.getId();
+            } else {
+                // Kalau tidak punya ID, berarti lagi ADD NEW. Balikin ke form tambah.
+                return "redirect:/add-product";
+            }
+            // -----------------------------
+        }
+        try {
+            productService.save(product);
+            redirectAttributes.addFlashAttribute("successMessage", "Produk berhasil disimpan!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
+        }
         return "redirect:/home-admin";
     }
 

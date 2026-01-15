@@ -31,6 +31,11 @@
                         <h2 class="h4 mb-0">Edit Product</h2>
                     </div>
                     <div class="card-body">
+                        <div th:if="${successMessage}" class="alert alert-success" role="alert"
+                            th:text="${successMessage}"></div>
+                        <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}">
+                        </div>
+
                         <form th:action="@{/save-product}" th:object="${products}" method="post">
 
                             <input type="hidden" th:field="*{id}">

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.IOException;
 
 @Controller
 @RequestMapping("/admin/providers")
@@ -26,22 +25,30 @@ public class ProviderController {
     }
 
     @PostMapping("/save")
-    public String saveProvider(@ModelAttribute("newProvider") Provider provider,
-            @RequestParam("image") MultipartFile multipartFile,
+    public String saveProvider(
+            @ModelAttribute("newProvider") Provider provider,
+            @RequestParam("image") MultipartFile file, 
             RedirectAttributes redirectAttributes) {
-        try {
-            // Panggil Service untuk menangani logika penyimpanan
-            providerService.saveProvider(provider, multipartFile);
 
+        try {
+            // Panggil Service (Semua validasi terjadi di dalam sini)
+            providerService.saveProvider(provider, file);
+            
             redirectAttributes.addFlashAttribute("successMessage", "Provider berhasil disimpan!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal mengupload gambar: " + e.getMessage());
+            
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Terjadi kesalahan: " + e.getMessage());
+            // Tangkap Error dari Service (misal: "File bukan gambar!")
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: " + e.getMessage());
+            
+            // Logika Smart Redirect (Balik ke Add atau Update?)
+            if (provider.getId() != null) {
+                return "redirect:/update-provider/" + provider.getId(); // Asumsi ada endpoint ini
+            } else {
+                return "redirect:/admin/providers";
+            }
         }
 
-        return "redirect:/admin/providers";
+        return "redirect:/admin/providers"; // Halaman list provider
     }
 
     @GetMapping("/delete/{id}")
