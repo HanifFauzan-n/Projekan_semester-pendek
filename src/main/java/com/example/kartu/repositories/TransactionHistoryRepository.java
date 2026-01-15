@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.kartu.models.TransactionHistory;
 
-public interface TransactionHistoryRepository extends JpaRepository <TransactionHistory,Integer> {
+public interface TransactionHistoryRepository extends JpaRepository<TransactionHistory, Integer> {
     List<TransactionHistory> findByUserId(Integer integer);
-    
-} 
+
+    List<TransactionHistory> findAllByOrderByTimestampDesc();
+
+}

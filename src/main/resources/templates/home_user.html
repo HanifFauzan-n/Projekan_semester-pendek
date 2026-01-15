@@ -41,6 +41,35 @@
             <p class="lead text-muted">Please choose your desired package.</p>
         </header>
 
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
+
+            <a th:href="@{/home-user(keyword=${keyword})}" class="btn rounded-pill fw-bold px-3"
+                th:classappend="${categoryId == null || categoryId == ''} ? 'btn-dark' : 'btn-outline-dark'">
+                All
+            </a>
+
+            <a th:each="cat : ${categories}" th:href="@{/home-user(categoryId=${cat.id}, keyword=${keyword})}"
+                class="btn rounded-pill fw-bold px-3"
+                th:classappend="${categoryId == cat.id} ? 'btn-primary' : 'btn-outline-primary'" th:text="${cat.type}">
+                Data Plan
+            </a>
+        </div>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <form th:action="@{/home-user}" method="get">
+                    <div class="input-group input-group-lg shadow-sm">
+                        <span class="input-group-text bg-white border-end-0 text-muted">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" name="keyword" class="form-control border-start-0 ps-0"
+                            placeholder="Search for products (eg: Telkomsel, 10GB)..." th:value="${keyword}">
+                        <button type="submit" class="btn btn-primary fw-bold px-4">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -70,24 +99,25 @@
                 </thead>
                 <tbody>
                     <tr th:each="product : ${products}">
-                        
+
                         <td>
                             <div class="d-flex align-items-center">
                                 <img th:if="${product.provider != null && product.provider.logo != null}"
-                                     th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}" 
-                                     style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;"
-                                     class="rounded bg-light p-1 border">
-                                
-                                <img th:unless="${product.provider != null && product.provider.logo != null}"
-                                     th:src="@{/img/default.png}" 
-                                     style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
+                                    th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}"
+                                    style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;"
+                                    class="rounded bg-light p-1 border">
 
-                                <span th:text="${product.provider != null} ? ${product.provider.name} : 'Unknown'" 
-                                      class="fw-bold text-dark">Provider</span>
+                                <img th:unless="${product.provider != null && product.provider.logo != null}"
+                                    th:src="@{/img/default.png}"
+                                    style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
+
+                                <span th:text="${product.provider != null} ? ${product.provider.name} : 'Unknown'"
+                                    class="fw-bold text-dark">Provider</span>
                             </div>
                         </td>
 
-                        <td class="fw-bold text-dark" th:text="${product.category != null} ? ${product.category.type} : 'Unknown'" ></td>
+                        <td class="fw-bold text-dark"
+                            th:text="${product.category != null} ? ${product.category.type} : 'Unknown'"></td>
 
                         <td class="fw-semibold text-primary" th:text="${product.name}">
                             Internet 10GB
@@ -104,14 +134,12 @@
                         </td>
 
                         <td class="text-center">
-                            <a th:if="${product.stock > 0}" 
-                               th:href="@{/purchase-confirmation/{id}(id=${product.id})}" 
-                               class="btn btn-sm btn-primary w-100 fw-bold shadow-sm">
+                            <a th:if="${product.stock > 0}" th:href="@{/transaction/confirm/{id}(id=${product.id})}"
+                                class="btn btn-sm btn-primary w-100 fw-bold shadow-sm">
                                 <i class="fas fa-shopping-cart me-1"></i> Buy
                             </a>
 
-                            <button th:if="${product.stock == 0}" 
-                                    class="btn btn-sm btn-secondary w-100" disabled>
+                            <button th:if="${product.stock == 0}" class="btn btn-sm btn-secondary w-100" disabled>
                                 Sold Out
                             </button>
                         </td>
@@ -125,6 +153,35 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}" class="mt-4">
+            <ul class="pagination justify-content-center">
+
+                <a class="page-link"
+                    th:href="@{/home-user(page=${currentPage - 1}, keyword=${keyword}, categoryId=${categoryId})}">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
+
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:classappend="${currentPage == i} ? 'active'">
+
+                    <a class="page-link"
+                        th:href="@{/home-user(page=${i}, keyword=${keyword}, categoryId=${categoryId})}"
+                        th:text="${i + 1}">
+                        1
+                    </a>
+                </li>
+
+                <a class="page-link"
+                    th:href="@{/home-user(page=${currentPage + 1}, keyword=${keyword}, categoryId=${categoryId})}">
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+            </ul>
+        </nav>
+
+        <div class="text-center text-muted small mt-2" th:if="${totalItems > 0}">
+            Showing page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span>
+            (Total <span th:text="${totalItems}"></span> products)
         </div>
 
     </main>

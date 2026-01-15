@@ -41,30 +41,70 @@
     <section class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Our Available Products</h2>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <div class="col" th:each="product : ${products}">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <div>
-                                <img th:if="${product.provider != null && product.provider.logo != null}"
-                                    th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}"
-                                    alt="Logo Provider" class="product-logo">
+            <div class="table-responsive mt-3">
+                <table class="table table-hover align-middle shadow-sm bg-white rounded">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 20%;">Provider</th>
+                            <th style="width: 15%;">Category</th>
+                            <th style="width: 20%;">Product Name</th>
+                            <th style="width: 20%;">Description</th>
+                            <th style="width: 25%;">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="product : ${products}">
 
-                                <img th:unless="${product.provider != null && product.provider.logo != null}"
-                                    th:src="@{/img/default.png}" class="product-logo">
-                            </div>
-                            <h6 class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.8rem;"
-                                th:text="${product.provider != null} ? ${product.provider.name} : 'Unknown'">
-                                PROVIDER NAME
-                            </h6>
-                            <h5 class="card-title" th:text="${product.name}">Product Name</h5>
-                            <p class="card-text text-muted" th:text="${product.description}">Product Description</p>
-                            <h6 class="card-subtitle mt-2 fw-bold"
-                                th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">Price
-                            </h6>
-                        </div>
-                    </div>
-                </div>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <img th:if="${product.provider != null && product.provider.logo != null}"
+                                        th:src="'data:image/png;base64,' + ${product.provider.getLogoBase64()}"
+                                        style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;"
+                                        class="rounded bg-light p-1 border">
+
+                                    <img th:unless="${product.provider != null && product.provider.logo != null}"
+                                        th:src="@{/img/default.png}"
+                                        style="width: 30px; height: 30px; object-fit: contain; margin-right: 10px;">
+
+                                    <span th:text="${product.provider != null} ? ${product.provider.name} : 'Unknown'"
+                                        class="fw-bold text-dark">Provider</span>
+                                </div>
+                            </td>
+
+                            <td class="fw-bold text-dark"
+                                th:text="${product.category != null} ? ${product.category.type} : 'Unknown'"></td>
+
+                            <td class="fw-semibold text-primary" th:text="${product.name}">
+                                Internet 10GB
+                            </td>
+
+                            <td th:text="${product.description}" class="text-muted small">
+                                Valid for 30 days
+                            </td>
+
+                            <td class="fw-bold text-success">
+                                <span
+                                    th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}">
+                                    Rp 50.000
+                                </span>
+                            </td>
+
+                            <td class="text-center">
+
+                                <button th:if="${product.stock == 0}" class="btn btn-sm btn-secondary w-100" disabled>
+                                    Sold Out
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr th:if="${#lists.isEmpty(products)}">
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i><br>
+                                Sorry, no products available at the moment.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
             <div class="text-center mt-4">
                 <p class="text-muted">And many more... <a th:href="@{/login}">Login</a> or <a

@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.kartu.enums.TransactionStatus;
+import com.example.kartu.models.TopUp;
 import com.example.kartu.models.TransactionHistory;
 import com.example.kartu.models.User;
+import com.example.kartu.repositories.TopUpRepository;
 import com.example.kartu.repositories.TransactionHistoryRepository;
 import com.example.kartu.repositories.UserRepository;
 import com.example.kartu.services.ProductService;
@@ -27,6 +29,9 @@ public class HomeController {
 
     @Autowired
     private TransactionHistoryService transactionService;
+
+    @Autowired
+    private TopUpRepository topUpRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -77,6 +82,9 @@ public class HomeController {
 
         // 3. Ambil riwayat transaksi user tersebut
         List<TransactionHistory> history = transactionHistoryRepository.findByUserId(user.getId());
+
+        List<TopUp> topups = topUpRepository.findByUserIdOrderByDateDesc(user.getId());
+        model.addAttribute("topups", topups);
 
         // 4. Hitung Statistik (Opsional: Hitung hanya yang SUKSES untuk Total Spending)
         long totalTransactions = history.size();
