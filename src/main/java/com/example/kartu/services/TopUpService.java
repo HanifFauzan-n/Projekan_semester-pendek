@@ -4,6 +4,9 @@ import com.example.kartu.models.TopUp;
 import com.example.kartu.models.User;
 import com.example.kartu.repositories.TopUpRepository;
 import com.example.kartu.repositories.UserRepository;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +38,20 @@ public class TopUpService {
 
         // 3. Update Saldo User (Saldo Akhir)
         double currentBalance = (user.getBalance() == null) ? 0 : user.getBalance();
-        user.setBalance((int)(currentBalance + amount));
+        user.setBalance((int) (currentBalance + amount));
         userRepository.save(user);
 
         // 4. Simpan Bukti/Riwayat (Entity TopUp)
         TopUp topUp = new TopUp(user, amount);
         topUpRepository.save(topUp);
+    }
+
+    public List<TopUp> getAllTopUpsDesc() {
+        return topUpRepository.findAllByOrderByDateDesc();
+    }
+
+    // Tambahkan method ini di dalam class TopUpService yang sudah ada
+    public List<TopUp> getTopUpHistoryByUser(User user) {
+        return topUpRepository.findByUserIdOrderByDateDesc(user.getId());
     }
 }

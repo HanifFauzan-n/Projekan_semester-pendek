@@ -2,9 +2,9 @@ package com.example.kartu.controllers;
 
 import com.example.kartu.models.Product;
 import com.example.kartu.models.User;
-import com.example.kartu.repositories.UserRepository; // Ganti Service dengan Repository
 import com.example.kartu.services.ProductService;
 import com.example.kartu.services.TransactionHistoryService;
+import com.example.kartu.services.UserService; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,18 +24,17 @@ public class TransactionHistoryController {
     private ProductService productService;
 
     @Autowired
-    private UserRepository userRepository; // Langsung pakai Repository saja
+    private UserService userService; 
 
     // 1. Tampilkan Halaman Konfirmasi (Checkout)
     @GetMapping("/confirm/{id}")
     public String showConfirmationPage(@PathVariable("id") Integer productId, Model model, Principal principal) {
         try {
-            // Ambil Produk
+            // Ambil Produk dari Service
             Product product = productService.findById(productId);
             
-            // Ambil User langsung dari Repository (Gak perlu BalanceService)
-            User user = userRepository.findByUsername(principal.getName())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+            // PERBAIKAN: Ambil User lewat Service (Logic pencarian dipindah ke Service)
+            User user = userService.getCurrentUser(principal);
 
             model.addAttribute("product", product);
             model.addAttribute("user", user);
@@ -52,7 +51,7 @@ public class TransactionHistoryController {
                                      Principal principal, 
                                      RedirectAttributes redirectAttributes) {
         try {
-            // Eksekusi transaksi
+            // Eksekusi transaksi (Sudah benar pakai Service)
             transactionService.purchaseProduct(productId, principal.getName());
             
             redirectAttributes.addFlashAttribute("successMessage", "Transaksi Berhasil!");

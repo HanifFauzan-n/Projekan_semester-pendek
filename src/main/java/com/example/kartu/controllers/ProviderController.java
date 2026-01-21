@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class ProviderController {
 
     @Autowired
-    private ProviderService providerService; // Sekarang pakai Service, bukan Repository
+    private ProviderService providerService; 
 
     @GetMapping
     public String listProviders(Model model) {

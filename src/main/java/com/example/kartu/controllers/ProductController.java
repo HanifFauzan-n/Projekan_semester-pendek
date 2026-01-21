@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.kartu.models.Product;
-import com.example.kartu.repositories.CategoryRepository;
 import com.example.kartu.services.CategoryService;
 import com.example.kartu.services.ProductService;
 import com.example.kartu.services.ProviderService;
@@ -28,9 +27,6 @@ public class ProductController {
 
     @Autowired
     private TransactionHistoryService transactionService;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Autowired
     private CategoryService categoryService;
@@ -49,7 +45,7 @@ public class ProductController {
     public String showAddProductForm(Model model) {
         model.addAttribute("products", new Product());
         // Note: You might need to send categories to the form as well
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("providers", providerService.findAll());
         return "add_product";
     }
@@ -81,7 +77,7 @@ public class ProductController {
     @GetMapping("/update-product/{id}")
     public String showUpdateProductForm(@PathVariable Integer id, Model model) {
         model.addAttribute("products", productService.findById(id));
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("providers", providerService.findAll());
         return "update_product";
     }

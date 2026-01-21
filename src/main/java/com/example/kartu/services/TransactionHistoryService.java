@@ -81,4 +81,14 @@ public class TransactionHistoryService {
                 .mapToLong(t -> t.getProduct().getPrice())
                 .sum();
     }
+
+    // Tambahkan ini di TransactionHistoryService
+    public List<TransactionHistory> getAllTransactionsDesc() {
+        return transactionHistoryRepository.findAllByOrderByTimestampDesc();
+    }
+
+    // Tambahkan method ini di dalam class TransactionHistoryService yang sudah ada
+    public List<TransactionHistory> getTransactionHistoryByUser(User user) {
+        return transactionHistoryRepository.findByUserIdOrderByTimestampDesc(user.getId());
+    }
 }

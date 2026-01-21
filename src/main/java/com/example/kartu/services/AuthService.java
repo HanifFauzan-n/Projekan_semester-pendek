@@ -8,7 +8,6 @@ import com.example.kartu.dto.request.UserRequest;
 import com.example.kartu.models.User;
 import com.example.kartu.repositories.UserRepository;
 
-import jakarta.validation.Valid;
 
 @Service
 public class AuthService {

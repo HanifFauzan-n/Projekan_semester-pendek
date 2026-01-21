@@ -11,4 +11,7 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
 
     List<TransactionHistory> findAllByOrderByTimestampDesc();
 
+    // Mengambil transaksi user tertentu, urut dari yang paling baru
+    List<TransactionHistory> findByUserIdOrderByTimestampDesc(Integer userId);
+
 }

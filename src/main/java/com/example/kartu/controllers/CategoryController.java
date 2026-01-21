@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class CategoryController {
 
     @Autowired
-    private CategoryService categoryService; // Ganti Repository dengan Service
+    private CategoryService categoryService; 
 
     // 1. READ: Tampilkan halaman daftar kategori
     @GetMapping
