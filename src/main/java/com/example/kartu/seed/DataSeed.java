@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import com.example.kartu.models.Category;
 import com.example.kartu.models.User;
@@ -24,6 +25,12 @@ public class DataSeed implements CommandLineRunner {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${app.admin.username}")
+    private String adminUsername;
+
+    @Value("${app.admin.password}")
+    private String adminPassword;
+
     @Override
     public void run(String... args) throws Exception {
         seedCategories();
@@ -42,12 +49,12 @@ public class DataSeed implements CommandLineRunner {
 
     private void seedAdmin() {
         // Cek apakah admin "Hanif18" sudah ada
-        if (userRepository.findByUsername("Hanif18").isEmpty()) {
+        if (userRepository.findByUsername(adminUsername).isEmpty()) {
             System.out.println("Seeding Default Admin...");
             
             User admin = new User();
-            admin.setUsername("Hanif18");
-            admin.setPassword(passwordEncoder.encode("rahasia123")); // Ganti password sesuai keinginan
+            admin.setUsername(adminUsername);
+            admin.setPassword(passwordEncoder.encode(adminPassword)); // Ganti password sesuai keinginan
             admin.setRole("ROLE_ADMIN");
             admin.setPhoneNumber("081234567890");
             admin.setDanaNumber("081234567890");
