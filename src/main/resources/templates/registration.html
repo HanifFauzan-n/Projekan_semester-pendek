@@ -21,7 +21,7 @@
                     </div>
 
                     <form th:action="@{/register}" th:object="${userRequest}" method="post">
-                        
+
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="username" class="form-label">Username</label>
@@ -32,6 +32,11 @@
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" th:field="*{password}"
                                     placeholder="Min. 8 characters" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="confirmPassword"
+                                    th:field="*{confirmPassword}" placeholder="Ulangi password..." required>
                             </div>
                         </div>
                         <div class="row">

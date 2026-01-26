@@ -53,26 +53,29 @@ public class AuthController {
 
     @PostMapping("/register")
     public String processRegistration(
-            @Valid @ModelAttribute("userRequest") UserRequest userRequest, // Tetep pake DTO
+            @Valid @ModelAttribute("userRequest") UserRequest userRequest,
             BindingResult result,
             RedirectAttributes redirectAttributes,
-            Model model) { // Tambah Model di sini
+            Model model) {
 
-        // 1. Cek Error DTO
+        // 1. Validasi Manual: Cek Password Match
+        if (userRequest.getPassword() != null && userRequest.getConfirmPassword() != null) {
+            if (!userRequest.getPassword().equals(userRequest.getConfirmPassword())) {
+                model.addAttribute("errorMessage", "Password dan Konfirmasi Password tidak cocok!");
+                return "registration";
+            }
+        }
+
+        // 2. Cek Error DTO (Validasi anotasi lain)
         if (result.hasErrors()) {
-            // == TRIK RAHASIA ==
-            // Ambil pesan error PERTAMA aja dari list error DTO
             String pesanError = result.getAllErrors().get(0).getDefaultMessage();
-
-            // Masukin ke variabel 'errorMessage' biar HTML lo nampilin kayak biasa
             model.addAttribute("errorMessage", pesanError);
-
             return "registration";
         }
 
         try {
             authService.registerUser(userRequest);
-            redirectAttributes.addFlashAttribute("successMessage", "Registration successful!");
+            redirectAttributes.addFlashAttribute("successMessage", "Registrasi Berhasil! Silakan Login.");
             return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());

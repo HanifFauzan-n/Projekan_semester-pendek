@@ -21,54 +21,51 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeHttpRequests(authorize -> authorize
-                // 1. URL Publik (dapat diakses tanpa login)
-                .requestMatchers(
-                    "/",
-                    "/login",
-                    "/register", // URL untuk GET (menampilkan form) dan POST (memproses registrasi)
-                    "/css/**",   // Aset statis
-                    "/img/**"    // Aset statis
-                ).permitAll()
+                .authorizeHttpRequests(authorize -> authorize
+                        // 1. URL Publik
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/register",
+                                "/css/**",
+                                "/img/**",
+                                "/error" // Tambahkan ini biar halaman error bisa diakses siapa saja
+                        ).permitAll()
 
-                // 2. URL Khusus Admin
-                .requestMatchers(
-                    "/home-admin",
-                    "/profile-admin",
-                    "/add-product",       // Sebelumnya /add-konter
-                    "/save-product",      // URL baru untuk menyimpan produk
-                    "/update-product/**", // Sebelumnya /update-konter/**
-                    "/delete-product/**"  // Sebelumnya /delete-konter/**
-                ).hasRole("ADMIN")
+                        // 2. URL Khusus Admin (UPDATE PENTING)
+                        .requestMatchers(
+                                "/home-admin",
+                                "/profile-admin",
+                                "/admin/**", // Melindungi /admin/products, /admin/providers
+                                "/categories/**", // Melindungi /categories/save, /categories/delete
+                                "/providers/**" // Jaga-jaga
+                        ).hasRole("ADMIN")
 
-                // 3. URL Khusus User
-                .requestMatchers(
-                    "/home-user",
-                    "/profile-user",
-                    "/purchase-product/**", // Sebelumnya /pesan-konter/**
-                    "/add-balance/**",      // Sebelumnya /tambah-saldo/**
-                    "/purchase"             // Sebelumnya /beli
-                ).hasRole("USER")
+                        // 3. URL Khusus User (UPDATE PENTING)
+                        .requestMatchers(
+                                "/home-user",
+                                "/profile-user",
+                                "/transaction/**", // Melindungi /transaction/confirm, /transaction/process
+                                "/user/**", // Melindungi /user/edit, /user/update
+                                "/purchase/**", // Jika masih ada sisa controller lama
+                                "/topup/**" // Jika ada controller TopUp
+                        ).hasRole("USER")
 
-                // 4. Semua URL lainnya harus diautentikasi
-                .anyRequest().authenticated()
-            )
-            // Konfigurasi Halaman Login
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home-redirect", true)
-                .failureUrl("/login?error=true")
-                .permitAll()
-            )
-            // Konfigurasi Proses Logout
-            .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login?logout=true")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .permitAll()
-            );
+                        // 4. Sisanya harus login
+                        .anyRequest().authenticated())
+                // Config Login & Logout (Tetap sama)
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/home-redirect", true)
+                        .failureUrl("/login?error=true")
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
 
         return http.build();
     }

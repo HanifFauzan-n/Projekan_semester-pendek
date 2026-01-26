@@ -19,6 +19,10 @@ public class UserRequest {
     @Size(min = 8, message = "Password minimal 8 karakter")
     private String password;
 
+    @NotBlank(message = "Confirm Password wajib diisi")
+    @Size(min = 8, message = "minimal 8 karakter")
+    private String confirmPassword;
+
     @NotBlank(message = "Nomor HP wajib diisi")
     @Pattern(regexp = "^08\\d{10,13}$", message = "Format HP salah (harus 08xxx, 12-15 digit)")
     private String phoneNumber;

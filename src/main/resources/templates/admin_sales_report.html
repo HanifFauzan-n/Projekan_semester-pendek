@@ -1,11 +1,36 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Sales Report - FlashCell Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        /* Saat diprint, sembunyikan tombol, navbar, dan elemen yang tidak perlu */
+        @media print {
+
+            .no-print,
+            .navbar,
+            .footer,
+            .btn {
+                display: none !important;
+            }
+
+            /* Pastikan tabel terlihat jelas */
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            body {
+                background-color: white !important;
+            }
+        }
+    </style>
 </head>
+
 <body class="bg-light">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
@@ -20,10 +45,15 @@
     <main class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h3><i class="fas fa-chart-line me-2"></i>Sales Transaction Report</h3>
-            
+
             <a th:href="@{/admin/transactions/topups}" class="btn btn-outline-primary">
                 <i class="fas fa-wallet me-2"></i>View Top Up Report
             </a>
+            <div class="d-flex justify-content-end mb-3 no-print">
+                <button onclick="window.print()" class="btn btn-success">
+                    <i class="fas fa-print me-2"></i> Cetak Laporan (PDF)
+                </button>
+            </div>
         </div>
 
         <div class="card shadow-sm">
@@ -43,24 +73,25 @@
                         <tbody>
                             <tr th:each="tx : ${transactions}">
                                 <td th:text="${tx.id}">1</td>
-                                
+
                                 <td th:text="${#temporals.format(tx.timestamp, 'dd MMM yyyy, HH:mm')}">Date</td>
-                                
+
                                 <td>
                                     <div class="fw-bold" th:text="${tx.user.username}">User</div>
                                     <small class="text-muted" th:text="${tx.user.phoneNumber}">08123...</small>
                                 </td>
-                                
+
                                 <td>
-                                    <span th:text="${tx.product.provider.name}" class="badge bg-secondary me-1">Prov</span>
+                                    <span th:text="${tx.product.provider.name}"
+                                        class="badge bg-secondary me-1">Prov</span>
                                     <span th:text="${tx.product.name}">Product Name</span>
                                 </td>
-                                
-                                <td class="fw-bold text-success" 
+
+                                <td class="fw-bold text-success"
                                     th:text="'Rp ' + ${#numbers.formatDecimal(tx.product.price, 0, 'POINT', 0, 'COMMA')}">
                                     Rp 50.000
                                 </td>
-                                
+
                                 <td class="text-center">
                                     <span class="badge rounded-pill"
                                         th:classappend="${tx.status.name() == 'SUCCESS' ? 'bg-success' : 'bg-danger'}"
@@ -75,4 +106,5 @@
     </main>
 
 </body>
+
 </html>

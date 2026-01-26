@@ -11,9 +11,12 @@ import com.example.kartu.models.User;
 import com.example.kartu.repositories.CategoryRepository;
 import com.example.kartu.repositories.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.List;
 
 @Component
+@Slf4j
 public class DataSeed implements CommandLineRunner {
 
     @Autowired
@@ -39,18 +42,18 @@ public class DataSeed implements CommandLineRunner {
 
     private void seedCategories() {
         if (categoryRepository.count() == 0) {
-            System.out.println("Seeding Categories...");
+            log.info("Seeding Categories...");
             Category rowOne = new Category( "CD-001","MOBILE CREDIT");
             Category rowTwo = new Category( "CD-002","DATA PLAN");
             categoryRepository.saveAll(List.of(rowOne, rowTwo));
-            System.out.println("Categories seeded.");
+            log.info("Categories seeded.");
         }
     }
 
     private void seedAdmin() {
         // Cek apakah admin "Hanif18" sudah ada
         if (userRepository.findByUsername(adminUsername).isEmpty()) {
-            System.out.println("Seeding Default Admin...");
+            log.info("Seeding Default Admin...");
             
             User admin = new User();
             admin.setUsername(adminUsername);
@@ -61,7 +64,7 @@ public class DataSeed implements CommandLineRunner {
             admin.setBalance(0);
 
             userRepository.save(admin);
-            System.out.println("Admin 'Hanif18' created successfully.");
+            log.info("Admin 'Hanif18' created successfully.");
         }
     }
 }
