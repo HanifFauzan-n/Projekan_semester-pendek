@@ -32,12 +32,12 @@ public class TopUpController {
 
     // 2. Proses Submit
     @PostMapping("/topup")
-    public String processTopUp(@RequestParam("amount") Double amount, 
-                               Principal principal, 
-                               RedirectAttributes redirectAttributes) {
+    public String processTopUp(@RequestParam("amount") Double amount,
+            Principal principal,
+            RedirectAttributes redirectAttributes) {
         try {
             topUpService.processTopUp(principal.getName(), amount);
-            redirectAttributes.addFlashAttribute("successMessage", "Berhasil Top Up Rp " + amount.longValue());
+            redirectAttributes.addFlashAttribute("successMessage","Permintaan Top Up diterima! Saldo akan masuk otomatis dalam 3-5 menit.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Gagal: " + e.getMessage());
         }

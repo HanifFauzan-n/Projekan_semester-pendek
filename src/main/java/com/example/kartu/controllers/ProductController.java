@@ -100,12 +100,13 @@ public class ProductController {
     }
 
     @PostMapping("/purchase")
-    public String purchaseProduct(@ModelAttribute("products") Product product, Principal principal,
+    public String purchaseProduct(@ModelAttribute("products") Product product,
+            @RequestParam(value = "voucherCode", required = false) String code, Principal principal,
             RedirectAttributes redirectAttributes) {
         try {
             // Securely get the username of the logged-in user
             String username = principal.getName();
-            transactionService.purchaseProduct(product.getId(), username);
+            transactionService.purchaseProduct(product.getId(), username, code);
             redirectAttributes.addFlashAttribute("successMessage", "Purchase successful!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());

@@ -4,9 +4,11 @@ import com.example.kartu.models.TransactionHistory;
 import com.example.kartu.enums.TransactionStatus;
 import com.example.kartu.models.Product;
 import com.example.kartu.models.User;
+import com.example.kartu.models.Voucher;
 import com.example.kartu.repositories.TransactionHistoryRepository;
 import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.UserRepository;
+import com.example.kartu.repositories.VoucherRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,15 +27,39 @@ public class TransactionHistoryService {
     private ProductRepository productRepository;
 
     @Autowired
+    private VoucherRepository voucherRepository;
+
+    @Autowired
     private TransactionHistoryRepository transactionHistoryRepository;
 
     @Transactional(rollbackFor = Exception.class)
-    public void purchaseProduct(Integer productId, String username) throws Exception {
+    public void purchaseProduct(Integer productId, String username, String voucherCode) throws Exception {
 
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new Exception("User not found"));
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new Exception("Product not found"));
+
+        Double finalPrice = Double.valueOf(product.getPrice());
+
+        // 2. Cek Voucher (Jika user memasukkan kode)
+        if (voucherCode != null && !voucherCode.isEmpty()) {
+            Voucher voucher = voucherRepository.findByCode(voucherCode)
+                    .orElseThrow(() -> new Exception("Kode Voucher tidak valid!"));
+
+            if (voucher.getStock() <= 0 || !voucher.isActive()) {
+                throw new Exception("Voucher sudah habis atau tidak aktif.");
+            }
+
+            // Potong Harga
+            finalPrice = finalPrice - voucher.getDiscountAmount();
+            if (finalPrice < 0)
+                finalPrice = 0.0; // Mencegah harga minus
+
+            // Kurangi Stok Voucher
+            voucher.setStock(voucher.getStock() - 1);
+            voucherRepository.save(voucher);
+        }
 
         // 1. Siapkan Object History Awal
         TransactionHistory history = new TransactionHistory();
@@ -61,6 +87,7 @@ public class TransactionHistoryService {
 
             // 4. Update Status Jadi SUCCESS
             history.setStatus(TransactionStatus.SUCCESS);
+            history.setAmountPaid(finalPrice);
             transactionHistoryRepository.save(history); // Simpan riwayat sukses
 
         } catch (Exception e) {

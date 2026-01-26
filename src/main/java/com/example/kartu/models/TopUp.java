@@ -3,6 +3,7 @@ package com.example.kartu.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.example.kartu.enums.TransactionStatus;
 
 import java.time.LocalDateTime;
 
@@ -23,6 +24,9 @@ public class TopUp {
     private Double amount;
     
     private LocalDateTime date; // Saya ganti 'transactionDate' jadi 'date' biar simpel
+
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;
 
 
     // Constructor Helper

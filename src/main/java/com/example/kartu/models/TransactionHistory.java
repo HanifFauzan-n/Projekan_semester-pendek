@@ -25,4 +25,6 @@ public class TransactionHistory {
     @ManyToOne
     @JoinColumn(name = "id_product")
     private Product product;
+
+    private Double amountPaid; 
 }

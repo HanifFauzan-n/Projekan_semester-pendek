@@ -1,17 +1,24 @@
 package com.example.kartu.services;
 
+import com.example.kartu.enums.TransactionStatus;
 import com.example.kartu.models.TopUp;
 import com.example.kartu.models.User;
 import com.example.kartu.repositories.TopUpRepository;
 import com.example.kartu.repositories.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class TopUpService {
 
     @Autowired
@@ -36,14 +43,45 @@ public class TopUpService {
         // 2. Ambil User
         User user = getUser(username);
 
-        // 3. Update Saldo User (Saldo Akhir)
-        double currentBalance = (user.getBalance() == null) ? 0 : user.getBalance();
-        user.setBalance((int) (currentBalance + amount));
-        userRepository.save(user);
-
         // 4. Simpan Bukti/Riwayat (Entity TopUp)
         TopUp topUp = new TopUp(user, amount);
+        topUp.setStatus(TransactionStatus.PENDING);
+        topUp.setDate(LocalDateTime.now());
         topUpRepository.save(topUp);
+    }
+
+    // 2. FITUR BARU: Robot Pengecek Otomatis (Scheduler)
+    // Jalan setiap 60.000 ms (1 menit)
+    @Scheduled(fixedRate = 60000)
+    @Transactional // Biar aman kalau ada error di tengah jalan
+    public void autoApproveTopUp() {
+        System.out.println("[SCHEDULER] Mengecek top up pending...");
+
+        // Ambil semua yang PENDING
+        List<TopUp> pendingList = topUpRepository.findByStatus(TransactionStatus.PENDING);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        for (TopUp topUp : pendingList) {
+            // Hitung selisih waktu (dalam menit)
+            long minutesSinceRequest = ChronoUnit.MINUTES.between(topUp.getDate(), now);
+
+            // Jika sudah lewat 3 menit (Ganti angka 3 kalau mau lebih cepat saat demo,
+            // misal 1 menit)
+            if (minutesSinceRequest >= 1) {
+
+                // 1. Tambah Saldo User
+                User user = topUp.getUser();
+                user.setBalance(user.getBalance() + topUp.getAmount().intValue());
+                userRepository.save(user);
+
+                // 2. Ubah Status jadi SUCCESS
+                topUp.setStatus(TransactionStatus.SUCCESS);
+                topUpRepository.save(topUp);
+
+                log.info("TopUp ID " + topUp.getId() + " BERHASIL diproses otomatis.");
+            }
+        }
     }
 
     public List<TopUp> getAllTopUpsDesc() {

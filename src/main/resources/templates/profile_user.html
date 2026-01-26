@@ -210,7 +210,11 @@
                                 </td>
 
                                 <td class="text-center">
-                                    <span class="badge bg-success rounded-pill">SUCCESS</span>
+                                    <span class="badge rounded-pill"
+                                        th:classappend="${topup.status.name() == 'SUCCESS' ? 'bg-success' : 'bg-warning text-dark'}"
+                                        th:text="${topup.status}">
+                                        SUCCESS
+                                    </span>
                                 </td>
                             </tr>
                         </tbody>
