@@ -55,21 +55,24 @@ public class HomeController {
         return "profile_admin";
     }
 
-    // 4. Profile User (SEKARANG JAUH LEBIH BERSIH)
-    @GetMapping("/profile-user")
+   @GetMapping("/profile-user")
     public String showUserProfile(Model model, Principal principal) {
-        // A. Ambil User dari Service
+        // A. Ambil User
         User user = userService.getCurrentUser(principal);
 
-        // B. Ambil Data Transaksi & Topup dari Service masing-masing
-        var history = transactionHistoryService.getTransactionHistoryByUser(user);
+        // B. Ambil Data Transaksi & Topup
+        var history = transactionHistoryService.getTransactionHistoryByUser(user); 
         var topups = topUpService.getTopUpHistoryByUser(user);
 
-        // C. Hitung Statistik Sederhana (Bisa juga dipindah ke Service kalau mau lebih rapi lagi)
+        // C. Hitung Statistik (PERBAIKAN DISINI)
         long totalTransactions = history.size();
-        long totalSpending = history.stream()
-                .filter(tx -> "SUCCESS".equals(tx.getStatus().name()))
-                .mapToLong(tx -> tx.getProduct().getPrice())
+        
+        // Ubah jadi 'double' karena amountPaid tipenya Double
+        double totalSpending = history.stream()
+                .filter(tx -> "SUCCESS".equals(tx.getStatus().name())) // Cuma hitung yang sukses
+                // PERBAIKAN UTAMA: Pakai getAmountPaid()
+                // Kita kasih fallback logic: Kalau amountPaid null (transaksi lama), pakai harga produk asli
+                .mapToDouble(tx -> tx.getAmountPaid() != null ? tx.getAmountPaid() : tx.getProduct().getPrice())
                 .sum();
 
         // D. Kirim ke HTML
@@ -77,7 +80,9 @@ public class HomeController {
         model.addAttribute("history", history);
         model.addAttribute("topups", topups);
         model.addAttribute("totalTransactions", totalTransactions);
-        model.addAttribute("totalSpending", totalSpending);
+        
+        // Format angka biar enak dilihat (tanpa koma .0 di belakang)
+        model.addAttribute("totalSpending", (long) totalSpending); 
 
         return "profile_user";
     }

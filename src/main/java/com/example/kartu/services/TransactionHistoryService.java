@@ -73,12 +73,11 @@ public class TransactionHistoryService {
             if (product.getStock() <= 0) {
                 throw new Exception("Stok Habis");
             }
-            if (user.getBalance() < product.getPrice()) {
+            if (user.getBalance() < finalPrice) {
                 throw new Exception("Saldo Tidak Cukup");
             }
 
-            // 3. Jika Lolos Validasi -> Kurangi Saldo & Stok
-            user.setBalance(user.getBalance() - product.getPrice());
+            user.setBalance((int) (user.getBalance() - finalPrice));
             product.setStock(product.getStock() - 1);
 
             // Simpan perubahan data master

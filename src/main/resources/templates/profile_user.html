@@ -126,7 +126,7 @@
                                 <td>
                                     <div class="d-flex align-items-center">
                                         <img th:if="${tx.product.provider != null && tx.product.provider.logo != null}"
-                                            th:src="'data:image/png;base64,' + ${tx.product.provider.getLogo()}"
+                                            th:src="'data:image/png;base64,' + ${tx.product.provider.getLogoBase64()}"
                                             class="rounded border bg-light p-1 me-2"
                                             style="width: 40px; height: 40px; object-fit: contain;">
 
@@ -142,9 +142,16 @@
                                     </div>
                                 </td>
 
-                                <td class="fw-bold text-danger"
-                                    th:text="'- Rp ' + ${#numbers.formatDecimal(tx.product.price, 0, 'POINT', 0, 'COMMA')}">
-                                    - Rp 50.000
+                                <td>
+                                    <span th:text="'Rp ' + ${#numbers.formatDecimal(tx.amountPaid != null ? tx.amountPaid : tx.product.price, 0, 'POINT', 0, 'COMMA')}">
+                                        Rp 0
+                                    </span>
+
+                                    <span
+                                        th:if="${tx.amountPaid != null && tx.amountPaid < tx.product.price}"
+                                        class="badge bg-warning text-dark ms-1" style="font-size: 0.7em;">
+                                        Diskon
+                                    </span>
                                 </td>
 
                                 <td class="text-center">
