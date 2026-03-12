@@ -14,4 +14,8 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
     // Mengambil transaksi user tertentu, urut dari yang paling baru
     List<TransactionHistory> findByUserIdOrderByTimestampDesc(Integer userId);
 
+    boolean existsByTransactionId(String newId);
+
+    boolean existsBySerialNumber(String sn);
+
 }

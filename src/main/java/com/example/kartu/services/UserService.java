@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.security.Principal;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -47,15 +49,49 @@ public class UserService {
             user.setDanaNumber(request.getDanaNumber());
         }
 
-        // Logic Ganti Password (Jika diisi)
-        if (request.getNewPassword() != null && !request.getNewPassword().isEmpty()) {
+        // Logic Ganti Password
+        if (StringUtils.hasText(request.getNewPassword())) {
+            if (!StringUtils.hasText(request.getCurrentPassword())) {
+                throw new IllegalArgumentException("Password lama harus diisi!");
+            }
+
             // Cek password lama harus benar
             if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-                throw new Exception("Password lama salah!");
+                throw new IllegalArgumentException("Password lama salah!");
             }
+
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
         }
 
+        userRepository.save(user);
+    }
+
+    // Untuk Admin: Melihat daftar seluruh pengguna
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    // Untuk Admin: Melihat detail informasi pengguna berdasarkan ID
+    public User getUserDetailsById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Data pengguna tidak ditemukan"));
+    }
+
+    public void banUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Data pengguna tidak ditemukan"));
+
+        // Ubah status menjadi BANNED
+        user.setStatus("BANNED");
+        userRepository.save(user);
+    }
+
+    public void unbanUser(Integer id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Data pengguna tidak ditemukan"));
+
+        // Kembalikan status menjadi ACTIVE
+        user.setStatus("ACTIVE");
         userRepository.save(user);
     }
 }

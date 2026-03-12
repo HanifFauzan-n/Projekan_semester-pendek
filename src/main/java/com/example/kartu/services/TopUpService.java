@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -68,7 +69,7 @@ public class TopUpService {
 
             // Jika sudah lewat 3 menit (Ganti angka 3 kalau mau lebih cepat saat demo,
             // misal 1 menit)
-            if (minutesSinceRequest >= 1) {
+            if (minutesSinceRequest >= 1) { // posisi pending top up
 
                 // 1. Tambah Saldo User
                 User user = topUp.getUser();
@@ -91,5 +92,23 @@ public class TopUpService {
     // Tambahkan method ini di dalam class TopUpService yang sudah ada
     public List<TopUp> getTopUpHistoryByUser(User user) {
         return topUpRepository.findByUserIdOrderByDateDesc(user.getId());
+    }
+
+    @Transactional
+    public void cancelTopUp(Integer id) {
+        Optional<TopUp> topUpOpt = topUpRepository.findById(id);
+
+        if (topUpOpt.isPresent()) {
+            TopUp topUp = topUpOpt.get();
+            
+            // Hanya bisa batalkan jika status masih PENDING
+            if (topUp.getStatus() == TransactionStatus.PENDING) {
+                topUp.setStatus(TransactionStatus.FAILED); // Ubah status jadi FAILED
+                topUpRepository.save(topUp);
+                log.info("TopUp ID " + id + " DIBATALKAN oleh Admin.");
+            } else {
+                throw new RuntimeException("Tidak bisa membatalkan transaksi yang sudah selesai/gagal.");
+            }
+        }
     }
 }

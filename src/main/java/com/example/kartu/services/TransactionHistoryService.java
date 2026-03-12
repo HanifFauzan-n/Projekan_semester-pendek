@@ -10,7 +10,9 @@ import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.UserRepository;
 import com.example.kartu.repositories.VoucherRepository;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,44 @@ public class TransactionHistoryService {
 
     @Autowired
     private TransactionHistoryRepository transactionHistoryRepository;
+
+    private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private final SecureRandom random = new SecureRandom();
+
+    // Method untuk generate Transaction ID unik (Contoh: FLC-20260312-A7X9)
+    private String generateUniqueTransactionId() {
+        String newId;
+        boolean exists;
+        do {
+            String datePart = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            StringBuilder randomPart = new StringBuilder(4);
+            for (int i = 0; i < 4; i++) {
+                randomPart.append(CHARS.charAt(random.nextInt(CHARS.length())));
+            }
+            newId = "FLC-" + datePart + "-" + randomPart;
+
+            // Validasi ke database: pastikan belum pernah ada
+            exists = transactionHistoryRepository.existsByTransactionId(newId);
+        } while (exists); // Jika ada yang sama, ulangi generate
+
+        return newId;
+    }
+
+    // Method untuk generate SN unik (16 digit angka)
+    private String generateUniqueSN() {
+        String sn;
+        boolean exists;
+        do {
+            StringBuilder sb = new StringBuilder(16);
+            for (int i = 0; i < 16; i++) {
+                sb.append(random.nextInt(10));
+            }
+            sn = sb.toString();
+            exists = transactionHistoryRepository.existsBySerialNumber(sn);
+        } while (exists);
+
+        return sn;
+    }
 
     @Transactional(rollbackFor = Exception.class)
     public void purchaseProduct(Integer productId, String username, String voucherCode) throws Exception {
@@ -67,6 +107,8 @@ public class TransactionHistoryService {
         history.setProduct(product);
         history.setTimestamp(LocalDateTime.now());
         history.setStatus(TransactionStatus.PENDING); // Status awal
+        history.setTransactionId(generateUniqueTransactionId());
+        history.setSerialNumber(generateUniqueSN());
 
         try {
             // 2. Lakukan Validasi Bisnis
@@ -102,9 +144,11 @@ public class TransactionHistoryService {
     @Transactional
     public Long calculateTotalRevenue() {
         List<TransactionHistory> transactions = transactionHistoryRepository.findAll();
-        // Menjumlahkan harga produk dari setiap transaksi
-        return transactions.stream()
-                .mapToLong(t -> t.getProduct().getPrice())
+
+        // Menjumlahkan dari field amountPaid yang ada di riwayat transaksi
+        return (long) transactions.stream()
+                .filter(t -> t.getAmountPaid() != null) // Safety check agar tidak error jika ada data null
+                .mapToDouble(TransactionHistory::getAmountPaid)
                 .sum();
     }
 

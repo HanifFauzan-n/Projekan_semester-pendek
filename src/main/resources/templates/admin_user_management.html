@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Management - FlashCell Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        @media print {
+
+            .no-print,
+            .navbar,
+            .footer,
+            .btn {
+                display: none !important;
+            }
+
+            .card {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            body {
+                background-color: white !important;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top no-print">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/home-admin}">FlashCell [Admin]</a>
+            <div class="d-flex">
+                <a th:href="@{/profile-admin}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i> Back to Profile
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container py-5">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold text-warning"><i class="fas fa-users-cog me-2"></i>User Management</h3>
+
+            <div class="no-print">
+                <a th:href="@{/admin/users}" class="btn btn-outline-secondary me-2">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </a>
+                <button onclick="window.print()" class="btn btn-success">
+                    <i class="fas fa-print me-2"></i> Cetak PDF
+                </button>
+            </div>
+        </div>
+
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show no-print" role="alert">
+            <i class="fas fa-check-circle me-2"></i><span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show no-print" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i><span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="ps-4">ID</th>
+                                <th>Informasi Pengguna</th>
+                                <th>Kontak & DANA</th>
+                                <th>Saldo</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center no-print">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${users}">
+                                <td class="ps-4 text-muted fw-bold" th:text="'#' + ${user.id}">1</td>
+
+                                <td>
+                                    <div class="fw-bold text-dark" th:text="${user.username}">Username</div>
+                                    <small class="text-muted">
+                                        <span class="badge bg-secondary" th:text="${user.role}">USER</span>
+                                    </small>
+                                </td>
+
+                                <td>
+                                    <div class="text-muted small">
+                                        <i class="fas fa-phone-alt me-1 text-primary"></i>
+                                        <span
+                                            th:text="${user.phoneNumber != null ? user.phoneNumber : '-'}">08123</span>
+                                    </div>
+                                    <div class="text-muted small mt-1">
+                                        <i class="fas fa-wallet me-1 text-info"></i>
+                                        <span th:text="${user.danaNumber != null ? user.danaNumber : '-'}">08123</span>
+                                    </div>
+                                </td>
+
+                                <td class="fw-bold text-success"
+                                    th:text="'Rp ' + ${#numbers.formatDecimal(user.balance != null ? user.balance : 0, 0, 'POINT', 0, 'COMMA')}">
+                                    Rp 50.000
+                                </td>
+
+                                <td class="text-center">
+                                    <span th:if="${user.status == 'ACTIVE'}" class="badge bg-success rounded-pill">
+                                        <i class="fas fa-user-check me-1"></i> ACTIVE
+                                    </span>
+                                    <span th:if="${user.status == 'BANNED'}" class="badge bg-danger rounded-pill">
+                                        <i class="fas fa-user-slash me-1"></i> BANNED
+                                    </span>
+                                </td>
+
+                                <td class="text-center no-print">
+                                    <div class="d-flex justify-content-center gap-2">
+
+                                        <th:block th:if="${user.role != 'ROLE_ADMIN' and user.role != 'ADMIN'}">
+
+                                            <form th:if="${user.status == 'ACTIVE'}"
+                                                th:action="@{/admin/users/ban/{id}(id=${user.id})}" method="post"
+                                                onsubmit="return confirm('Yakin ingin memblokir/banned akun ini? Akun tidak akan bisa melakukan transaksi.');">
+                                                <button type="submit" class="btn btn-sm btn-danger rounded-pill"
+                                                    title="Banned Akun">
+                                                    <i class="fas fa-ban me-1"></i> Banned
+                                                </button>
+                                            </form>
+
+                                            <form th:if="${user.status == 'BANNED'}"
+                                                th:action="@{/admin/users/unban/{id}(id=${user.id})}" method="post"
+                                                onsubmit="return confirm('Yakin ingin mengaktifkan kembali akun ini?');">
+                                                <button type="submit" class="btn btn-sm btn-success rounded-pill"
+                                                    title="Aktifkan Kembali">
+                                                    <i class="fas fa-undo me-1"></i> Unban
+                                                </button>
+                                            </form>
+
+                                        </th:block>
+
+                                        <th:block th:if="${user.role == 'ROLE_ADMIN' or user.role == 'ADMIN'}">
+                                            <span class="text-muted small" style="cursor: not-allowed;">
+                                                <i class="fas fa-shield-alt me-1"></i> <em>Protected</em>
+                                            </span>
+                                        </th:block>
+
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr th:if="${#lists.isEmpty(users)}">
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="fas fa-users-slash fa-3x mb-3 text-secondary"></i><br>
+                                    Belum ada data pengguna yang terdaftar.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

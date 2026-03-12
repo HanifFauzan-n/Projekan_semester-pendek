@@ -23,10 +23,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User tidak ditemukan dengan username: " + username));
 
-        // Buat objek UserDetails dari Spring Security
+        // Jika statusnya BANNED, maka isAccountNonLocked menjadi false
+        boolean isAccountNonLocked = !"BANNED".equals(user.getStatus());
+
+        // Gunakan konstruktor UserDetails yang lengkap (7 parameter)
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
+                true,                // enabled
+                true,                // accountNonExpired
+                true,                // credentialsNonExpired
+                isAccountNonLocked,  // accountNonLocked (false jika user BANNED)
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
         );
     }

@@ -4,9 +4,13 @@ import com.example.kartu.dto.request.UserRequest;
 import com.example.kartu.models.User;
 import com.example.kartu.services.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.LockedException;
+import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,12 +30,28 @@ public class AuthController {
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
+            HttpServletRequest request,
             Model model) {
 
         // Menampilkan pesan error jika login gagal
         if (error != null) {
-            model.addAttribute("errorMessage", "Invalid username or password.");
+            // Kita ambil session untuk mengecek error spesifik dari Spring Security
+            HttpSession session = request.getSession(false);
+            String errorMessage = "Invalid username or password."; // Pesan default
+
+            if (session != null) {
+                Exception ex = (Exception) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
+                if (ex != null) {
+                    // Jika errornya karena di-banned (LockedException)
+                    if (ex instanceof LockedException) {
+                        errorMessage = "Your account has been banned by the Administrator.";
+                    }
+                    // Anda juga bisa menambahkan tipe error lain di sini jika perlu
+                }
+            }
+            model.addAttribute("errorMessage", errorMessage);
         }
+
         // Menampilkan pesan sukses setelah logout
         if (logout != null) {
             model.addAttribute("successMessage", "You have been logged out successfully.");
