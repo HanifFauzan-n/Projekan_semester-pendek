@@ -29,6 +29,7 @@ public class SecurityConfig {
                                 "/register",
                                 "/css/**",
                                 "/img/**",
+                                "/forgot-password",
                                 "/error" // Tambahkan ini biar halaman error bisa diakses siapa saja
                         ).permitAll()
 

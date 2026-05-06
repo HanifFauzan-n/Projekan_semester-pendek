@@ -102,4 +102,26 @@ public class AuthController {
             return "registration";
         }
     }
+
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordForm() {
+        return "forgot_password";
+    }
+
+    @PostMapping("/forgot-password")
+    public String handlePasswordReset(@RequestParam String username,
+            @RequestParam String emergencyNumber,
+            @RequestParam String newPassword,
+            Model model) {
+
+        boolean isSuccess = authService.resetPasswordWithEmergencyNumber(username, emergencyNumber, newPassword);
+
+        if (isSuccess) {
+            model.addAttribute("successMessage", "Password berhasil diperbarui. Silakan login.");
+            return "login";
+        } else {
+            model.addAttribute("errorMessage", "Data tidak cocok. Pastikan Username dan Nomor Darurat benar.");
+            return "forgot_password";
+        }
+    }
 }

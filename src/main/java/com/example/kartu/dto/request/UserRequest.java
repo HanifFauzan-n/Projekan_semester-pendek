@@ -23,14 +23,13 @@ public class UserRequest {
     @Size(min = 8, message = "minimal 8 karakter")
     private String confirmPassword;
 
+    @NotBlank(message = "Emergency Number wajib diisi")
+    @Size(min = 5, message = "minimal 5 karakter")
+    @Pattern(regexp = "^[0-9]+$", message = "Nomor darurat hanya boleh berisi angka")
+    private String emergencyNumber;
+
     @NotBlank(message = "Nomor HP wajib diisi")
-    @Pattern(regexp = "^08\\d{10,13}$", message = "Format HP salah (harus 08xxx, 12-15 digit)")
+    @Pattern(regexp = "^08\\d{7,15}$", message = "Format HP salah (harus 08xxx, 9-15 digit)")
     private String phoneNumber;
-
-    @NotBlank(message = "Nomor DANA wajib diisi")
-    @Pattern(regexp = "^08\\d{10,13}$", message = "Format DANA salah")
-    private String danaNumber;
-
-    private Integer balance;
 
 }

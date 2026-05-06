@@ -8,4 +8,6 @@ import com.example.kartu.models.User;
 
 public interface UserRepository extends JpaRepository <User,Integer>{
     Optional<User> findByUsername(String username);
+    Optional<User> findByUsernameAndEmergencyNumber(String username, String emergencyNumber);
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }

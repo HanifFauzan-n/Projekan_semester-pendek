@@ -38,23 +38,18 @@
                                 <input type="password" class="form-control" id="confirmPassword"
                                     th:field="*{confirmPassword}" placeholder="Ulangi password..." required>
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Emergency Number </label>
+                                <input type="text" id="emergencyNumber" th:field="*{emergencyNumber}" class="form-control"
+                                    placeholder="(For Password Reset)" required>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="mb-3">
                                 <label for="phoneNumber" class="form-label">Phone Number</label>
                                 <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
                                     placeholder="Example: 0812..." required>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="danaNumber" class="form-label">DANA Number</label>
-                                <input type="tel" class="form-control" id="danaNumber" th:field="*{danaNumber}"
-                                    placeholder="Registered DANA number" required>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="balance" class="form-label">Initial Balance</label>
-                            <input type="number" class="form-control" id="balance" th:field="*{balance}"
-                                placeholder="Example: 50000" required>
                         </div>
                         <div class="d-grid mt-4">
                             <button type="submit" class="btn btn-primary">Register</button>
