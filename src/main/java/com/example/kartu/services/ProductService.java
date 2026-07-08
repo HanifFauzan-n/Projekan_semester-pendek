@@ -2,7 +2,6 @@ package com.example.kartu.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -12,14 +11,15 @@ import com.example.kartu.models.Product;
 import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.TransactionHistoryRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private TransactionHistoryRepository transactionHistoryRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
 
     public List<Product> findAll() {
         return productRepository.findAll();

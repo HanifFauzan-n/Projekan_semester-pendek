@@ -2,18 +2,21 @@ package com.example.kartu.controllers;
 
 import com.example.kartu.models.Category;
 import com.example.kartu.services.CategoryService; // Import Service
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/categories")
 public class CategoryController {
 
-    @Autowired
-    private CategoryService categoryService; 
+    
+    private final CategoryService categoryService; 
 
     // 1. READ: Tampilkan halaman daftar kategori
     @GetMapping
@@ -31,9 +34,9 @@ public class CategoryController {
             // Logika "toUpperCase" sudah diurus oleh Service
             categoryService.saveCategory(category);
             
-            redirectAttributes.addFlashAttribute("successMessage", "Kategori berhasil disimpan!");
+            redirectAttributes.addFlashAttribute("successMessage", "Category saved successfully!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menyimpan kategori: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save category:" + e.getMessage());
         }
         return "redirect:/categories";
     }
@@ -45,7 +48,7 @@ public class CategoryController {
             // Service akan melempar error jika kategori masih dipakai produk
             categoryService.deleteCategory(id);
             
-            redirectAttributes.addFlashAttribute("successMessage", "Kategori berhasil dihapus!");
+            redirectAttributes.addFlashAttribute("successMessage", "Category successfully deleted!");
         } catch (Exception e) {
             // Tangkap pesan error dari Service ("Gagal! Kategori ini sedang digunakan...")
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());

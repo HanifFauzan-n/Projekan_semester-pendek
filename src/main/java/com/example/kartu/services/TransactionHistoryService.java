@@ -10,29 +10,27 @@ import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.UserRepository;
 import com.example.kartu.repositories.VoucherRepository;
 
+import lombok.RequiredArgsConstructor;
+
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionHistoryService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    @Autowired
-    private VoucherRepository voucherRepository;
+    private final VoucherRepository voucherRepository;
 
-    @Autowired
-    private TransactionHistoryRepository transactionHistoryRepository;
+    private final TransactionHistoryRepository transactionHistoryRepository;
 
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final SecureRandom random = new SecureRandom();
@@ -85,10 +83,10 @@ public class TransactionHistoryService {
         // 2. Cek Voucher (Jika user memasukkan kode)
         if (voucherCode != null && !voucherCode.isEmpty()) {
             Voucher voucher = voucherRepository.findByCode(voucherCode)
-                    .orElseThrow(() -> new Exception("Kode Voucher tidak valid!"));
+                    .orElseThrow(() -> new Exception("Voucher Code is invalid!"));
 
             if (voucher.getStock() <= 0 || !voucher.isActive()) {
-                throw new Exception("Voucher sudah habis atau tidak aktif.");
+                throw new Exception("Voucher has expired or is inactive.");
             }
 
             // Potong Harga
@@ -113,10 +111,10 @@ public class TransactionHistoryService {
         try {
             // 2. Lakukan Validasi Bisnis
             if (product.getStock() <= 0) {
-                throw new Exception("Stok Habis");
+                throw new Exception("Out of stock");
             }
             if (user.getBalance() < finalPrice) {
-                throw new Exception("Saldo Tidak Cukup");
+                throw new Exception("Operation failed! Insufficient balance."); // uang anda kurang
             }
 
             user.setBalance((int) (user.getBalance() - finalPrice));

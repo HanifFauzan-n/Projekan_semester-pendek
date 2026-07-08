@@ -3,7 +3,9 @@ package com.example.kartu.services;
 import com.example.kartu.models.Provider;
 import com.example.kartu.repositories.ProductRepository;
 import com.example.kartu.repositories.ProviderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,15 +13,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProviderService {
 
-    @Autowired
-    private ProviderRepository providerRepository;
+    private final ProviderRepository providerRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    // Ambil semua provider
     public List<Provider> findAll() {
         return providerRepository.findAll();
     }
@@ -39,12 +39,12 @@ public class ProviderService {
             List<String> allowedTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
 
             if (!allowedTypes.contains(contentType)) {
-                throw new Exception("File harus berupa gambar (PNG/JPG)!");
+                throw new Exception("File must be an image (PNG/JPG)!");
             }
 
             // B. Validasi Ukuran File (Max 1MB)
             if (file.getSize() > 1024 * 1024) {
-                throw new Exception("Ukuran gambar maksimal 1MB!");
+                throw new Exception("Maximum image size is 1MB!");
             }
 
             // C. Konversi ke Base64
@@ -55,14 +55,14 @@ public class ProviderService {
 
             // Kasus: Tambah Baru (Wajib ada logo)
             if (provider.getId() == null) {
-                throw new Exception("Wajib upload logo provider untuk data baru!");
+                throw new Exception("Uploading the provider logo is required for new data!");
             }
 
             // Kasus: Update (Edit)
             // Jika user tidak upload gambar baru, kita HARUS pertahankan gambar lama.
             // Ambil data lama dari database:
             Provider oldData = providerRepository.findById(provider.getId())
-                    .orElseThrow(() -> new Exception("Provider tidak ditemukan"));
+                    .orElseThrow(() -> new Exception("Provider not found"));
 
             provider.setLogo(oldData.getLogo()); // Pakai logo lama
         }
@@ -77,8 +77,7 @@ public class ProviderService {
 
         if (productCount > 0) {
             // 2. Jika ada, LEMPAR ERROR (Jangan dihapus!)
-            throw new Exception(
-                    "Gagal menghapus! Provider ini masih digunakan oleh " + productCount + " produk aktif.");
+            throw new Exception("Operation failed! This provider is currently in use by " + productCount + " active products.");
         }
 
         // 3. Jika aman (0 produk), baru hapus

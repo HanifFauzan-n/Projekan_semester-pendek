@@ -6,6 +6,7 @@ import com.example.kartu.models.User;
 import com.example.kartu.repositories.TopUpRepository;
 import com.example.kartu.repositories.UserRepository;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
@@ -13,20 +14,18 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TopUpService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TopUpRepository topUpRepository;
+    private final TopUpRepository topUpRepository;
 
     // Helper untuk ambil user
     public User getUser(String username) {
@@ -38,7 +37,7 @@ public class TopUpService {
     public void processTopUp(String username, Double amount) throws Exception {
         // 1. Validasi
         if (amount == null || amount < 10000) {
-            throw new Exception("Minimal Top Up Rp 10.000");
+            throw new Exception("Minimum Top Up IDR 10,000");
         }
 
         // 2. Ambil User
@@ -100,14 +99,14 @@ public class TopUpService {
 
         if (topUpOpt.isPresent()) {
             TopUp topUp = topUpOpt.get();
-            
+
             // Hanya bisa batalkan jika status masih PENDING
             if (topUp.getStatus() == TransactionStatus.PENDING) {
                 topUp.setStatus(TransactionStatus.FAILED); // Ubah status jadi FAILED
                 topUpRepository.save(topUp);
-                log.info("TopUp ID " + id + " DIBATALKAN oleh Admin.");
+                log.info("[ADMIN ACTION] TopUp ID {} was successfully cancelled.", id);
             } else {
-                throw new RuntimeException("Tidak bisa membatalkan transaksi yang sudah selesai/gagal.");
+                throw new RuntimeException("Cannot cancel a completed transaction.");
             }
         }
     }

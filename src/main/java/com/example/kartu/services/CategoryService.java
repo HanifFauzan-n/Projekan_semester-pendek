@@ -3,19 +3,20 @@ package com.example.kartu.services;
 import com.example.kartu.models.Category;
 import com.example.kartu.repositories.CategoryRepository;
 import com.example.kartu.repositories.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private ProductRepository productRepository; // Inject untuk validasi
+    private final ProductRepository productRepository;
 
     // 1. Ambil Semua Data
     public List<Category> findAll() {
@@ -38,7 +39,7 @@ public class CategoryService {
         Integer count = productRepository.countByCategoryId(id);
 
         if (count > 0) {
-            throw new Exception("Gagal! Kategori ini sedang digunakan oleh " + count + " produk.");
+            throw new Exception("Operation failed. Category is active in " + count + " products.");
         }
 
         categoryRepository.deleteById(id);

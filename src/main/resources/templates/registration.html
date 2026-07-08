@@ -36,19 +36,19 @@
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassword"
-                                    th:field="*{confirmPassword}" placeholder="Ulangi password..." required>
+                                    th:field="*{confirmPassword}" placeholder="Re-enter your password" required>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label">Emergency Number </label>
-                                <input type="text" id="emergencyNumber" th:field="*{emergencyNumber}" class="form-control"
-                                    placeholder="(For Password Reset)" required>
+                                <label class="form-label">Recovery Key </label>
+                                <input type="text" id="recoveryKey" th:field="*{recoveryKey}" class="form-control"
+                                    placeholder="Enter a unique number to reset password" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="mb-3">
                                 <label for="phoneNumber" class="form-label">Phone Number</label>
                                 <input type="tel" class="form-control" id="phoneNumber" th:field="*{phoneNumber}"
-                                    placeholder="Example: 0812..." required>
+                                    placeholder="Enter your active phone number" required>
                             </div>
                         </div>
                         <div class="d-grid mt-4">

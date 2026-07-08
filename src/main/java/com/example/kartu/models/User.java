@@ -19,13 +19,11 @@ public class User {
 
     private String username;
     private String password;
-    private String emergencyNumber;
+    private String recoveryKey;
 
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "dana_number")
-    private String danaNumber;
 
     @Column(name = "balance")
     private Integer balance;

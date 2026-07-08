@@ -2,7 +2,6 @@ package com.example.kartu.services;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,20 +10,26 @@ import com.example.kartu.dto.request.UserRequest;
 import com.example.kartu.models.User;
 import com.example.kartu.repositories.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AuthService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public void registerUser(UserRequest requestUser) throws Exception {
 
         // 1. Username Validation
         if (userRepository.findByUsername(requestUser.getUsername()).isPresent()) {
             throw new Exception("Username is already taken, please choose another.");
+        }
+
+        String usernameRegex = "^(?=(?:.*[a-zA-Z]){3,}).+$";
+        if (!requestUser.getUsername().matches(usernameRegex)) {
+            throw new Exception("Username must contain at least 3 letters!");
         }
 
         if (userRepository.findByPhoneNumber(requestUser.getPhoneNumber()).isPresent()) {
@@ -35,7 +40,7 @@ public class AuthService {
         user.setUsername(requestUser.getUsername());
         user.setPassword(passwordEncoder.encode(requestUser.getPassword())); // Enkripsi password
         user.setPhoneNumber(requestUser.getPhoneNumber());
-        user.setEmergencyNumber(requestUser.getEmergencyNumber());
+        user.setRecoveryKey(requestUser.getRecoveryKey());
 
         // Set Default Role (Hardcode biar aman)
         user.setRole("ROLE_USER");
@@ -43,8 +48,8 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    public boolean resetPasswordWithEmergencyNumber(String username, String emergencyNumber, String newPassword) {
-        Optional<User> userOpt = userRepository.findByUsernameAndEmergencyNumber(username, emergencyNumber);
+    public boolean resetPasswordWithRecoveryKey(String username, String recoveryKey, String newPassword) {
+        Optional<User> userOpt = userRepository.findByUsernameAndRecoveryKey(username, recoveryKey);
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();

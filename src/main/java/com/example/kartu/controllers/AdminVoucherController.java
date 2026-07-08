@@ -2,18 +2,21 @@ package com.example.kartu.controllers;
 
 import com.example.kartu.models.Voucher;
 import com.example.kartu.services.VoucherService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/vouchers")
 public class AdminVoucherController {
 
-    @Autowired
-    private VoucherService voucherService;
+    
+    private final VoucherService voucherService;
 
     // 1. Tampilkan Halaman List Voucher
     @GetMapping
@@ -28,9 +31,9 @@ public class AdminVoucherController {
     public String saveVoucher(@ModelAttribute Voucher voucher, RedirectAttributes redirectAttributes) {
         try {
             voucherService.saveVoucher(voucher);
-            redirectAttributes.addFlashAttribute("successMessage", "Voucher berhasil disimpan!");
+            redirectAttributes.addFlashAttribute("successMessage", "Voucher saved successfully!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal menyimpan: Kode mungkin sudah ada.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save: Code may already exist.");
         }
         return "redirect:/admin/vouchers";
     }
@@ -39,7 +42,7 @@ public class AdminVoucherController {
     @GetMapping("/delete/{id}")
     public String deleteVoucher(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         voucherService.deleteVoucher(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Voucher dihapus.");
+        redirectAttributes.addFlashAttribute("successMessage", "Voucher deleted.");
         return "redirect:/admin/vouchers";
     }
 }

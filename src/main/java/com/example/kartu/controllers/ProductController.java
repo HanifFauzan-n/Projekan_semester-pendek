@@ -2,7 +2,6 @@ package com.example.kartu.controllers;
 
 import java.security.Principal;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,20 +18,23 @@ import com.example.kartu.services.ProductService;
 import com.example.kartu.services.ProviderService;
 import com.example.kartu.services.TransactionHistoryService;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
+@RequiredArgsConstructor
 public class ProductController {
 
-    @Autowired
-    private ProductService productService;
+    
+    private final ProductService productService;
 
-    @Autowired
-    private TransactionHistoryService transactionService;
+    
+    private final TransactionHistoryService transactionService;
 
-    @Autowired
-    private CategoryService categoryService;
+    
+    private final CategoryService categoryService;
 
-    @Autowired
-    private ProviderService providerService;
+    
+    private final ProviderService providerService;
 
     // == ADMIN ROUTES ==
     @GetMapping("/home-admin")
@@ -53,7 +55,7 @@ public class ProductController {
     @PostMapping("/save-product")
     public String saveProduct(@ModelAttribute("products") Product product, RedirectAttributes redirectAttributes) {
         if (product.getStock() == null || product.getStock() < 0) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: Stok tidak boleh negatif!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Fail: Stock cannot be negative!");
 
             // --- LOGIKA PINTAR DI SINI ---
             if (product.getId() != null) {
@@ -67,7 +69,7 @@ public class ProductController {
         }
         try {
             productService.save(product);
-            redirectAttributes.addFlashAttribute("successMessage", "Produk berhasil disimpan!");
+            redirectAttributes.addFlashAttribute("successMessage", "Product saved successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Error: " + e.getMessage());
         }

@@ -5,7 +5,9 @@ import com.example.kartu.services.ProductService;
 import com.example.kartu.services.TopUpService;
 import com.example.kartu.services.TransactionHistoryService;
 import com.example.kartu.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -15,20 +17,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
 
-    // Inject SEMUA Service yang dibutuhkan
-    @Autowired
-    private UserService userService;
+    
+    private final UserService userService;
 
-    @Autowired
-    private ProductService productService;
+    
+    private final ProductService productService;
 
-    @Autowired
-    private TransactionHistoryService transactionHistoryService;
+    
+    private final TransactionHistoryService transactionHistoryService;
 
-    @Autowired
-    private TopUpService topUpService;
+    
+    private final TopUpService topUpService;
 
     // 1. Halaman Depan (Public)
     @GetMapping("/")

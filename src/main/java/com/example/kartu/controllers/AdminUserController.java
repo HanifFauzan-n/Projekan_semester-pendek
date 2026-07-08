@@ -2,7 +2,9 @@ package com.example.kartu.controllers;
 
 import com.example.kartu.models.User;
 import com.example.kartu.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +17,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/users") // Berubah dari /admin/pengguna menjadi /admin/users
 @PreAuthorize("hasAuthority('ADMIN') or hasRole('ADMIN')")
 public class AdminUserController {
 
-    @Autowired
-    private UserService userService;
+    
+    private final UserService userService;
 
     // Menampilkan daftar user
     @GetMapping

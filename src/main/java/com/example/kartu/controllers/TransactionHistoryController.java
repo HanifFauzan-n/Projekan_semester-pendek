@@ -5,7 +5,9 @@ import com.example.kartu.models.User;
 import com.example.kartu.services.ProductService;
 import com.example.kartu.services.TransactionHistoryService;
 import com.example.kartu.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,17 +16,15 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/transaction")
 public class TransactionHistoryController {
 
-    @Autowired
-    private TransactionHistoryService transactionService;
+    private final TransactionHistoryService transactionService;
 
-    @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     // 1. Tampilkan Halaman Konfirmasi (Checkout)
     @GetMapping("/confirm/{id}")
@@ -53,13 +53,13 @@ public class TransactionHistoryController {
             RedirectAttributes redirectAttributes) {
         try {
             // Eksekusi transaksi (Sudah benar pakai Service)
-            transactionService.purchaseProduct(productId, principal.getName(),code);
+            transactionService.purchaseProduct(productId, principal.getName(), code);
 
-            redirectAttributes.addFlashAttribute("successMessage", "Transaksi Berhasil!");
+            redirectAttributes.addFlashAttribute("successMessage", "Transaction Successful!");
             return "redirect:/profile-user";
 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed: " + e.getMessage());
             return "redirect:/transaction/confirm/" + productId;
         }
     }

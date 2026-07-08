@@ -7,8 +7,8 @@ import com.example.kartu.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     // Menampilkan halaman login
     @GetMapping("/login")
@@ -81,7 +81,7 @@ public class AuthController {
         // 1. Validasi Manual: Cek Password Match
         if (userRequest.getPassword() != null && userRequest.getConfirmPassword() != null) {
             if (!userRequest.getPassword().equals(userRequest.getConfirmPassword())) {
-                model.addAttribute("errorMessage", "Password dan Konfirmasi Password tidak cocok!");
+                model.addAttribute("errorMessage", "Password and Confirm Password do not match!");
                 return "registration";
             }
         }
@@ -95,7 +95,7 @@ public class AuthController {
 
         try {
             authService.registerUser(userRequest);
-            redirectAttributes.addFlashAttribute("successMessage", "Registrasi Berhasil! Silakan Login.");
+            redirectAttributes.addFlashAttribute("successMessage", "Registration Successful!");
             return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -110,17 +110,17 @@ public class AuthController {
 
     @PostMapping("/forgot-password")
     public String handlePasswordReset(@RequestParam String username,
-            @RequestParam String emergencyNumber,
+            @RequestParam String recoveryKey,
             @RequestParam String newPassword,
             Model model) {
 
-        boolean isSuccess = authService.resetPasswordWithEmergencyNumber(username, emergencyNumber, newPassword);
+        boolean isSuccess = authService.resetPasswordWithRecoveryKey(username, recoveryKey, newPassword);
 
         if (isSuccess) {
-            model.addAttribute("successMessage", "Password berhasil diperbarui. Silakan login.");
+            model.addAttribute("successMessage", "Password updated successfully. ");
             return "login";
         } else {
-            model.addAttribute("errorMessage", "Data tidak cocok. Pastikan Username dan Nomor Darurat benar.");
+            model.addAttribute("errorMessage", "Data does not match. Make sure the username and recovery key are correct.");
             return "forgot_password";
         }
     }

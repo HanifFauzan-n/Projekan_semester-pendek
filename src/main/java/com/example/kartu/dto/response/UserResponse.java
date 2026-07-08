@@ -15,7 +15,6 @@ public class UserResponse {
 
     private String phoneNumber;
 
-    private String danaNumber;
 
     private Integer balance;
 

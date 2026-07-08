@@ -3,7 +3,9 @@ package com.example.kartu.controllers;
 import com.example.kartu.models.TopUp;
 import com.example.kartu.models.User;
 import com.example.kartu.services.TopUpService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +17,10 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class TopUpController {
 
-    @Autowired
-    private TopUpService topUpService;
+    private final TopUpService topUpService;
 
     // 1. Tampilkan Halaman
     @GetMapping("/topup")
@@ -40,9 +42,9 @@ public class TopUpController {
         try {
             topUpService.processTopUp(principal.getName(), amount);
             redirectAttributes.addFlashAttribute("successMessage",
-                    "Permintaan Top Up diterima! Saldo akan masuk otomatis dalam 3-5 menit.");
+                    "Top Up request accepted! The balance will be automatically added in 3-5 minutes.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed: " + e.getMessage());
         }
         return "redirect:/topup";
     }
@@ -61,9 +63,9 @@ public class TopUpController {
     public String cancelTopUp(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             topUpService.cancelTopUp(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Top Up berhasil dibatalkan (FAILED).");
+            redirectAttributes.addFlashAttribute("successMessage", "Top Up was successfully cancelled (FAILED).");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal membatalkan: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to cancel:" + e.getMessage());
         }
         return "redirect:/admin/topups"; // Refresh halaman
     }

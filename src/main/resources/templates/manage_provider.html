@@ -84,7 +84,7 @@
                                     <td class="text-end align-middle">
                                         <a th:href="@{/admin/providers/delete/{id}(id=${prov.id})}" 
                                            class="btn btn-sm btn-outline-danger"
-                                           onclick="return confirm('Hapus provider ini? Produk terkait mungkin akan error.')">
+                                           onclick="return confirm('Delete this provider ? The system will restrict deletion if active products are linked to it.')">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

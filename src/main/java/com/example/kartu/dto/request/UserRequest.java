@@ -11,25 +11,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequest {
-    @NotBlank(message = "Username wajib diisi")
-    @Size(min = 8, message = "Username minimal 8 karakter")
+    @NotBlank(message = "Username is required")
+    @Size(min = 8, message = "Username must be at least 8 characters")
     private String username;
 
-    @NotBlank(message = "Password wajib diisi")
-    @Size(min = 8, message = "Password minimal 8 karakter")
+    @NotBlank(message = "Password is required")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
-    @NotBlank(message = "Confirm Password wajib diisi")
-    @Size(min = 8, message = "minimal 8 karakter")
+    @NotBlank(message = "Confirm Password is required")
+    @Size(min = 8, message = "Confirm password must be at least 8 characters")
     private String confirmPassword;
 
-    @NotBlank(message = "Emergency Number wajib diisi")
-    @Size(min = 5, message = "minimal 5 karakter")
-    @Pattern(regexp = "^[0-9]+$", message = "Nomor darurat hanya boleh berisi angka")
-    private String emergencyNumber;
+    @NotBlank(message = "Recovery key is required")
+    @Size(min = 5, message = "Recovery key must be at least 5 characters")
+    @Pattern(regexp = "^[0-9]+$", message = "Recovery key must contain only digits")
+    private String recoveryKey;
 
-    @NotBlank(message = "Nomor HP wajib diisi")
-    @Pattern(regexp = "^08\\d{7,15}$", message = "Format HP salah (harus 08xxx, 9-15 digit)")
+    @NotBlank(message = "Phone number is required")
+    @Pattern(regexp = "^08\\d{7,15}$", message = "Invalid phone number format (must start with 08, 9-15 digits)")
     private String phoneNumber;
 
 }

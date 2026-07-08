@@ -2,7 +2,9 @@ package com.example.kartu.controllers;
 
 import com.example.kartu.models.Provider;
 import com.example.kartu.services.ProviderService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,11 +13,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
+@RequiredArgsConstructor
 @RequestMapping("/admin/providers")
 public class ProviderController {
 
-    @Autowired
-    private ProviderService providerService; 
+    private final ProviderService providerService; 
 
     @GetMapping
     public String listProviders(Model model) {
@@ -34,11 +36,11 @@ public class ProviderController {
             // Panggil Service (Semua validasi terjadi di dalam sini)
             providerService.saveProvider(provider, file);
             
-            redirectAttributes.addFlashAttribute("successMessage", "Provider berhasil disimpan!");
+            redirectAttributes.addFlashAttribute("successMessage", "Provider saved successfully!");
             
         } catch (Exception e) {
             // Tangkap Error dari Service (misal: "File bukan gambar!")
-            redirectAttributes.addFlashAttribute("errorMessage", "Gagal: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed: " + e.getMessage());
             
             // Logika Smart Redirect (Balik ke Add atau Update?)
             if (provider.getId() != null) {
@@ -55,7 +57,7 @@ public class ProviderController {
     public String deleteProvider(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             providerService.deleteProvider(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Provider berhasil dihapus!");
+            redirectAttributes.addFlashAttribute("successMessage", "Provider successfully deleted!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
