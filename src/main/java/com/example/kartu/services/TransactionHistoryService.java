@@ -35,7 +35,7 @@ public class TransactionHistoryService {
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final SecureRandom random = new SecureRandom();
 
-    // Method untuk generate Transaction ID unik (Contoh: FLC-20260312-A7X9)
+    // Method untuk generate Transaction ID unik (Contoh: ZLC-20260312-A7X9)
     private String generateUniqueTransactionId() {
         String newId;
         boolean exists;
@@ -45,7 +45,7 @@ public class TransactionHistoryService {
             for (int i = 0; i < 4; i++) {
                 randomPart.append(CHARS.charAt(random.nextInt(CHARS.length())));
             }
-            newId = "FLC-" + datePart + "-" + randomPart;
+            newId = "ZLC-" + datePart + "-" + randomPart;
 
             // Validasi ke database: pastikan belum pernah ada
             exists = transactionHistoryRepository.existsByTransactionId(newId);

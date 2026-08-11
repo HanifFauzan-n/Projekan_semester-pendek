@@ -1,0 +1,16 @@
+OK | 4.2.1-login.png | HTTP 200 | http://localhost:8080/login
+OK | 4.2.2-registrasi.png | HTTP 200 | http://localhost:8080/register
+LOGIN ADMIN | http://localhost:8080/home-admin
+OK | 4.2.3-dashboard-admin-produk-stok.png | HTTP 200 | http://localhost:8080/home-admin
+OK | 4.2.4-data-pengguna.png | HTTP 200 | http://localhost:8080/admin/users
+OK | 4.2.5-kelola-kategori.png | HTTP 200 | http://localhost:8080/categories
+OK | 4.2.7-data-top-up.png | HTTP 200 | http://localhost:8080/admin/topups
+OK | 4.2.8-kelola-provider.png | HTTP 200 | http://localhost:8080/admin/providers
+OK | 4.2.12-laporan-penjualan.png | HTTP 200 | http://localhost:8080/admin/transactions/sales
+OK | 4.2.13-kelola-voucher-diskon.png | HTTP 200 | http://localhost:8080/admin/vouchers
+LOGIN USER | http://localhost:8080/home-user
+OK | 4.2.6-request-top-up.png | HTTP 200 | http://localhost:8080/topup
+OK | 4.2.9-katalog-produk.png | HTTP 200 | http://localhost:8080/home-user
+OK | 4.2.10-transaksi-pembelian.png | HTTP 200 | http://localhost:8080/transaction/confirm/1
+OK | 4.2.11-riwayat-transaksi.png | HTTP 200 | http://localhost:8080/profile-user
+OK | 4.2.14-kelola-profil-akun.png | HTTP 200 | http://localhost:8080/user/edit

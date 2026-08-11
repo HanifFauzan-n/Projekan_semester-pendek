@@ -1,6 +1,6 @@
-# FlashCell E-commerce Website 🛒
+# Zelatan Cell E-commerce Website 🛒
 
-Selamat datang di **FlashCell**, sebuah proyek aplikasi web full-stack yang menyimulasikan fungsionalitas toko online modern. Proyek ini dibangun untuk mendemonstrasikan arsitektur aplikasi web menggunakan backend **Java** dengan **Spring Boot**, dan **Thymeleaf** sebagai *template engine* untuk merender halaman secara dinamis di sisi server.
+Selamat datang di **Zelatan Cell**, sebuah proyek aplikasi web full-stack yang menyimulasikan fungsionalitas toko online modern. Proyek ini dibangun untuk mendemonstrasikan arsitektur aplikasi web menggunakan backend **Java** dengan **Spring Boot**, dan **Thymeleaf** sebagai *template engine* untuk merender halaman secara dinamis di sisi server.
 
 - [Tentang Proyek](#tentang-proyek)
 - [Teknologi yang Digunakan](#teknologi-yang-digunakan)
@@ -14,7 +14,7 @@ Selamat datang di **FlashCell**, sebuah proyek aplikasi web full-stack yang meny
 
 ## Tentang Proyek
 
-**FlashCell** adalah sebuah platform e-commerce fungsional yang memungkinkan pengguna untuk menjelajahi berbagai produk, menambahkannya ke keranjang belanja, dan menyelesaikan proses *checkout*. Aplikasi ini dirancang dengan arsitektur yang bersih dan mudah dipelihara, menjadikannya contoh yang baik untuk mempelajari pengembangan web dengan ekosistem Java.
+**Zelatan Cell** adalah sebuah platform e-commerce fungsional yang memungkinkan pengguna untuk menjelajahi berbagai produk, menambahkannya ke keranjang belanja, dan menyelesaikan proses *checkout*. Aplikasi ini dirancang dengan arsitektur yang bersih dan mudah dipelihara, menjadikannya contoh yang baik untuk mempelajari pengembangan web dengan ekosistem Java.
 
 Tujuan utama proyek ini adalah:
 * Membangun aplikasi e-commerce yang realistis dari awal.
@@ -91,7 +91,7 @@ Pastikan perangkat Anda telah terinstal:
 1.  **Clone Repositori**
     ```bash
     git clone https://github.com/HanifFauzan-n/Projekan_semester-pendek.git
-    cd FlashCell
+    cd Zelatan Cell
     ```
 
 2.  **Konfigurasi Database**
@@ -138,7 +138,7 @@ Pastikan perangkat Anda telah terinstal:
 Struktur direktori proyek ini mengikuti konvensi standar dari aplikasi Spring Boot.
 
 ```
-FlashCell/
+Zelatan Cell/
 ├── src/
 │   ├── main/
 │   │   ├── java/com/example/flashcell/  <-- Kode sumber Java (paket utama)
@@ -146,7 +146,7 @@ FlashCell/
 │   │   │   ├── model/                  <-- Entitas data (JPA Entities)
 │   │   │   ├── repository/             <-- Interface untuk akses data (Spring Data JPA)
 │   │   │   ├── service/                <-- Logika bisnis aplikasi
-│   │   │   └── FlashCellApplication.java <-- Titik masuk utama aplikasi
+│   │   │   └── Zelatan CellApplication.java <-- Titik masuk utama aplikasi
 │   │   ├── resources/
 │   │   │   ├── static/                 <-- Aset statis (CSS, JavaScript, gambar)
 │   │   │   ├── templates/              <-- File template Thymeleaf (.html)
