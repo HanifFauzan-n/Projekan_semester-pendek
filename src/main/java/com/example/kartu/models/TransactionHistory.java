@@ -13,6 +13,9 @@ public class TransactionHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String customer;
+    private String customerNumber;
+
     private LocalDateTime timestamp = LocalDateTime.now();
     // TransactionHistory.java
     @Column(name = "transaction_id", unique = true, nullable = false)
@@ -28,7 +31,7 @@ public class TransactionHistory {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "id_product")
+    @JoinColumn(name = "product_id")
     private Product product;
 
     private Double amountPaid;

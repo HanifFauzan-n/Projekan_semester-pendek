@@ -40,6 +40,7 @@ public class AuthService {
         user.setUsername(requestUser.getUsername());
         user.setPassword(passwordEncoder.encode(requestUser.getPassword())); // Enkripsi password
         user.setPhoneNumber(requestUser.getPhoneNumber());
+        user.setBalance(0);
         user.setRecoveryKey(requestUser.getRecoveryKey());
 
         // Set Default Role (Hardcode biar aman)

@@ -14,42 +14,59 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow">
-                    <div class="card-header bg-primary text-white">
-                        <h4 class="mb-0">Edit Profile</h4>
-                    </div>
-                    <div class="card-body">
 
-                        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                        <div class="card-header bg-primary text-white">
+                            <h4 class="mb-0">Edit Profile</h4>
+                            <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+                        </div>
+                        <div class="card-body">
 
-                        <form th:action="@{/user/update-profile}" th:object="${profileRequest}" method="post">
 
-                            <div class="mb-3">
-                                <label class="form-label">Username</label>
-                                <input type="text" class="form-control" th:field="*{username}" readonly
-                                    style="background-color: #e9ecef; cursor: not-allowed;"
-                                    onclick="alert('Only administrators can modify usernames for administrative security purposes.');">
-                            </div>
+                            <form th:action="@{/user/update-profile}" th:object="${profileRequest}" method="post">
 
-                            <div class="mb-3">
-                                <label class="form-label">Phone Number</label>
-                                <input type="text" class="form-control" th:field="*{phoneNumber}">
-                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" th:field="*{username}" readonly
+                                        style="background-color: #e9ecef; cursor: not-allowed;"
+                                        onclick="alert('Only administrators can modify usernames for administrative security purposes.');">
+                                </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Recovery Key</label>
-                                <input type="text" class="form-control" th:field="*{recoveryKey}">
-                            </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input id="phone" type="text" class="form-control" th:field="*{phoneNumber}"
+                                        th:data-initial="*{phoneNumber}" oninput="checkFormChanges()">
+                                </div>
 
-                            <div class="d-grid gap-2">
-                                <button type="submit" class="btn btn-primary">Save Changes</button>
-                                <a th:href="@{/profile-user}" class="btn btn-secondary">Cancel</a>
-                            </div>
-                        </form>
+                                <div class="mb-3">
+                                    <label class="form-label">Recovery Key</label>
+                                    <input id="recovery" type="text" class="form-control" th:field="*{recoveryKey}"
+                                        th:data-initial="*{recoveryKey}" oninput="checkFormChanges()">
+                                </div>
+
+                                <div class="d-grid gap-2">
+                                    <button id="btn-save" type="submit" class="btn btn-primary" disabled>Save
+                                        Changes</button>
+                                    <a th:href="@{/profile-user}" class="btn btn-secondary">Cancel</a>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </body>
+
+<script>
+    function checkFormChanges() {
+        const phone = document.getElementById('phone');
+        const recovery = document.getElementById('recovery');
+        const btn = document.getElementById('btn-save');
+
+        const isChanged = (phone.value !== phone.getAttribute('data-initial')) ||
+            (recovery.value !== recovery.getAttribute('data-initial'));
+
+        btn.disabled = !isChanged;
+    }
+</script>
 
 </html>

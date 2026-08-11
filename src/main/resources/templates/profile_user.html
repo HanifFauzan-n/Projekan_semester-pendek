@@ -34,6 +34,14 @@
         </div>
     </nav>
 
+    <div class="container mt-3" th:if="${successMessage}">
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <span th:text="${successMessage}">Pesan sukses di sini</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    </div>
+
     <main class="container py-5">
 
         <div class="row mb-4">

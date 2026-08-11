@@ -125,6 +125,8 @@ public class TransactionHistoryService {
             productRepository.save(product);
 
             // 4. Update Status Jadi SUCCESS
+            history.setCustomer(user.getUsername());
+            history.setCustomerNumber(user.getPhoneNumber());
             history.setStatus(TransactionStatus.SUCCESS);
             history.setAmountPaid(finalPrice);
             transactionHistoryRepository.save(history); // Simpan riwayat sukses

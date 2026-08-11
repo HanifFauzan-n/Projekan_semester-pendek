@@ -78,8 +78,8 @@
                                 <td th:text="${#temporals.format(tx.timestamp, 'dd MMM yyyy, HH:mm')}">Date</td>
 
                                 <td>
-                                    <div class="fw-bold" th:text="${tx.user.username}">User</div>
-                                    <small class="text-muted" th:text="${tx.user.phoneNumber}">08123...</small>
+                                    <div class="fw-bold" th:text="${tx.customer}">User</div>
+                                    <small class="text-muted" th:text="${tx.customerNumber}">08123...</small>
                                 </td>
 
                                 <td>
