@@ -123,11 +123,11 @@ public class DataDummy implements CommandLineRunner {
     }
 
     private void seedUsers() {
-        createUser("rizky21", "081211112222", "081233334444", 250000);
-        createUser("salsa08", "081277778888", "081299990000", 150000);
-        createUser("dinda99", "081222223333", "081244445555", 500000);
-        createUser("bagas11", "081288889999", "081200001111", 100000);
-        createUser("aldi77", "081233334455", "081255556677", 0);
+        createUser("rizky21", "081211112222", 250000);
+        createUser("salsa08", "081277778888", 150000);
+        createUser("dinda99", "081222223333", 500000);
+        createUser("bagas11", "081288889999", 100000);
+        createUser("aldi77", "081233334455", 0);
         createBannedUser();
     }
 
@@ -272,14 +272,13 @@ public class DataDummy implements CommandLineRunner {
         return product;
     }
 
-    private void createUser(String username, String phone, String emergency, int balance) {
+    private void createUser(String username, String phone, int balance) {
         if (userRepository.findByUsername(username).isEmpty()) {
             User user = new User();
             user.setUsername(username);
             user.setPassword(passwordEncoder.encode(DUMMY_PASSWORD));
             user.setPhoneNumber(phone);
-            user.setEmergencyNumber(emergency);
-            user.setDanaNumber(phone);
+            user.setRecoveryKey("12345");
             user.setBalance(balance);
             user.setStatus("ACTIVE");
             user.setRole("ROLE_USER");
@@ -294,8 +293,7 @@ public class DataDummy implements CommandLineRunner {
             user.setUsername("banned_user");
             user.setPassword(passwordEncoder.encode(DUMMY_PASSWORD));
             user.setPhoneNumber("081244445566");
-            user.setEmergencyNumber("081266667788");
-            user.setDanaNumber("081244445566");
+            user.setRecoveryKey("12345");
             user.setBalance(10000);
             user.setStatus("BANNED");
             user.setRole("ROLE_USER");
