@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Sales Report - Zelatan Cell Admin</title>
+    <title>Sales Report - Admin Zelatan Cell</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
@@ -37,21 +37,21 @@
         <div class="container">
             <a class="navbar-brand fw-bold" th:href="@{/home-admin}">Zelatan Cell [Admin]</a>
             <div class="d-flex">
-                <a th:href="@{/home-admin}" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
+                 <a th:href="@{/home-admin}" class="btn btn-outline-light btn-sm">Back to Dashboard</a>
             </div>
         </div>
     </nav>
 
     <main class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3><i class="fas fa-chart-line me-2"></i>Sales Transaction Report</h3>
+             <h3><i class="fas fa-chart-line me-2"></i>Sales Transaction Report</h3>
 
             <a th:href="@{/admin/transactions/topups}" class="btn btn-outline-primary">
-                <i class="fas fa-wallet me-2"></i>View Top Up Report
+                 <i class="fas fa-wallet me-2"></i>View Top Up Report
             </a>
             <div class="d-flex justify-content-end mb-3 no-print">
                 <button onclick="window.print()" class="btn btn-success">
-                    <i class="fas fa-print me-2"></i> Print Report (PDF)
+                     <i class="fas fa-print me-2"></i> Print Report (PDF)
                 </button>
             </div>
         </div>
@@ -63,10 +63,10 @@
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
-                                <th>Date</th>
-                                <th>User</th>
-                                <th>Product</th>
-                                <th>Price</th>
+                                 <th>Date</th>
+                                 <th>User</th>
+                                 <th>Product</th>
+                                 <th>Price</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Detail</th>
                             </tr>
@@ -75,17 +75,17 @@
                             <tr th:each="tx : ${transactions}">
                                 <td th:text="${tx.id}">1</td>
 
-                                <td th:text="${#temporals.format(tx.timestamp, 'dd MMM yyyy, HH:mm')}">Date</td>
+                                 <td th:text="${#temporals.format(tx.timestamp, 'dd MMM yyyy, HH:mm')}">Date</td>
 
                                 <td>
-                                    <div class="fw-bold" th:text="${tx.customer}">User</div>
+                                     <div class="fw-bold" th:text="${tx.customer}">User</div>
                                     <small class="text-muted" th:text="${tx.customerNumber}">08123...</small>
                                 </td>
 
                                 <td>
                                     <span th:text="${tx.product.provider.name}"
                                         class="badge bg-secondary me-1">Prov</span>
-                                    <span th:text="${tx.product.name}">Product Name</span>
+                                     <span th:text="${tx.product.name}">Product Name</span>
                                 </td>
 
                                 <td>
@@ -106,7 +106,7 @@
                                 <td class="text-center">
                                     <button type="button" class="btn btn-sm btn-info text-white rounded-pill px-3"
                                         data-bs-toggle="modal" th:data-bs-target="'#adminModal' + ${tx.id}">
-                                        <i class="fas fa-search me-1"></i> View
+                                         <i class="fas fa-search me-1"></i> View
                                     </button>
 
                                     <div class="modal fade" th:id="'adminModal' + ${tx.id}" tabindex="-1"
@@ -115,14 +115,14 @@
                                             <div class="modal-content border-0 shadow">
                                                 <div class="modal-header bg-dark text-white">
                                                     <h5 class="modal-title"><i
-                                                            class="fas fa-file-invoice me-2"></i>Transaction Audit</h5>
+                                                             class="fas fa-file-invoice me-2"></i>Transaction Audit</h5>
                                                     <button type="button" class="btn-close btn-close-white"
                                                         data-bs-dismiss="modal"></button>
                                                 </div>
                                                 <div class="modal-body text-start p-4">
                                                     <div class="row mb-3">
                                                         <div class="col-6">
-                                                            <small class="text-muted d-block">Transaction ID</small>
+                                                             <small class="text-muted d-block">Transaction ID</small>
                                                             <span class="fw-bold text-primary"
                                                                 th:text="${tx.transactionId != null ? tx.transactionId : '-'}">ZLC-123</span>
                                                         </div>
@@ -135,26 +135,25 @@
                                                     </div>
 
                                                     <div class="p-3 bg-light rounded mb-3 border">
-                                                        <small class="text-muted d-block mb-1">Serial Number
+                                                         <small class="text-muted d-block mb-1">Serial Number
                                                             (SN)</small>
                                                         <code class="h5 fw-bold text-dark d-block"
                                                             th:text="${tx.serialNumber != null ? tx.serialNumber : '-'}">8827361524371822</code>
                                                         <small class="text-info" style="font-size: 0.75rem;"><i
-                                                                class="fas fa-info-circle me-1"></i>Gunakan SN ini untuk
-                                                            verifikasi ke provider.</small>
+                                                                 class="fas fa-info-circle me-1"></i>Use this SN for
+                                                             verification with the Provider.</small>
                                                     </div>
 
                                                     <div class="row mb-3">
                                                         <div class="col-6">
-                                                            <small class="text-muted d-block">Customer</small>
+                                                             <small class="text-muted d-block">Customer</small>
                                                             <span class="fw-bold"
-                                                                th:text="${tx.user.username}">User</span>
+                                                                 th:text="${tx.user.username}">User</span>
                                                         </div>
                                                         <div class="col-6 text-end">
-                                                            <small class="text-muted d-block">Payment Method</small>
+                                                             <small class="text-muted d-block">Payment Method</small>
                                                             <span
-                                                                class="badge bg-outline-secondary border text-dark">Zelatan Cell
-                                                                Balance</span>
+class="badge bg-outline-secondary border text-dark">Zelatan Cell Balance</span>
                                                         </div>
                                                     </div>
 
@@ -162,21 +161,21 @@
 
                                                     <div class="d-flex justify-content-between align-items-center">
                                                         <div>
-                                                            <small class="text-muted d-block">Actual Amount Paid</small>
+                                                             <small class="text-muted d-block">Amount Paid</small>
                                                             <h4 class="fw-bold text-success mb-0"
                                                                 th:text="'Rp ' + ${#numbers.formatDecimal(tx.amountPaid, 0, 'POINT', 0, 'COMMA')}">
                                                                 Rp 7.000</h4>
                                                         </div>
                                                         <div class="text-end">
-                                                            <small class="text-muted d-block">Date Processed</small>
+                                                             <small class="text-muted d-block">Processed Date</small>
                                                             <span class="small"
-                                                                th:text="${#temporals.format(tx.timestamp, 'dd/MM/yyyy HH:mm')}">Date</span>
+                                                                 th:text="${#temporals.format(tx.timestamp, 'dd/MM/yyyy HH:mm')}">Date</span>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer border-0">
                                                     <button type="button" class="btn btn-secondary w-100 rounded-pill"
-                                                        data-bs-dismiss="modal">Close Audit View</button>
+                                                         data-bs-dismiss="modal">Close Audit View</button>
                                                 </div>
                                             </div>
                                         </div>

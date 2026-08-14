@@ -32,14 +32,14 @@ public class HomeController {
     
     private final TopUpService topUpService;
 
-    // 1. Halaman Depan (Public)
+    // 1. Halaman Depan (Publik)
     @GetMapping("/")
     public String showPublicHomePage(Model model) {
         model.addAttribute("products", productService.findAll());
         return "home";
     }
 
-    // 2. Logic Redirect Login
+    // 2. Logika Pengalihan Masuk
     @GetMapping("/home-redirect")
     public String homeRedirect(Authentication authentication) {
         if (authentication != null && authentication.isAuthenticated()) {
@@ -49,7 +49,7 @@ public class HomeController {
         return "redirect:/login";
     }
 
-    // 3. Profile Admin
+    // 3. Profil Admin
     @GetMapping("/profile-admin")
     public String showAdminProfile(Model model) {
         model.addAttribute("totalProducts", productService.countTotalProducts());
@@ -73,7 +73,7 @@ public class HomeController {
         double totalSpending = history.stream()
                 .filter(tx -> "SUCCESS".equals(tx.getStatus().name())) // Cuma hitung yang sukses
                 // PERBAIKAN UTAMA: Pakai getAmountPaid()
-                // Kita kasih fallback logic: Kalau amountPaid null (transaksi lama), pakai harga produk asli
+                // Kita beri logika cadangan: Kalau amountPaid null (transaksi lama), pakai harga produk asli
                 .mapToDouble(tx -> tx.getAmountPaid() != null ? tx.getAmountPaid() : tx.getProduct().getPrice())
                 .sum();
 

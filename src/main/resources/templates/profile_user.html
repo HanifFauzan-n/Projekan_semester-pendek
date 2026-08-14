@@ -37,7 +37,7 @@
     <div class="container mt-3" th:if="${successMessage}">
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             <i class="fas fa-check-circle me-2"></i>
-            <span th:text="${successMessage}">Pesan sukses di sini</span>
+            <span th:text="${successMessage}">Success message here</span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     </div>
@@ -48,7 +48,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm h-100">
                     <div class="card-body d-flex align-items-center">
-                        <img th:src="@{/img/profile.png}" alt="Profile Picture" class="profile-picture me-4">
+                        <img th:src="@{/img/profile.png}" alt="Profile Photo" class="profile-picture me-4">
                         <div>
                             <h2 class="h4 mb-1" th:text="${user.username}">Username</h2>
                             <p class="text-muted mb-1"><i class="fas fa-phone-alt me-2"></i><span
@@ -68,7 +68,7 @@
                         <p class="card-text display-5 fw-bold mb-2"
                             th:text="'Rp ' + ${#numbers.formatDecimal(user.balance, 0, 'POINT', 0, 'COMMA')}">Rp 0</p>
                         <a th:href="@{/topup}" class="btn btn-light stretched-link mt-2 fw-bold">
-                            <i class="fas fa-plus-circle me-1"></i> Top Up Balance
+                            <i class="fas fa-plus-circle me-1"></i> Top Up
                         </a>
                     </div>
                 </div>
@@ -142,7 +142,7 @@
                                         <div>
                                             <div class="fw-bold text-dark" th:text="${tx.product.name}">Product Name
                                             </div>
-                                            <div class="small text-muted" th:text="${tx.product.description}">Desc</div>
+                                            <div class="small text-muted" th:text="${tx.product.description}">Description</div>
                                         </div>
                                     </div>
                                 </td>
@@ -154,7 +154,7 @@
                                     </span>
                                     <span th:if="${tx.amountPaid != null && tx.amountPaid < tx.product.price}"
                                         class="badge bg-warning text-dark ms-1" style="font-size: 0.7em;">
-                                        Diskon
+                                         Discount
                                     </span>
                                 </td>
 
@@ -162,14 +162,14 @@
                                     <span class="badge rounded-pill"
                                         th:classappend="${tx.status.name() == 'SUCCESS' ? 'bg-success' : (tx.status.name() == 'FAILED' ? 'bg-danger' : 'bg-warning text-dark')}"
                                         th:text="${tx.status}">
-                                        SUCCESS
+                                          SUCCESS
                                     </span>
                                 </td>
 
                                 <td class="text-center">
                                     <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3"
                                         data-bs-toggle="modal" th:data-bs-target="'#detailModal' + ${tx.id}">
-                                        <i class="fas fa-info-circle me-1"></i> Detail
+                                        <i class="fas fa-info-circle me-1"></i> Details
                                     </button>
 
                                     <div class="modal fade" th:id="'detailModal' + ${tx.id}" tabindex="-1"
@@ -183,24 +183,24 @@
                                                 <div class="modal-body px-4 text-start">
                                                     <div class="text-center mb-4">
                                                         <i class="fas fa-check-circle text-success fa-3x mb-2"></i>
-                                                        <h5 class="fw-bold mb-0">Transaction Receipt</h5>
+                                                         <h5 class="fw-bold mb-0">Transaction Receipt</h5>
                                                         <small class="text-muted"
                                                             th:text="${#temporals.format(tx.timestamp, 'dd MMM yyyy, HH:mm')}"></small>
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="text-muted small d-block">Transaction ID</label>
+                                                         <label class="text-muted small d-block">Transaction ID</label>
                                                         <span class="fw-bold"
                                                             th:text="${tx.transactionId != null ? tx.transactionId : '-'}">ZLC-123456</span>
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="text-muted small d-block">Product</label>
+                                                         <label class="text-muted small d-block">Product</label>
                                                         <span class="fw-bold" th:text="${tx.product.name}">Test 1</span>
                                                     </div>
 
                                                     <div class="mb-3">
-                                                        <label class="text-muted small d-block">Serial Number
+                                                         <label class="text-muted small d-block">Serial Number
                                                             (SN)</label>
                                                         <span class="fw-bold text-primary"
                                                             th:text="${tx.serialNumber != null ? tx.serialNumber : '-'}">887261552431</span>
@@ -209,7 +209,7 @@
                                                     <hr class="border-secondary border-1 opacity-25">
 
                                                     <div class="d-flex justify-content-between align-items-center">
-                                                        <span class="text-muted">Total Amount</span>
+                                                         <span class="text-muted">Total Amount</span>
                                                         <h5 class="fw-bold mb-0 text-dark"
                                                             th:text="'Rp ' + ${#numbers.formatDecimal(tx.amountPaid, 0, 'POINT', 0, 'COMMA')}">
                                                             Rp 7.000</h5>
@@ -217,13 +217,13 @@
 
                                                     <div
                                                         class="mt-4 p-2 bg-light rounded text-center x-small text-muted">
-                                                        <i class="fas fa-wallet me-1"></i> Paid via Zelatan Cell Balance
+                                                         <i class="fas fa-wallet me-1"></i> Paid with Zelatan Cell Balance
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer border-0">
                                                     <button type="button"
                                                         class="btn btn-secondary btn-sm w-100 rounded-pill"
-                                                        data-bs-dismiss="modal">Close</button>
+                                                         data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -241,7 +241,7 @@
         <div class="card shadow-sm">
             <div class="card-header bg-white py-3">
                 <h5 class="mb-0 fw-bold text-success">
-                    <i class="fas fa-arrow-down me-2"></i>Top Up History
+                     <i class="fas fa-arrow-down me-2"></i>Top Up History
                 </h5>
             </div>
 
@@ -250,9 +250,9 @@
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th class="ps-4">Date & Time</th>
-                                <th>Method</th>
-                                <th>Amount</th>
+                                 <th class="ps-4">Date & Time</th>
+                                 <th>Method</th>
+                                 <th>Amount</th>
                                 <th class="text-center">Status</th>
                             </tr>
                         </thead>
@@ -260,14 +260,14 @@
                             <tr th:if="${#lists.isEmpty(topups)}">
                                 <td colspan="4" class="text-center py-5 text-muted">
                                     <i class="fas fa-wallet fa-2x mb-2"></i><br>
-                                    No top up history found.
+                                     No Top Up history found.
                                 </td>
                             </tr>
 
                             <tr th:each="topup : ${topups}">
                                 <td class="ps-4 text-muted small"
                                     th:text="${#temporals.format(topup.date, 'dd MMM yyyy, HH:mm')}">
-                                    Date
+                                     Date
                                 </td>
 
                                 <td>
@@ -275,7 +275,7 @@
                                         <div class="bg-light rounded-circle p-2 me-2 text-success">
                                             <i class="fas fa-plus"></i>
                                         </div>
-                                        <span class="fw-bold text-dark">Manual Top Up</span>
+                                         <span class="fw-bold text-dark">Manual Top Up</span>
                                     </div>
                                 </td>
 
@@ -288,7 +288,7 @@
                                     <span class="badge rounded-pill"
                                         th:classappend="${topup.status.name() == 'SUCCESS' ? 'bg-success' : 'bg-warning text-dark'}"
                                         th:text="${topup.status}">
-                                        SUCCESS
+                                          SUCCESS
                                     </span>
                                 </td>
                             </tr>
@@ -301,7 +301,7 @@
     </main>
 
     <footer class="bg-dark text-white text-center py-4 mt-auto">
-        <p class="mb-0">&copy; 2025 Zelatan Cell. All Rights Reserved.</p>
+         <p class="mb-0">&copy; 2025 Zelatan Cell. All Rights Reserved.</p>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

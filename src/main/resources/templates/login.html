@@ -32,12 +32,12 @@
                 <form th:action="@{/login}" th:object="${user}" method="post">
                     <div class="mb-3">
                         <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter username"
+                        <input type="text" class="form-control" id="username" placeholder="Enter your username"
                             name="username" required>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter password"
+                        <input type="password" class="form-control" id="password" placeholder="Enter your password"
                             name="password" required>
                         <div class="text-end mt-1">
                             <a th:href="@{/forgot-password}">
@@ -51,7 +51,7 @@
                 </form>
             </div>
             <div class="auth-footer text-center">
-                Don't have an account? <a th:href="@{/register}">Register here</a>
+                Do not have an account? <a th:href="@{/register}">Register here</a>
             </div>
         </div>
     </div>

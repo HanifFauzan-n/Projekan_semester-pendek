@@ -18,7 +18,7 @@ public class AdminVoucherController {
     
     private final VoucherService voucherService;
 
-    // 1. Tampilkan Halaman List Voucher
+    // 1. Tampilkan Halaman Daftar Voucher
     @GetMapping
     public String listVouchers(Model model) {
         model.addAttribute("vouchers", voucherService.getAllVouchers());
@@ -33,7 +33,7 @@ public class AdminVoucherController {
             voucherService.saveVoucher(voucher);
             redirectAttributes.addFlashAttribute("successMessage", "Voucher saved successfully!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save: Code may already exist.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save voucher: the code may already be in use.");
         }
         return "redirect:/admin/vouchers";
     }
@@ -42,7 +42,7 @@ public class AdminVoucherController {
     @GetMapping("/delete/{id}")
     public String deleteVoucher(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         voucherService.deleteVoucher(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Voucher deleted.");
+        redirectAttributes.addFlashAttribute("successMessage", "Voucher deleted successfully.");
         return "redirect:/admin/vouchers";
     }
 }

@@ -21,7 +21,7 @@
         
         <div class="row">
             <div class="col-12 mb-4">
-                <h3 class="border-bottom pb-2"><i class="fas fa-sim-card me-2"></i>Manage Providers </h3>
+                <h3 class="border-bottom pb-2"><i class="fas fa-sim-card me-2"></i>Manage Providers</h3>
             </div>
 
             <div class="col-12">
@@ -39,13 +39,13 @@
                             
                             <div class="mb-3">
                                 <label class="form-label">Provider Name</label>
-                                <input type="text" class="form-control" th:field="*{name}" placeholder="e.g. Telkomsel" required>
+                                <input type="text" class="form-control" th:field="*{name}" placeholder="Example: Telkomsel" required>
                             </div>
 
                             <div class="mb-3">
                                 <label class="form-label">Logo Image</label>
                                 <input type="file" name="image" class="form-control" accept="image/*" required>
-                                <div class="form-text text-muted">Format: JPG/PNG. Max 1MB.</div>
+                                <div class="form-text text-muted">Format: JPG/PNG. Maximum 1 MB.</div>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100">
@@ -68,7 +68,7 @@
                                     <th>ID</th>
                                     <th>Logo</th>
                                     <th>Name</th>
-                                    <th class="text-end">Actions</th>
+                                    <th class="text-end">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,7 +84,7 @@
                                     <td class="text-end align-middle">
                                         <a th:href="@{/admin/providers/delete/{id}(id=${prov.id})}" 
                                            class="btn btn-sm btn-outline-danger"
-                                           onclick="return confirm('Delete this provider ? The system will restrict deletion if active products are linked to it.')">
+                                           onclick="return confirm('Delete this provider? The system will prevent deletion if linked active products exist.')">
                                             <i class="fas fa-trash"></i>
                                         </a>
                                     </td>

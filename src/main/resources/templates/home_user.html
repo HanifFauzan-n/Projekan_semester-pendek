@@ -38,7 +38,7 @@
 
         <header class="text-center mb-4">
             <h1 class="display-6 fw-bold">Available Products</h1>
-            <p class="lead text-muted">Please choose your desired package.</p>
+            <p class="lead text-muted">Select your preferred package.</p>
         </header>
 
         <div class="d-flex justify-content-center flex-wrap gap-2 mb-3">
@@ -63,7 +63,7 @@
                             <i class="fas fa-search"></i>
                         </span>
                         <input type="text" name="keyword" class="form-control border-start-0 ps-0"
-                            placeholder="Search for products (eg: Telkomsel, 10GB)..." th:value="${keyword}">
+                            placeholder="Search products (example: Telkomsel, 10GB)..." th:value="${keyword}">
                         <button type="submit" class="btn btn-primary fw-bold px-4">Search</button>
                     </div>
                 </form>
@@ -140,7 +140,7 @@
                             </a>
 
                             <button th:if="${product.stock == 0}" class="btn btn-sm btn-secondary w-100" disabled>
-                                Sold Out
+                                Out of Stock
                             </button>
                         </td>
                     </tr>
@@ -148,7 +148,7 @@
                     <tr th:if="${#lists.isEmpty(products)}">
                         <td colspan="5" class="text-center py-5 text-muted">
                             <i class="fas fa-box-open fa-3x mb-3 text-secondary"></i><br>
-                            Sorry, no products available at the moment.
+                            Sorry, no products are currently available.
                         </td>
                     </tr>
                 </tbody>
@@ -181,7 +181,7 @@
 
         <div class="text-center text-muted small mt-2" th:if="${totalItems > 0}">
             Showing page <span th:text="${currentPage + 1}"></span> of <span th:text="${totalPages}"></span>
-            (Total <span th:text="${totalItems}"></span> products)
+            (<span th:text="${totalItems}"></span> products total)
         </div>
 
     </main>

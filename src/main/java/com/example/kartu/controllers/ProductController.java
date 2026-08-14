@@ -36,7 +36,7 @@ public class ProductController {
     
     private final ProviderService providerService;
 
-    // == ADMIN ROUTES ==
+    // == ROUTE ADMIN ==
     @GetMapping("/home-admin")
     public String showAdminDashboard(Model model) {
         model.addAttribute("products", productService.findAll());
@@ -46,7 +46,7 @@ public class ProductController {
     @GetMapping("/add-product")
     public String showAddProductForm(Model model) {
         model.addAttribute("products", new Product());
-        // Note: You might need to send categories to the form as well
+        // Catatan: Anda mungkin juga perlu mengirim kategori ke formulir
         model.addAttribute("categories", categoryService.findAll());
         model.addAttribute("providers", providerService.findAll());
         return "add_product";
@@ -55,14 +55,14 @@ public class ProductController {
     @PostMapping("/save-product")
     public String saveProduct(@ModelAttribute("products") Product product, RedirectAttributes redirectAttributes) {
         if (product.getStock() == null || product.getStock() < 0) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Fail: Stock cannot be negative!");
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed: Stock cannot be negative!");
 
             // --- LOGIKA PINTAR DI SINI ---
             if (product.getId() != null) {
-                // Kalau punya ID, berarti lagi UPDATE. Balikin ke form update produk tersebut.
+                // Kalau punya ID, berarti sedang MEMPERBARUI. Kembalikan ke formulir pembaruan produk tersebut.
                 return "redirect:/update-product/" + product.getId();
             } else {
-                // Kalau tidak punya ID, berarti lagi ADD NEW. Balikin ke form tambah.
+                // Kalau tidak punya ID, berarti sedang MENAMBAH DATA BARU. Kembalikan ke formulir tambah.
                 return "redirect:/add-product";
             }
             // -----------------------------
@@ -88,7 +88,7 @@ public class ProductController {
     public String deleteProduct(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             productService.deleteById(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Product successfully deleted.");
+            redirectAttributes.addFlashAttribute("successMessage", "Product deleted successfully.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
@@ -106,7 +106,7 @@ public class ProductController {
             @RequestParam(value = "voucherCode", required = false) String code, Principal principal,
             RedirectAttributes redirectAttributes) {
         try {
-            // Securely get the username of the logged-in user
+            // Ambil username pengguna yang sedang login secara aman
             String username = principal.getName();
             transactionService.purchaseProduct(product.getId(), username, code);
             redirectAttributes.addFlashAttribute("successMessage", "Purchase successful!");
@@ -125,7 +125,7 @@ public class ProductController {
 
         int pageSize = 18;
 
-        // Panggil method sakti di Service
+        // Panggil metode di layanan
         Page<Product> productPage = productService.getProductsWithFilter(keyword, categoryId, page, pageSize);
 
         // Kirim Data Produk & Halaman
@@ -134,11 +134,11 @@ public class ProductController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("totalItems", productPage.getTotalElements());
 
-        // Kirim State Filter (Biar tidak hilang saat klik page 2)
+        // Kirim Status Filter (Agar tidak hilang saat klik halaman 2)
         model.addAttribute("keyword", keyword);
         model.addAttribute("categoryId", categoryId);
 
-        // Kirim Daftar Kategori (Untuk Tombol Filter)
+        // Kirim Daftar Kategori (Untuk Tombol Filter/Penyaringan)
         model.addAttribute("categories", categoryService.findAll());
 
         return "home_user";

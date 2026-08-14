@@ -23,7 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Cari pengguna berdasarkan username di database
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username:" + username));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with Username: " + username));
 
         // Jika statusnya BANNED, maka isAccountNonLocked menjadi false
         boolean isAccountNonLocked = !"BANNED".equals(user.getStatus());
@@ -32,10 +32,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
-                true,                // enabled
-                true,                // accountNonExpired
-                true,                // credentialsNonExpired
-                isAccountNonLocked,  // accountNonLocked (false jika user BANNED)
+                true,                // diaktifkan
+                true,                // akunBelumKedaluwarsa
+                true,                // kredensialBelumKedaluwarsa
+                isAccountNonLocked,  // akunTidakTerkunci (false jika user BANNED)
                 Collections.singletonList(new SimpleGrantedAuthority(user.getRole()))
         );
     }

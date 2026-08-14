@@ -26,14 +26,14 @@ public class TransactionHistoryController {
 
     private final UserService userService;
 
-    // 1. Tampilkan Halaman Konfirmasi (Checkout)
+    // 1. Tampilkan Halaman Konfirmasi (Pemeriksaan Akhir)
     @GetMapping("/confirm/{id}")
     public String showConfirmationPage(@PathVariable("id") Integer productId, Model model, Principal principal) {
         try {
-            // Ambil Produk dari Service
+            // Ambil Produk dari layanan
             Product product = productService.findById(productId);
 
-            // PERBAIKAN: Ambil User lewat Service (Logic pencarian dipindah ke Service)
+            // PERBAIKAN: Ambil Pengguna lewat layanan (Logika pencarian dipindah ke layanan)
             User user = userService.getCurrentUser(principal);
 
             model.addAttribute("product", product);
@@ -52,10 +52,10 @@ public class TransactionHistoryController {
             Principal principal,
             RedirectAttributes redirectAttributes) {
         try {
-            // Eksekusi transaksi (Sudah benar pakai Service)
+            // Eksekusi transaksi (Sudah benar pakai layanan)
             transactionService.purchaseProduct(productId, principal.getName(), code);
 
-            redirectAttributes.addFlashAttribute("successMessage", "Transaction Successful!");
+            redirectAttributes.addFlashAttribute("successMessage", "Transaction successful!");
             return "redirect:/profile-user";
 
         } catch (Exception e) {

@@ -21,19 +21,19 @@ public class CustomErrorController implements ErrorController {
         // Ambil status code errornya
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
-       String errorMessage = "An unexpected error occurred. Please try again later."; // gw nggak tau bagusnya gini atau nggak intinya cuman buat nenangin aja dari pada keluar error yang panjang terus user nya nggak paham
+       String errorMessage = "An unexpected error occurred. Please try again later."; // Pesan umum agar detail kesalahan internal tidak ditampilkan kepada pengguna
 
     if (status != null) {
         int statusCode = Integer.parseInt(status.toString());
 
         if (statusCode == 404) {
-            errorMessage = "The page you are looking for could not be found (404).";
+            errorMessage = "The page you are looking for was not found (404).";
         } else if (statusCode == 500) {
-            errorMessage = "Internal server error (500). Please try зgain later.";
+            errorMessage = "A server error occurred (500). Please try again later.";
         } else if (statusCode == 403) {
             errorMessage = "You do not have permission to access this page (403).";
         } else {
-            errorMessage = "Error Code: " + statusCode;
+            errorMessage = "Error code: " + statusCode;
         }
     }
 

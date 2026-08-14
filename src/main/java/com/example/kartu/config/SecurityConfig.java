@@ -54,7 +54,7 @@ public class SecurityConfig {
 
                         // 4. Sisanya harus login
                         .anyRequest().authenticated())
-                // Config Login & Logout (Tetap sama)
+                // Konfigurasi masuk dan keluar (tetap sama)
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")

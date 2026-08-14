@@ -33,16 +33,16 @@ public class ProviderController {
             RedirectAttributes redirectAttributes) {
 
         try {
-            // Panggil Service (Semua validasi terjadi di dalam sini)
+            // Panggil layanan (Semua validasi terjadi di dalam sini)
             providerService.saveProvider(provider, file);
             
             redirectAttributes.addFlashAttribute("successMessage", "Provider saved successfully!");
             
         } catch (Exception e) {
-            // Tangkap Error dari Service (misal: "File bukan gambar!")
+            // Tangkap Kesalahan dari layanan (misal: "File bukan gambar!")
             redirectAttributes.addFlashAttribute("errorMessage", "Failed: " + e.getMessage());
             
-            // Logika Smart Redirect (Balik ke Add atau Update?)
+            // Logika Pengalihan Cerdas (Kembali ke Tambah atau Perbarui?)
             if (provider.getId() != null) {
                 return "redirect:/update-provider/" + provider.getId(); // Asumsi ada endpoint ini
             } else {
@@ -50,14 +50,14 @@ public class ProviderController {
             }
         }
 
-        return "redirect:/admin/providers"; // Halaman list provider
+        return "redirect:/admin/providers"; // Halaman daftar provider
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProvider(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             providerService.deleteProvider(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Provider successfully deleted!");
+            redirectAttributes.addFlashAttribute("successMessage", "Provider deleted successfully!");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }

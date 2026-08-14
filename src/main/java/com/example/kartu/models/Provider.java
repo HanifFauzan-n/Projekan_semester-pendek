@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 
-import java.util.Base64; // Import untuk konversi ke HTML nanti
+import java.util.Base64; // Impor untuk konversi ke HTML nanti
 import java.util.List;
 
 @Entity
@@ -26,7 +26,7 @@ public class Provider {
     @ToString.Exclude
     private List<Product> products;
     
-    // Helper method untuk menampilkan gambar di HTML
+    // Metode pembantu untuk menampilkan gambar di HTML
     public String getLogoBase64() {
         if (logo == null) return null;
         return Base64.getEncoder().encodeToString(logo);

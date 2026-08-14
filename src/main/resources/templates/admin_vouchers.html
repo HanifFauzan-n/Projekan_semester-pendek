@@ -34,12 +34,12 @@
                     </thead>
                     <tbody>
                         <tr th:each="voucher : ${vouchers}">
-                            <td class="fw-bold text-primary" th:text="${voucher.code}">DISKON10</td>
+                            <td class="fw-bold text-primary" th:text="${voucher.code}">DISCOUNT10</td>
                             <td th:text="'Rp ' + ${#numbers.formatDecimal(voucher.discountAmount, 0, 'COMMA', 0, 'POINT')}">5000</td>
                             <td th:text="${voucher.stock}">100</td>
                             <td>
                                 <span class="badge" th:classappend="${voucher.stock > 0} ? 'bg-success' : 'bg-danger'">
-                                    <span th:text="${voucher.stock > 0} ? 'Active' : 'Empty'"></span>
+                                    <span th:text="${voucher.stock > 0} ? 'Active' : 'Out of Stock'"></span>
                                 </span>
                             </td>
                             <td>
@@ -51,7 +51,7 @@
                             </td>
                         </tr>
                         <tr th:if="${#lists.isEmpty(vouchers)}">
-                            <td colspan="5" class="text-center text-muted">There are no vouchers yet.</td>
+                            <td colspan="5" class="text-center text-muted">No vouchers yet.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -63,7 +63,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Buat Voucher Baru</h5>
+                    <h5 class="modal-title">Create New Voucher</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form th:action="@{/admin/vouchers/save}" th:object="${newVoucher}" method="post">
@@ -71,7 +71,7 @@
                         
                         <div class="mb-3">
                             <label class="form-label">Promo Code (Unique)</label>
-                            <input type="text" class="form-control" th:field="*{code}" placeholder="Example: HEMAT50" required>
+                            <input type="text" class="form-control" th:field="*{code}" placeholder="Example: SAVE50" required>
                         </div>
 
                         <div class="mb-3">
@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label class="form-label">Stock Amount (Quota)</label>
+                            <label class="form-label">Stock Quantity (Quota)</label>
                             <input type="number" class="form-control" th:field="*{stock}" value="100" required>
                         </div>
 

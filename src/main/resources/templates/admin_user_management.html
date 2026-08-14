@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>User Management - Zelatan Cell Admin</title>
+    <title>User Management - Admin Zelatan Cell</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
@@ -36,7 +36,7 @@
             <a class="navbar-brand fw-bold" th:href="@{/home-admin}">Zelatan Cell [Admin]</a>
             <div class="d-flex">
                 <a th:href="@{/profile-admin}" class="btn btn-outline-light btn-sm">
-                    <i class="fas fa-arrow-left me-1"></i> Back to Profile
+                     <i class="fas fa-arrow-left me-1"></i> Back to Profile
                 </a>
             </div>
         </div>
@@ -49,10 +49,10 @@
 
             <div class="no-print">
                 <a th:href="@{/admin/users}" class="btn btn-outline-secondary me-2">
-                    <i class="fas fa-sync-alt"></i> Refresh
+                     <i class="fas fa-sync-alt"></i> Refresh
                 </a>
                 <button onclick="window.print()" class="btn btn-success">
-                    <i class="fas fa-print me-2"></i> Cetak PDF
+                     <i class="fas fa-print me-2"></i> Print PDF
                 </button>
             </div>
         </div>
@@ -73,11 +73,11 @@
                         <thead class="table-dark">
                             <tr>
                                 <th class="ps-4">ID</th>
-                                <th>Informasi Pengguna</th>
-                                <th>Kontak </th>
-                                <th>Saldo</th>
+                                 <th>User Information</th>
+                                 <th>Contact</th>
+                                 <th>Balance</th>
                                 <th class="text-center">Status</th>
-                                <th class="text-center no-print">Aksi</th>
+                                 <th class="text-center no-print">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,7 +85,7 @@
                                 <td class="ps-4 text-muted fw-bold" th:text="'#' + ${user.id}">1</td>
 
                                 <td>
-                                    <div class="fw-bold text-dark" th:text="${user.username}">Username</div>
+                                     <div class="fw-bold text-dark" th:text="${user.username}">Username</div>
                                     <small class="text-muted">
                                         <span class="badge bg-secondary" th:text="${user.role}">USER</span>
                                     </small>
@@ -106,10 +106,10 @@
 
                                 <td class="text-center">
                                     <span th:if="${user.status == 'ACTIVE'}" class="badge bg-success rounded-pill">
-                                        <i class="fas fa-user-check me-1"></i> ACTIVE
+                                         <i class="fas fa-user-check me-1"></i> ACTIVE
                                     </span>
                                     <span th:if="${user.status == 'BANNED'}" class="badge bg-danger rounded-pill">
-                                        <i class="fas fa-user-slash me-1"></i> BANNED
+                                         <i class="fas fa-user-slash me-1"></i> BANNED
                                     </span>
                                 </td>
 
@@ -120,19 +120,19 @@
 
                                             <form th:if="${user.status == 'ACTIVE'}"
                                                 th:action="@{/admin/users/ban/{id}(id=${user.id})}" method="post"
-                                                onsubmit="return confirm('Are you sure you want to block/ban this account ? The account will not be able to make transactions.');">
+                                                 onsubmit="return confirm('Are you sure you want to ban this account? The account will not be able to make transactions.');">
                                                 <button type="submit" class="btn btn-sm btn-danger rounded-pill"
-                                                    title="Banned Akun">
-                                                    <i class="fas fa-ban me-1"></i> Banned
+                                                     title="Ban Account">
+                                                     <i class="fas fa-ban me-1"></i> Ban
                                                 </button>
                                             </form>
 
                                             <form th:if="${user.status == 'BANNED'}"
                                                 th:action="@{/admin/users/unban/{id}(id=${user.id})}" method="post"
-                                                onsubmit="return confirm('Are you sure you want to reactivate this account ?');">
+                                                 onsubmit="return confirm('Are you sure you want to reactivate this account?');">
                                                 <button type="submit" class="btn btn-sm btn-success rounded-pill"
-                                                    title="Aktifkan Kembali">
-                                                    <i class="fas fa-undo me-1"></i> Unban
+                                                     title="Reactivate">
+                                                     <i class="fas fa-undo me-1"></i> Reactivate
                                                 </button>
                                             </form>
 
@@ -140,7 +140,7 @@
 
                                         <th:block th:if="${user.role == 'ROLE_ADMIN' or user.role == 'ADMIN'}">
                                             <span class="text-muted small" style="cursor: not-allowed;">
-                                                <i class="fas fa-shield-alt me-1"></i> <em>Protected</em>
+                                                 <i class="fas fa-shield-alt me-1"></i> <em>Protected</em>
                                             </span>
                                         </th:block>
 
@@ -151,7 +151,7 @@
                             <tr th:if="${#lists.isEmpty(users)}">
                                 <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="fas fa-users-slash fa-3x mb-3 text-secondary"></i><br>
-                                    Belum ada data pengguna yang terdaftar.
+                                     No registered user data yet.
                                 </td>
                             </tr>
                         </tbody>

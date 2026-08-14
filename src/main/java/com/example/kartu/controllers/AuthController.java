@@ -26,25 +26,25 @@ public class AuthController {
 
     private final AuthService authService;
 
-    // Menampilkan halaman login
+    // Menampilkan halaman masuk
     @GetMapping("/login")
     public String showLoginPage(@RequestParam(value = "error", required = false) String error,
             @RequestParam(value = "logout", required = false) String logout,
             HttpServletRequest request,
             Model model) {
 
-        // Menampilkan pesan error jika login gagal
+        // Menampilkan pesan kesalahan jika proses masuk gagal
         if (error != null) {
-            // Kita ambil session untuk mengecek error spesifik dari Spring Security
+            // Kita ambil sesi untuk mengecek error spesifik dari Spring Security
             HttpSession session = request.getSession(false);
-            String errorMessage = "Invalid username or password."; // Pesan default
+            String errorMessage = "Invalid Username or Password."; // Pesan bawaan
 
             if (session != null) {
                 Exception ex = (Exception) session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
                 if (ex != null) {
                     // Jika errornya karena di-banned (LockedException)
                     if (ex instanceof LockedException) {
-                        errorMessage = "Your account has been banned by the Administrator.";
+                        errorMessage = "Your account has been banned by the administrator.";
                     }
                     // Anda juga bisa menambahkan tipe error lain di sini jika perlu
                 }
@@ -52,9 +52,9 @@ public class AuthController {
             model.addAttribute("errorMessage", errorMessage);
         }
 
-        // Menampilkan pesan sukses setelah logout
+        // Menampilkan pesan sukses setelah keluar
         if (logout != null) {
-            model.addAttribute("successMessage", "You have been logged out successfully.");
+            model.addAttribute("successMessage", "You have logged out successfully.");
         }
 
         model.addAttribute("userRequest", new User());
@@ -78,7 +78,7 @@ public class AuthController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        // 1. Validasi Manual: Cek Password Match
+        // 1. Validasi Manual: Periksa Kecocokan Password
         if (userRequest.getPassword() != null && userRequest.getConfirmPassword() != null) {
             if (!userRequest.getPassword().equals(userRequest.getConfirmPassword())) {
                 model.addAttribute("errorMessage", "Password and Confirm Password do not match!");
@@ -86,7 +86,7 @@ public class AuthController {
             }
         }
 
-        // 2. Cek Error DTO (Validasi anotasi lain)
+        // 2. Cek Error DTO (Validasi anotasi lainnya)
         if (result.hasErrors()) {
             String pesanError = result.getAllErrors().get(0).getDefaultMessage();
             model.addAttribute("errorMessage", pesanError);
@@ -95,7 +95,7 @@ public class AuthController {
 
         try {
             authService.registerUser(userRequest);
-            redirectAttributes.addFlashAttribute("successMessage", "Registration Successful!");
+            redirectAttributes.addFlashAttribute("successMessage", "Registration successful!");
             return "redirect:/login";
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -117,10 +117,10 @@ public class AuthController {
         boolean isSuccess = authService.resetPasswordWithRecoveryKey(username, recoveryKey, newPassword);
 
         if (isSuccess) {
-            model.addAttribute("successMessage", "Password updated successfully. ");
+            model.addAttribute("successMessage", "Password updated successfully.");
             return "login";
         } else {
-            model.addAttribute("errorMessage", "Data does not match. Make sure the username and recovery key are correct.");
+            model.addAttribute("errorMessage", "The information does not match. Ensure the Username and recovery key are correct.");
             return "forgot_password";
         }
     }

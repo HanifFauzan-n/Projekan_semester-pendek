@@ -27,7 +27,7 @@ public class TopUpService {
 
     private final TopUpRepository topUpRepository;
 
-    // Helper untuk ambil user
+    // Pembantu untuk mengambil pengguna
     public User getUser(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -37,25 +37,25 @@ public class TopUpService {
     public void processTopUp(String username, Double amount) throws Exception {
         // 1. Validasi
         if (amount == null || amount < 10000) {
-            throw new Exception("Minimum Top Up IDR 10,000");
+            throw new Exception("Minimum Top Up is Rp 10,000");
         }
 
-        // 2. Ambil User
+        // 2. Ambil Pengguna
         User user = getUser(username);
 
-        // 4. Simpan Bukti/Riwayat (Entity TopUp)
+        // 4. Simpan Bukti/Riwayat (Entitas TopUp)
         TopUp topUp = new TopUp(user, amount);
         topUp.setStatus(TransactionStatus.PENDING);
         topUp.setDate(LocalDateTime.now());
         topUpRepository.save(topUp);
     }
 
-    // 2. FITUR BARU: Robot Pengecek Otomatis (Scheduler)
-    // Jalan setiap 60.000 ms (1 menit)
+    // 2. FITUR BARU: Robot Pengecek Otomatis (Penjadwal)
+    // Berjalan setiap 60.000 ms (1 menit)
     @Scheduled(fixedRate = 60000)
     @Transactional // Biar aman kalau ada error di tengah jalan
     public void autoApproveTopUp() {
-        System.out.println("[SCHEDULER] Mengecek top up pending...");
+        System.out.println("[SCHEDULER] Checking pending Top Up requests...");
 
         // Ambil semua yang PENDING
         List<TopUp> pendingList = topUpRepository.findByStatus(TransactionStatus.PENDING);
@@ -70,7 +70,7 @@ public class TopUpService {
             // misal 1 menit)
             if (minutesSinceRequest >= 1) { // posisi pending top up
 
-                // 1. Tambah Saldo User
+                // 1. Tambah Saldo Pengguna
                 User user = topUp.getUser();
                 user.setBalance(user.getBalance() + topUp.getAmount().intValue());
                 userRepository.save(user);
@@ -79,7 +79,7 @@ public class TopUpService {
                 topUp.setStatus(TransactionStatus.SUCCESS);
                 topUpRepository.save(topUp);
 
-                log.info("TopUp ID " + topUp.getId() + " BERHASIL diproses otomatis.");
+                log.info("Top Up ID " + topUp.getId() + " processed automatically with SUCCESS status.");
             }
         }
     }
@@ -88,7 +88,7 @@ public class TopUpService {
         return topUpRepository.findAllByOrderByDateDesc();
     }
 
-    // Tambahkan method ini di dalam class TopUpService yang sudah ada
+    // Tambahkan method ini di dalam kelas TopUpService yang sudah ada
     public List<TopUp> getTopUpHistoryByUser(User user) {
         return topUpRepository.findByUserIdOrderByDateDesc(user.getId());
     }
@@ -104,9 +104,9 @@ public class TopUpService {
             if (topUp.getStatus() == TransactionStatus.PENDING) {
                 topUp.setStatus(TransactionStatus.FAILED); // Ubah status jadi FAILED
                 topUpRepository.save(topUp);
-                log.info("[ADMIN ACTION] TopUp ID {} was successfully cancelled.", id);
+                log.info("[ADMIN ACTION] Top Up ID {} canceled successfully.", id);
             } else {
-                throw new RuntimeException("Cannot cancel a completed transaction.");
+                throw new RuntimeException("A completed transaction cannot be canceled.");
             }
         }
     }

@@ -22,12 +22,12 @@ public class UserController {
 
     private final UserService userService;
 
-    // 1. Tampilkan Form Edit
+    // 1. Tampilkan Formulir Edit
     @GetMapping("/edit")
     public String showEditProfileForm(Model model, Principal principal) {
         User user = userService.getCurrentUser(principal);
 
-        // Siapkan DTO dengan data lama biar form terisi otomatis
+        // Siapkan DTO dengan data lama agar formulir terisi otomatis
         UserProfileRequest request = new UserProfileRequest();
         request.setUsername(user.getUsername());
         request.setPhoneNumber(user.getPhoneNumber());
@@ -38,7 +38,7 @@ public class UserController {
         return "edit_profile"; // Nama file HTML nanti
     }
 
-    // 2. Proses Update Data
+    // 2. Proses Pembaruan Data
     @PostMapping("/update-profile")
     public String processUpdateProfile(@Valid @ModelAttribute UserProfileRequest request,
             BindingResult result,

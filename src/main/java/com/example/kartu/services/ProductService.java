@@ -27,7 +27,7 @@ public class ProductService {
 
     public Product findById(Integer id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("Product not found with ID: " + id));
     }
 
     public void save(Product product) {
@@ -39,7 +39,7 @@ public class ProductService {
                 .stream().anyMatch(h -> h.getProduct().getId().equals(id));
 
         if (hasHistory) {
-            throw new Exception("Cannot delete product because it has a transaction history.");
+            throw new Exception("Product cannot be deleted because it has transaction history.");
         }
         productRepository.deleteById(id);
     }
@@ -58,25 +58,25 @@ public class ProductService {
         return productRepository.count();
     }
 
-    // Method Sakti untuk Menangani Filter + Search + Pagination
+    // Metode untuk menangani Filter + Pencarian + Paginasi
     public Page<Product> getProductsWithFilter(String keyword, String categoryId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        // A. Jika ada Filter Kategori
+        // A. Jika ada Penyaring Kategori
         if (categoryId != null && !categoryId.isEmpty()) {
             if (keyword != null && !keyword.isEmpty()) {
-                // Search + Kategori
+                // Pencarian + Kategori
                 return productRepository.findByCategoryIdAndNameContainingIgnoreCase(categoryId, keyword, pageable);
             } else {
-                // Cuma Kategori
+                // Hanya Kategori
                 return productRepository.findByCategoryId(categoryId, pageable);
             }
         }
 
-        // B. Jika TIDAK ada Filter Kategori (Cuma Search atau All)
+        // B. Jika TIDAK ada Penyaring Kategori (Hanya Pencarian atau Semua)
         else {
             if (keyword != null && !keyword.isEmpty()) {
-                // Cuma Search
+                // Hanya Pencarian
                 return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
             } else {
                 // Tampilkan Semua

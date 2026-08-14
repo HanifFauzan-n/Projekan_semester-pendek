@@ -17,13 +17,13 @@ public class TransactionHistory {
     private String customerNumber;
 
     private LocalDateTime timestamp = LocalDateTime.now();
-    // TransactionHistory.java
+    // Berkas TransactionHistory.java
     @Column(name = "transaction_id", unique = true, nullable = false)
     private String transactionId;
 
     @Column(name = "serial_number", unique = true, nullable = false)
     private String serialNumber;
-    @Enumerated(EnumType.STRING) // Menyimpan sebagai teks "SUCCESS"/"FAILED" di database
+    @Enumerated(EnumType.STRING) // Disimpan sebagai teks "SUCCESS"/"FAILED" di database
     private TransactionStatus status;
 
     @ManyToOne

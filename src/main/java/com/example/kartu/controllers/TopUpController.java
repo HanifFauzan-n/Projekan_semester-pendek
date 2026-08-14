@@ -34,7 +34,7 @@ public class TopUpController {
         }
     }
 
-    // 2. Proses Submit
+    // 2. Proses Pengiriman
     @PostMapping("/topup")
     public String processTopUp(@RequestParam("amount") Double amount,
             Principal principal,
@@ -42,7 +42,7 @@ public class TopUpController {
         try {
             topUpService.processTopUp(principal.getName(), amount);
             redirectAttributes.addFlashAttribute("successMessage",
-                    "Top Up request accepted! The balance will be automatically added in 3-5 minutes.");
+                    "Top Up request received! The balance will be added automatically within 3-5 minutes.");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Failed: " + e.getMessage());
         }
@@ -63,10 +63,10 @@ public class TopUpController {
     public String cancelTopUp(@RequestParam("id") Integer id, RedirectAttributes redirectAttributes) {
         try {
             topUpService.cancelTopUp(id);
-            redirectAttributes.addFlashAttribute("successMessage", "Top Up was successfully cancelled (FAILED).");
+            redirectAttributes.addFlashAttribute("successMessage", "Top Up canceled successfully and marked FAILED.");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to cancel:" + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to cancel Top Up: " + e.getMessage());
         }
-        return "redirect:/admin/topups"; // Refresh halaman
+        return "redirect:/admin/topups"; // Muat ulang halaman
     }
 }

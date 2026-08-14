@@ -23,13 +23,13 @@ public class TopUp {
 
     private Double amount;
     
-    private LocalDateTime date; // Saya ganti 'transactionDate' jadi 'date' biar simpel
+    private LocalDateTime date; // Saya ganti 'transactionDate' jadi 'date' agar sederhana
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
 
-    // Constructor Helper
+    // Konstruktor Pembantu
     public TopUp(User user, Double amount) {
         this.user = user;
         this.amount = amount;

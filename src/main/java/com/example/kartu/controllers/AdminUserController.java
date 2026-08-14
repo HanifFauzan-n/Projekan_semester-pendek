@@ -25,7 +25,7 @@ public class AdminUserController {
     
     private final UserService userService;
 
-    // Menampilkan daftar user
+    // Menampilkan daftar pengguna
     @GetMapping
     public String listUsers(Model model) {
         List<User> userList = userService.getAllUsers();
@@ -35,41 +35,41 @@ public class AdminUserController {
         return "admin_user_management";
     }
 
-    // Menampilkan detail user
+    // Menampilkan detail pengguna
     @GetMapping("/detail/{id}")
     public String userDetails(@PathVariable Integer id, Model model) {
         try {
             User userDetail = userService.getUserDetailsById(id);
             model.addAttribute("user", userDetail);
 
-            // Asumsi jika nanti dibuatkan file detail: letakkan langsung di root templates
+            // Asumsi jika nanti dibuatkan file detail: letakkan langsung di root template
             return "admin_user_detail";
 
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", "User data not found!");
-            return "redirect:/admin/users"; // Redirect disesuaikan ke /admin/users
+            return "redirect:/admin/users"; // Pengalihan disesuaikan ke /admin/users
         }
     }
 
-    // Blokir user
+    // Blokir pengguna
     @PostMapping("/ban/{id}")
     public String banUser(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             userService.banUser(id);
-            // Flash attribute untuk memunculkan notifikasi sukses di HTML
-            redirectAttributes.addFlashAttribute("successMessage", "User account has been successfully banned!");
+            // Atribut sementara untuk menampilkan notifikasi sukses di halaman HTML
+            redirectAttributes.addFlashAttribute("successMessage", "User account banned successfully!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/admin/users";
     }
 
-    // Aktifkan kembali user
+    // Aktifkan kembali pengguna
     @PostMapping("/unban/{id}")
     public String unbanUser(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
         try {
             userService.unbanUser(id);
-            redirectAttributes.addFlashAttribute("successMessage", "User account has been successfully reactivated!");
+            redirectAttributes.addFlashAttribute("successMessage", "User account reactivated successfully!");
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }

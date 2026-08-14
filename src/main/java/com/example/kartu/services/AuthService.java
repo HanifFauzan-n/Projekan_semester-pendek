@@ -22,9 +22,9 @@ public class AuthService {
 
     public void registerUser(UserRequest requestUser) throws Exception {
 
-        // 1. Username Validation
+        // 1. Validasi Username
         if (userRepository.findByUsername(requestUser.getUsername()).isPresent()) {
-            throw new Exception("Username is already taken, please choose another.");
+            throw new Exception("Username is already in use. Choose another one.");
         }
 
         String usernameRegex = "^(?=(?:.*[a-zA-Z]){3,}).+$";
@@ -33,7 +33,7 @@ public class AuthService {
         }
 
         if (userRepository.findByPhoneNumber(requestUser.getPhoneNumber()).isPresent()) {
-            throw new Exception("Phone Number is already taken, please choose another.");
+            throw new Exception("Phone number is already in use. Choose another one.");
         }
 
         User user = new User();
@@ -43,7 +43,7 @@ public class AuthService {
         user.setBalance(0);
         user.setRecoveryKey(requestUser.getRecoveryKey());
 
-        // Set Default Role (Hardcode biar aman)
+        // Tetapkan Peran Bawaan (Hardcode agar aman)
         user.setRole("ROLE_USER");
 
         userRepository.save(user);

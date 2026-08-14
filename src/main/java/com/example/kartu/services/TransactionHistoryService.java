@@ -35,7 +35,7 @@ public class TransactionHistoryService {
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final SecureRandom random = new SecureRandom();
 
-    // Method untuk generate Transaction ID unik (Contoh: ZLC-20260312-A7X9)
+    // Metode untuk membuat ID transaksi unik (contoh: ZLC-20260312-A7X9)
     private String generateUniqueTransactionId() {
         String newId;
         boolean exists;
@@ -49,12 +49,12 @@ public class TransactionHistoryService {
 
             // Validasi ke database: pastikan belum pernah ada
             exists = transactionHistoryRepository.existsByTransactionId(newId);
-        } while (exists); // Jika ada yang sama, ulangi generate
+        } while (exists); // Jika ada yang sama, ulangi pembuatan
 
         return newId;
     }
 
-    // Method untuk generate SN unik (16 digit angka)
+    // Metode untuk membuat SN unik (16 digit angka)
     private String generateUniqueSN() {
         String sn;
         boolean exists;
@@ -83,7 +83,7 @@ public class TransactionHistoryService {
         // 2. Cek Voucher (Jika user memasukkan kode)
         if (voucherCode != null && !voucherCode.isEmpty()) {
             Voucher voucher = voucherRepository.findByCode(voucherCode)
-                    .orElseThrow(() -> new Exception("Voucher Code is invalid!"));
+                    .orElseThrow(() -> new Exception("Invalid voucher code!"));
 
             if (voucher.getStock() <= 0 || !voucher.isActive()) {
                 throw new Exception("Voucher has expired or is inactive.");
@@ -114,7 +114,7 @@ public class TransactionHistoryService {
                 throw new Exception("Out of stock");
             }
             if (user.getBalance() < finalPrice) {
-                throw new Exception("Operation failed! Insufficient balance."); // uang anda kurang
+                throw new Exception("Operation failed! Insufficient balance."); // Saldo pengguna tidak mencukupi
             }
 
             user.setBalance((int) (user.getBalance() - finalPrice));
@@ -136,7 +136,7 @@ public class TransactionHistoryService {
             history.setStatus(TransactionStatus.FAILED);
             transactionHistoryRepository.save(history); // Simpan riwayat gagal
 
-            // Lempar error lagi agar Controller tahu dan bisa menampilkan pesan ke User
+            // Lempar kesalahan lagi agar Pengontrol tahu dan bisa menampilkan pesan ke Pengguna
             throw e;
         }
     }
@@ -147,7 +147,7 @@ public class TransactionHistoryService {
 
         // Menjumlahkan dari field amountPaid yang ada di riwayat transaksi
         return (long) transactions.stream()
-                .filter(t -> t.getAmountPaid() != null) // Safety check agar tidak error jika ada data null
+                .filter(t -> t.getAmountPaid() != null) // Pengecekan keamanan agar tidak error jika ada data null
                 .mapToDouble(TransactionHistory::getAmountPaid)
                 .sum();
     }
@@ -157,7 +157,7 @@ public class TransactionHistoryService {
         return transactionHistoryRepository.findAllByOrderByTimestampDesc();
     }
 
-    // Tambahkan method ini di dalam class TransactionHistoryService yang sudah ada
+    // Tambahkan method ini di dalam kelas TransactionHistoryService yang sudah ada
     public List<TransactionHistory> getTransactionHistoryByUser(User user) {
         return transactionHistoryRepository.findByUserIdOrderByTimestampDesc(user.getId());
     }

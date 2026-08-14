@@ -26,7 +26,7 @@ public class UserService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
-    // Method khusus untuk mengambil saldo user (opsional, jika ingin lebih
+    // Metode khusus untuk mengambil saldo pengguna (opsional, jika ingin lebih
     // spesifik)
     public Integer getUserBalance(Principal principal) {
         User user = getCurrentUser(principal);
@@ -37,16 +37,16 @@ public class UserService {
     User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new Exception("User not found"));
 
-    // 1. Validasi & Update Phone Number (Ini tetap butuh check duplicate biar nomor kontak gak kembar)
+    // 1. Validasi & Perbarui Nomor Telepon (Ini tetap butuh pemeriksaan duplikat biar nomor kontak gak kembar)
     if (request.getPhoneNumber() != null && !request.getPhoneNumber().isEmpty()) {
         boolean phoneExists = userRepository.existsByPhoneNumberAndUsernameNot(request.getPhoneNumber(), username);
         if (phoneExists) {
-            throw new Exception("Phone number is already in use by another account");
+            throw new Exception("Phone number is already used by another account");
         }
         user.setPhoneNumber(request.getPhoneNumber());
     }
 
-    // 2. Update Recovery Key (Bebas, rahasia, dan boleh sama dengan user lain secara tidak sengaja)
+    // 2. Perbarui Kunci Pemulihan (Bebas, rahasia, dan boleh sama dengan user lain secara tidak sengaja)
     if (request.getRecoveryKey() != null && !request.getRecoveryKey().isEmpty()) {
         user.setRecoveryKey(request.getRecoveryKey());
     }

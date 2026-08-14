@@ -23,7 +23,7 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
 
-    // 2. Simpan Kategori (Logic Huruf Besar dipindah ke sini)
+    // 2. Simpan Kategori (Logika Huruf Besar dipindah ke sini)
     public void saveCategory(Category category) {
 
         // Ubah jadi huruf besar sebelum simpan

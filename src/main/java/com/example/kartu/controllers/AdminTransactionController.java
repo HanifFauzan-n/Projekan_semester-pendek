@@ -16,21 +16,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminTransactionController {
 
     
-    private final TransactionHistoryService transactionService; // Pakai Service
+    private final TransactionHistoryService transactionService; // Pakai layanan
 
     
-    private final TopUpService topUpService; // Pakai Service
+    private final TopUpService topUpService; // Pakai layanan
 
     @GetMapping("/sales")
     public String showSalesReports(Model model) {
-        // Panggil method baru di service
+        // Panggil metode baru di layanan
         model.addAttribute("transactions", transactionService.getAllTransactionsDesc());
         return "admin_sales_report";
     }
 
     @GetMapping("/topups")
     public String showTopUpReports(Model model) {
-        // Panggil method baru di service
+        // Panggil metode baru di layanan
         model.addAttribute("topups", topUpService.getAllTopUpsDesc());
         return "admin_topup_report";
     }

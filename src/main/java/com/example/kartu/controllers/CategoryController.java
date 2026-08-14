@@ -1,7 +1,7 @@
 package com.example.kartu.controllers;
 
 import com.example.kartu.models.Category;
-import com.example.kartu.services.CategoryService; // Import Service
+import com.example.kartu.services.CategoryService; // Impor layanan
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +18,7 @@ public class CategoryController {
     
     private final CategoryService categoryService; 
 
-    // 1. READ: Tampilkan halaman daftar kategori
+    // 1. BACA: Tampilkan halaman daftar kategori
     @GetMapping
     public String listCategories(Model model) {
         // Panggil service
@@ -27,30 +27,30 @@ public class CategoryController {
         return "manage_categories";
     }
 
-    // 2. CREATE: Simpan kategori baru
+    // 2. BUAT: Simpan kategori baru
     @PostMapping("/save")
     public String saveCategory(@ModelAttribute("newCategory") Category category, RedirectAttributes redirectAttributes) {
         try {
-            // Logika "toUpperCase" sudah diurus oleh Service
+            // Logika "toUpperCase" sudah diurus oleh layanan
             categoryService.saveCategory(category);
             
             redirectAttributes.addFlashAttribute("successMessage", "Category saved successfully!");
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save category:" + e.getMessage());
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to save category: " + e.getMessage());
         }
         return "redirect:/categories";
     }
 
-    // 3. DELETE: Hapus kategori
+    // 3. HAPUS: Hapus kategori
     @GetMapping("/delete/{id}")
     public String deleteCategory(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         try {
-            // Service akan melempar error jika kategori masih dipakai produk
+            // Layanan akan melempar kesalahan jika kategori masih dipakai produk
             categoryService.deleteCategory(id);
             
-            redirectAttributes.addFlashAttribute("successMessage", "Category successfully deleted!");
+            redirectAttributes.addFlashAttribute("successMessage", "Category deleted successfully!");
         } catch (Exception e) {
-            // Tangkap pesan error dari Service ("Gagal! Kategori ini sedang digunakan...")
+            // Tangkap pesan kesalahan dari layanan ("Gagal! Kategori ini sedang digunakan...")
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/categories";

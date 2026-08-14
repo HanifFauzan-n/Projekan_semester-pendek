@@ -24,7 +24,7 @@ public class ProviderService {
         return providerRepository.findAll();
     }
 
-    // Ambil satu provider by ID (opsional, buat jaga-jaga nanti butuh)
+    // Ambil satu provider berdasarkan ID (opsional, buat jaga-jaga nanti butuh)
     public Provider findById(Integer id) {
         return providerRepository.findById(id).orElse(null);
     }
@@ -34,7 +34,7 @@ public class ProviderService {
         // 1. Cek Apakah Ada File yang Diupload?
         if (!file.isEmpty()) {
 
-            // A. Validasi Tipe File (MIME Type)
+            // A. Validasi Tipe File (Tipe MIME)
             String contentType = file.getContentType();
             List<String> allowedTypes = Arrays.asList("image/png", "image/jpeg", "image/jpg");
 
@@ -42,12 +42,12 @@ public class ProviderService {
                 throw new Exception("File must be an image (PNG/JPG)!");
             }
 
-            // B. Validasi Ukuran File (Max 1MB)
+            // B. Validasi Ukuran File (Maksimal 1MB)
             if (file.getSize() > 1024 * 1024) {
-                throw new Exception("Maximum image size is 1MB!");
+                throw new Exception("Maximum image size is 1 MB!");
             }
 
-            // C. Konversi ke Base64
+            // C. Konversi ke format Base64
             provider.setLogo(file.getBytes()); // Simpan string panjang ini ke entity
 
         } else {
@@ -55,7 +55,7 @@ public class ProviderService {
 
             // Kasus: Tambah Baru (Wajib ada logo)
             if (provider.getId() == null) {
-                throw new Exception("Uploading the provider logo is required for new data!");
+                throw new Exception("A Provider logo is required for new data!");
             }
 
             // Kasus: Update (Edit)
@@ -77,7 +77,7 @@ public class ProviderService {
 
         if (productCount > 0) {
             // 2. Jika ada, LEMPAR ERROR (Jangan dihapus!)
-            throw new Exception("Operation failed! This provider is currently in use by " + productCount + " active products.");
+            throw new Exception("Operation failed! This Provider is used by " + productCount + " active products.");
         }
 
         // 3. Jika aman (0 produk), baru hapus

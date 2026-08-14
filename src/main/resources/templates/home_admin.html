@@ -72,7 +72,7 @@
                                 <th>Description</th>
                                 <th>Price</th>
                                 <th class="text-center">Stock</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -95,7 +95,7 @@
 
                                 <td th:text="${product.name}" class="fw-semibold">Internet 10GB</td>
 
-                                <td th:text="${product.description}" class="text-muted small">Masa aktif 30 hari</td>
+                                <td th:text="${product.description}" class="text-muted small">Valid for 30 days</td>
 
                                 <td th:text="'Rp ' + ${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')}"
                                     class="text-primary fw-bold">
@@ -107,7 +107,7 @@
                                         class="badge bg-success rounded-pill"></span>
                                     <span th:if="${product.stock <= 10 && product.stock > 0}" th:text="${product.stock}"
                                         class="badge bg-warning text-dark rounded-pill"></span>
-                                    <span th:if="${product.stock == 0}" text="Habis"
+                                    <span th:if="${product.stock == 0}" text="Out of Stock"
                                         class="badge bg-danger rounded-pill">Out of Stock</span>
                                 </td>
 
@@ -117,8 +117,8 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <a th:href="@{/delete-product/{id}(id=${product.id})}"
-                                        class="btn btn-sm btn-outline-danger" title="Hapus"
-                                        onclick="return confirm('Are you sure you want to delete this product ?')">
+                                        class="btn btn-sm btn-outline-danger" title="Delete"
+                                        onclick="return confirm('Are you sure you want to delete this product?')">
                                         <i class="fas fa-trash"></i>
                                     </a>
                                 </td>
@@ -127,7 +127,7 @@
                             <tr th:if="${#lists.isEmpty(products)}">
                                 <td colspan="7" class="text-center py-4 text-muted">
                                     <i class="fas fa-box-open fa-2x mb-2"></i><br>
-                                    There are no products available yet.
+                                    No products are available yet.
                                 </td>
                             </tr>
                         </tbody>

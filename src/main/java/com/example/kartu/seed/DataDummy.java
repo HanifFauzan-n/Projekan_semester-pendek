@@ -78,13 +78,13 @@ public class DataDummy implements CommandLineRunner {
         seedVouchers();
         seedTopUps();
         seedTransactions();
-        log.info("[DUMMY] Semua data dummy berhasil disiapkan.");
+        log.info("[DUMMY] All dummy data prepared successfully.");
     }
 
     private void seedCategories() {
         if (categoryRepository.findByTypeContainingIgnoreCase("ACCESSORIES").isEmpty()) {
             categoryRepository.save(new Category("CD-003", "ACCESSORIES"));
-            log.info("[DUMMY] Kategori ACCESSORIES dibuat.");
+            log.info("[DUMMY] ACCESSORIES category created.");
         }
     }
 
@@ -102,23 +102,23 @@ public class DataDummy implements CommandLineRunner {
 
         if (productRepository.count() == 0) {
             List<Product> products = List.of(
-                    createProduct(telkomsel, pulsa, "Telkomsel 5.000", 5500, 100, "Pulsa Telkomsel nominal 5.000"),
-                    createProduct(telkomsel, pulsa, "Telkomsel 10.000", 10500, 100, "Pulsa Telkomsel nominal 10.000"),
-                    createProduct(telkomsel, pulsa, "Telkomsel 50.000", 50500, 50, "Pulsa Telkomsel nominal 50.000"),
-                    createProduct(indosat, pulsa, "Indosat 10.000", 10200, 100, "Pulsa Indosat nominal 10.000"),
-                    createProduct(xl, pulsa, "XL 20.000", 20200, 100, "Pulsa XL nominal 20.000"),
-                    createProduct(tri, pulsa, "Tri 10.000", 10050, 0, "Pulsa Tri nominal 10.000"),
-                    createProduct(smartfren, pulsa, "Smartfren 25.000", 25200, 100, "Pulsa Smartfren nominal 25.000"),
-                    createProduct(axis, pulsa, "Axis 5.000", 5200, 100, "Pulsa Axis nominal 5.000"),
-                    createProduct(telkomsel, data, "Telkomsel Kuota 5GB", 30000, 50, "Kuota internet Telkomsel 5GB"),
-                    createProduct(indosat, data, "Indosat Kuota 10GB", 35000, 50, "Kuota internet Indosat 10GB"),
-                    createProduct(xl, data, "XL Kuota 15GB", 45000, 30, "Kuota internet XL 15GB"),
-                    createProduct(smartfren, data, "Smartfren Kuota 20GB", 60000, 30, "Kuota internet Smartfren 20GB"),
-                    createProduct(null, aksesoris, "Casing HP Silicon", 20000, 25, "Casing HP silikon semua merek"),
-                    createProduct(null, aksesoris, "Kabel Data Type-C", 25000, 15, "Kabel data USB Type-C"));
+                    createProduct(telkomsel, pulsa, "Telkomsel 5.000", 5500, 100, "Telkomsel mobile credit worth 5,000"),
+                    createProduct(telkomsel, pulsa, "Telkomsel 10.000", 10500, 100, "Telkomsel mobile credit worth 10,000"),
+                    createProduct(telkomsel, pulsa, "Telkomsel 50.000", 50500, 50, "Telkomsel mobile credit worth 50,000"),
+                    createProduct(indosat, pulsa, "Indosat 10.000", 10200, 100, "Indosat mobile credit worth 10,000"),
+                    createProduct(xl, pulsa, "XL 20.000", 20200, 100, "XL mobile credit worth 20,000"),
+                    createProduct(tri, pulsa, "Tri 10.000", 10050, 0, "Tri mobile credit worth 10,000"),
+                    createProduct(smartfren, pulsa, "Smartfren 25.000", 25200, 100, "Smartfren mobile credit worth 25,000"),
+                    createProduct(axis, pulsa, "Axis 5.000", 5200, 100, "Axis mobile credit worth 5,000"),
+                    createProduct(telkomsel, data, "Telkomsel 5GB Data Plan", 30000, 50, "Telkomsel 5GB internet data plan"),
+                    createProduct(indosat, data, "Indosat 10GB Data Plan", 35000, 50, "Indosat 10GB internet data plan"),
+                    createProduct(xl, data, "XL 15GB Data Plan", 45000, 30, "XL 15GB internet data plan"),
+                    createProduct(smartfren, data, "Smartfren 20GB Data Plan", 60000, 30, "Smartfren 20GB internet data plan"),
+                    createProduct(null, aksesoris, "Silicone Phone Case", 20000, 25, "Silicone phone case for all brands"),
+                    createProduct(null, aksesoris, "Type-C Data Cable", 25000, 15, "USB Type-C data cable"));
 
             productRepository.saveAll(products);
-            log.info("[DUMMY] {} produk dibuat.", products.size());
+            log.info("[DUMMY] {} products created.", products.size());
         }
     }
 
@@ -137,7 +137,7 @@ public class DataDummy implements CommandLineRunner {
         }
 
         Voucher v1 = new Voucher();
-        v1.setCode("HEMAT10");
+        v1.setCode("SAVE10");
         v1.setDiscountAmount(10000.0);
         v1.setStock(10);
         v1.setActive(true);
@@ -155,7 +155,7 @@ public class DataDummy implements CommandLineRunner {
         v3.setActive(false);
 
         voucherRepository.saveAll(List.of(v1, v2, v3));
-        log.info("[DUMMY] 3 voucher dibuat.");
+        log.info("[DUMMY] 3 vouchers created.");
     }
 
     private void seedTopUps() {
@@ -177,7 +177,7 @@ public class DataDummy implements CommandLineRunner {
         TopUp t6 = createTopUp(rizky, 50000.0, TransactionStatus.PENDING, LocalDateTime.now());
 
         topUpRepository.saveAll(List.of(t1, t2, t3, t4, t5, t6));
-        log.info("[DUMMY] 6 data top up dibuat.");
+        log.info("[DUMMY] 6 Top Up records created.");
     }
 
     private void seedTransactions() {
@@ -193,13 +193,13 @@ public class DataDummy implements CommandLineRunner {
         List<TransactionHistory> histories = List.of(
                 createTransaction(rizky, "Telkomsel 10.000", 10500.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusHours(2)),
-                createTransaction(rizky, "Telkomsel Kuota 5GB", 30000.0, TransactionStatus.SUCCESS,
+                createTransaction(rizky, "Telkomsel 5GB Data Plan", 30000.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusDays(1)),
                 createTransaction(salsa, "Indosat 10.000", 10200.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusDays(2)),
-                createTransaction(salsa, "Smartfren Kuota 20GB", 60000.0, TransactionStatus.SUCCESS,
+                createTransaction(salsa, "Smartfren 20GB Data Plan", 60000.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusDays(3)),
-                createTransaction(dinda, "XL Kuota 15GB", 45000.0, TransactionStatus.SUCCESS,
+                createTransaction(dinda, "XL 15GB Data Plan", 45000.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusDays(1)),
                 createTransaction(dinda, "Telkomsel 50.000", 50500.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusHours(5)),
@@ -207,13 +207,13 @@ public class DataDummy implements CommandLineRunner {
                         LocalDateTime.now().minusDays(2)),
                 createTransaction(bagas, "Tri 10.000", 10050.0, TransactionStatus.FAILED,
                         LocalDateTime.now().minusDays(1)),
-                createTransaction(salsa, "Casing HP Silicon", 20000.0, TransactionStatus.SUCCESS,
+                createTransaction(salsa, "Silicone Phone Case", 20000.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusHours(8)),
                 createTransaction(dinda, "Telkomsel 10.000", 10500.0, TransactionStatus.SUCCESS,
                         LocalDateTime.now().minusHours(1)));
 
         transactionHistoryRepository.saveAll(histories);
-        log.info("[DUMMY] {} riwayat transaksi dibuat.", histories.size());
+        log.info("[DUMMY] {} transaction history records created.", histories.size());
     }
 
     private Provider createProvider(String name) {
@@ -255,7 +255,7 @@ public class DataDummy implements CommandLineRunner {
             ImageIO.write(resized, "png", output);
             return output.toByteArray();
         } catch (Exception e) {
-            log.warn("[DUMMY] Logo {} tidak ditemukan, pakai logo kosong.", providerName);
+            log.warn("[DUMMY] Logo {} not found; using an empty logo.", providerName);
             return new byte[0];
         }
     }
@@ -283,7 +283,7 @@ public class DataDummy implements CommandLineRunner {
             user.setStatus("ACTIVE");
             user.setRole("ROLE_USER");
             userRepository.save(user);
-            log.info("[DUMMY] User '{}' dibuat.", username);
+            log.info("[DUMMY] User '{}' created.", username);
         }
     }
 
@@ -298,7 +298,7 @@ public class DataDummy implements CommandLineRunner {
             user.setStatus("BANNED");
             user.setRole("ROLE_USER");
             userRepository.save(user);
-            log.info("[DUMMY] User 'banned_user' dibuat (status BANNED).");
+            log.info("[DUMMY] User 'banned_user' created (BANNED status).");
         }
     }
 
@@ -314,7 +314,7 @@ public class DataDummy implements CommandLineRunner {
         Product product = productRepository.findAll().stream()
                 .filter(p -> p.getName().equalsIgnoreCase(productName))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Product not found for dummy: " + productName));
+                .orElseThrow(() -> new RuntimeException("Product not found for dummy data: " + productName));
 
         TransactionHistory history = new TransactionHistory();
         history.setUser(user);
