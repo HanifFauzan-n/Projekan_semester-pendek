@@ -1,5 +1,6 @@
 package com.example.kartu.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -11,25 +12,23 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserRequest {
-    @NotBlank(message = "Username is required")
-    @Size(min = 8, message = "Username must be at least 8 characters")
+    @NotBlank(message = "Username wajib diisi.")
+    @Size(min = 3, max = 50, message = "Username harus 3-50 karakter.")
     private String username;
 
-    @NotBlank(message = "Password is required")
-    @Size(min = 8, message = "Password must be at least 8 characters")
+    @NotBlank(message = "Email wajib diisi.")
+    @Email(message = "Format email tidak valid.")
+    private String email;
+
+    @NotBlank(message = "Password wajib diisi.")
+    @Size(min = 6, message = "Password minimal 6 karakter.")
     private String password;
 
-    @NotBlank(message = "Confirm Password is required")
-    @Size(min = 8, message = "Confirm Password must be at least 8 characters")
+    @NotBlank(message = "Konfirmasi password wajib diisi.")
     private String confirmPassword;
 
-    @NotBlank(message = "Recovery key is required")
-    @Size(min = 5, message = "Recovery key must be at least 5 characters")
-    @Pattern(regexp = "^[0-9]+$", message = "Recovery key may contain numbers only")
-    private String recoveryKey;
-
-    @NotBlank(message = "Phone number is required")
-    @Pattern(regexp = "^08\\d{7,15}$", message = "Invalid phone number format (must start with 08 and contain 9-15 digits)")
+    @NotBlank(message = "Nomor HP wajib diisi.")
+    @Pattern(regexp = "^08\\d{7,15}$", message = "Nomor HP harus diawali 08 dan berisi 9-17 digit.")
     private String phoneNumber;
 
 }

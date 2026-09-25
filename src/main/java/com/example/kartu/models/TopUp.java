@@ -28,6 +28,25 @@ public class TopUp {
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;
 
+    // --- Xendit payment gateway (SKPL-F05) ---
+    // All nullable: manual top up rows created before v2 never fill these.
+    // A null externalId is what marks a row as belonging to the old manual flow,
+    // which is what TopUpService.autoApproveTopUp() uses to skip Xendit rows.
+
+    @Column(unique = true)
+    private String externalId;
+
+    private String xenditInvoiceId;
+
+    @Column(length = 512)
+    private String invoiceUrl;
+
+    private String paymentMethod;
+
+    private String paymentChannel;
+
+    private LocalDateTime paidAt;
+
 
     // Konstruktor Pembantu
     public TopUp(User user, Double amount) {

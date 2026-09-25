@@ -13,7 +13,6 @@ target/
 .springBeans
 .sts4-cache
 
-*.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -33,3 +32,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Kredensial lokal (SKPL-F05, F03, F18) ###
+.env
+.env.*
+!.env.example
+*.log

@@ -17,6 +17,9 @@ public class Product {
     @Column(name = "price")
     private Integer price;
 
+    @Column(name = "cost_price")
+    private Integer costPrice;
+
     @Column(name = "description")
     private String description; // Lebih generik daripada "kuota"
 

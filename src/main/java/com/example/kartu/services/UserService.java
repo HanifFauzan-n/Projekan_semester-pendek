@@ -6,63 +6,65 @@ import com.example.kartu.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-
-    public User getCurrentUser(Principal principal) {
-        if (principal == null)
-            return null;
-        return userRepository.findByUsername(principal.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    // Metode khusus untuk mengambil saldo pengguna (opsional, jika ingin lebih
-    // spesifik)
-    public Integer getUserBalance(Principal principal) {
-        User user = getCurrentUser(principal);
-        return (user != null) ? user.getBalance() : 0;
-    }
-
-    public void updateUserProfile(String username, UserProfileRequest request) throws Exception {
-    User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new Exception("User not found"));
-
-    // 1. Validasi & Perbarui Nomor Telepon (Ini tetap butuh pemeriksaan duplikat biar nomor kontak gak kembar)
-    if (request.getPhoneNumber() != null && !request.getPhoneNumber().isEmpty()) {
-        boolean phoneExists = userRepository.existsByPhoneNumberAndUsernameNot(request.getPhoneNumber(), username);
-        if (phoneExists) {
-            throw new Exception("Phone number is already used by another account");
+    /**
+     * The logged-in account for both login types: form login authenticates by username,
+     * Google login (OAuth2/OIDC) by email.
+     */
+    public Optional<User> findCurrentUser(Authentication authentication) {
+        if (authentication == null || !authentication.isAuthenticated()
+                || authentication instanceof AnonymousAuthenticationToken) {
+            return Optional.empty();
         }
-        user.setPhoneNumber(request.getPhoneNumber());
+        if (authentication.getPrincipal() instanceof OAuth2User oauth2User) {
+            String email = oauth2User.getAttribute("email");
+            if (email != null && !email.isBlank()) {
+                return userRepository.findByEmail(email.trim().toLowerCase());
+            }
+        }
+        String name = authentication.getName();
+        return userRepository.findByUsername(name).or(() -> userRepository.findByEmail(name));
     }
 
-    // 2. Perbarui Kunci Pemulihan (Bebas, rahasia, dan boleh sama dengan user lain secara tidak sengaja)
-    if (request.getRecoveryKey() != null && !request.getRecoveryKey().isEmpty()) {
-        user.setRecoveryKey(request.getRecoveryKey());
-    }
+    /**
+     * Updates the phone number and, when both password fields are given, the password.
+     * Throws IllegalArgumentException with a user-facing message.
+     */
+    @Transactional
+    public void updateProfile(User user, UserProfileRequest request) {
+        String phone = request.getPhoneNumber().trim();
+        if (userRepository.existsByPhoneNumberAndUsernameNot(phone, user.getUsername())) {
+            throw new IllegalArgumentException("Nomor HP sudah dipakai akun lain.");
+        }
+        user.setPhoneNumber(phone);
 
-    userRepository.save(user);
-}
-
-    // Untuk Admin: Melihat daftar seluruh pengguna
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
-    // Untuk Admin: Melihat detail informasi pengguna berdasarkan ID
-    public User getUserDetailsById(Integer id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User data not found"));
+        boolean wantsNewPassword = request.getNewPassword() != null && !request.getNewPassword().isBlank();
+        if (wantsNewPassword) {
+            if (user.getPassword() == null) {
+                throw new IllegalArgumentException("Akun Google tidak memakai password lokal.");
+            }
+            if (request.getCurrentPassword() == null
+                    || !passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                throw new IllegalArgumentException("Password lama salah.");
+            }
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        }
+        userRepository.save(user);
     }
 
     public void banUser(Integer id) {

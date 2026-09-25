@@ -8,6 +8,7 @@ import com.example.kartu.enums.TransactionStatus;
 
 @Entity
 @Data
+@Table(name = "transaction_history")
 public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +36,15 @@ public class TransactionHistory {
     private Product product;
 
     private Double amountPaid;
+
+    // SKPL-F15: Harga modal tersimpan saat transaksi agar profit laporan akurat
+    @Column(name = "cost_price")
+    private Double costPrice;
+
+    // SKPL-F07: Diskon voucher tersimpan di transaksi
+    @Column(name = "discount_amount")
+    private Double discountAmount = 0.0;
+
+    @Column(name = "voucher_code")
+    private String voucherCode;
 }
