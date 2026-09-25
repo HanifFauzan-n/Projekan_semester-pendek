@@ -2,6 +2,7 @@ package com.example.kartu.repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,8 @@ public interface TransactionHistoryRepository extends JpaRepository<TransactionH
     List<TransactionHistory> findByUserIdOrderByTimestampDesc(Integer userId);
 
     boolean existsByTransactionId(String newId);
+
+    Optional<TransactionHistory> findByTransactionId(String transactionId);
 
     boolean existsBySerialNumber(String sn);
 

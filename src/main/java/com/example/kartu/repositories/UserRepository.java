@@ -8,13 +8,16 @@ import org.springframework.data.repository.query.Param;
 import com.example.kartu.models.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
-    Optional<User> findByUsername(String username);
+    /**
+     * Usernames are case-insensitive everywhere (login, register, duplicate checks): "Budi" = "budi".
+     * Backed by the unique index on lower(username) (docs/sql/009); the stored spelling is kept for display.
+     */
+    @Query("SELECT u FROM User u WHERE LOWER(u.username) = LOWER(:username)")
+    Optional<User> findByUsername(@Param("username") String username);
     Optional<User> findByEmail(String email);
     Optional<User> findByPhoneNumber(String phoneNumber);
-    Optional<User> findByUsernameOrEmail(String username, String email);
-    boolean existsByUsername(String username);
     boolean existsByEmail(String email);
-    boolean existsByPhoneNumberAndUsernameNot(String phoneNumber, String username);
+    boolean existsByPhoneNumberAndIdNot(String phoneNumber, Integer id);
 
     /**
      * Atomic debit: the balance check and the subtraction happen in one statement, so two

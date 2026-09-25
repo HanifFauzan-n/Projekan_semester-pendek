@@ -47,4 +47,11 @@ public class TransactionHistory {
 
     @Column(name = "voucher_code")
     private String voucherCode;
+
+    // SALDO or XENDIT (paid directly, docs/sql/010). amountPaid never includes the admin fee.
+    @Column(name = "payment_method")
+    private String paymentMethod = "SALDO";
+
+    @Column(name = "admin_fee")
+    private Double adminFee = 0.0;
 }

@@ -44,8 +44,8 @@ public class DataSeed implements CommandLineRunner {
     private void seedCategories() {
         if (categoryRepository.count() == 0) {
             log.info("Seeding categories...");
-            Category rowOne = new Category( "CD-001","MOBILE CREDIT");
-            Category rowTwo = new Category( "CD-002","DATA PLAN");
+            Category rowOne = new Category( "CD-001","PULSA");
+            Category rowTwo = new Category( "CD-002","PAKET DATA");
             categoryRepository.saveAll(List.of(rowOne, rowTwo));
             log.info("Categories seeded successfully.");
         }

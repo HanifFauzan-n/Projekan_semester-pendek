@@ -30,26 +30,6 @@ public class TopUpService {
 
     private final EmailService emailService;
 
-    public User getUser(String usernameOrEmail) {
-        return userRepository.findByUsername(usernameOrEmail)
-                .or(() -> userRepository.findByEmail(usernameOrEmail))
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    @Transactional
-    public void processTopUp(String username, Double amount) throws Exception {
-        if (amount == null || amount < 10000) {
-            throw new Exception("Minimal top up adalah Rp 10.000");
-        }
-
-        User user = getUser(username);
-
-        TopUp topUp = new TopUp(user, amount);
-        topUp.setStatus(TransactionStatus.PENDING);
-        topUp.setDate(LocalDateTime.now());
-        topUpRepository.save(topUp);
-    }
-
     /** Admin approves a pending manual request: status flips first, then the balance is credited. */
     @Transactional
     public void approveManual(Integer id) {

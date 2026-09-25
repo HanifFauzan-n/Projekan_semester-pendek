@@ -81,16 +81,16 @@ public class DataDummy implements CommandLineRunner {
     }
 
     private void seedCategories() {
-        getOrCreateCategory("CD-001", "MOBILE CREDIT");
-        getOrCreateCategory("CD-002", "DATA PLAN");
+        getOrCreateCategory("CD-001", "PULSA");
+        getOrCreateCategory("CD-002", "PAKET DATA");
         getOrCreateCategory("CD-003", "ACCESSORIES");
         getOrCreateCategory("CD-004", "TOKEN PLN");
         getOrCreateCategory("CD-005", "VOUCHER GAME");
     }
 
     private void seedProvidersAndProducts() {
-        Category pulsa = getOrCreateCategory("CD-001", "MOBILE CREDIT");
-        Category data = getOrCreateCategory("CD-002", "DATA PLAN");
+        Category pulsa = getOrCreateCategory("CD-001", "PULSA");
+        Category data = getOrCreateCategory("CD-002", "PAKET DATA");
         Category aksesoris = getOrCreateCategory("CD-003", "ACCESSORIES");
         Category pln = getOrCreateCategory("CD-004", "TOKEN PLN");
         Category game = getOrCreateCategory("CD-005", "VOUCHER GAME");
@@ -102,6 +102,8 @@ public class DataDummy implements CommandLineRunner {
         Provider smartfren = createProvider("Smartfren");
         Provider axis = createProvider("Axis");
         Provider plnProvider = createProvider("PLN");
+        // Voucher game publishers (products: docs/sql/007). Logo = static/img/<name>.png, reloaded on every start.
+        List.of("Mobile Legends", "Free Fire", "PUBG Mobile", "Genshin Impact", "Valorant").forEach(this::createProvider);
 
         if (productRepository.count() == 0) {
             List<Product> products = List.of(
@@ -132,18 +134,18 @@ public class DataDummy implements CommandLineRunner {
                     createProduct(axis, pulsa, "Axis 25.000", 25200, 60, "Pulsa reguler Axis 25.000"),
 
                     // Paket Data
-                    createProduct(telkomsel, data, "Telkomsel 5GB Data Plan", 30000, 50, "Paket data Telkomsel 5GB 30 hari semua jaringan"),
+                    createProduct(telkomsel, data, "Telkomsel 5GB / 30 Hari", 30000, 50, "Paket data Telkomsel 5GB 30 hari semua jaringan"),
                     createProduct(telkomsel, data, "Telkomsel 14GB MAXstream", 55000, 40, "Kuota internet 14GB + langganan MAXstream"),
                     createProduct(telkomsel, data, "Telkomsel 28GB OMG!", 95000, 30, "Kuota internet 28GB 24 jam full"),
 
-                    createProduct(indosat, data, "Indosat 10GB Data Plan", 35000, 50, "Indosat Freedom Internet 10GB 30 hari"),
+                    createProduct(indosat, data, "Indosat 10GB / 30 Hari", 35000, 50, "Indosat Freedom Internet 10GB 30 hari"),
                     createProduct(indosat, data, "Indosat 25GB Freedom", 65000, 40, "Indosat Freedom Internet 25GB 24 jam"),
 
-                    createProduct(xl, data, "XL 15GB Data Plan", 45000, 30, "Paket data XL Xtra Combo Flex 15GB 30 hari"),
+                    createProduct(xl, data, "XL 15GB / 30 Hari", 45000, 30, "Paket data XL Xtra Combo Flex 15GB 30 hari"),
                     createProduct(xl, data, "XL 30GB Xtra Combo", 75000, 25, "Paket data XL Xtra Combo 30GB"),
 
                     createProduct(tri, data, "Tri Happy 12GB 30 Hari", 38000, 45, "Kuota Tri Happy 12GB 24 jam tanpa pembagian"),
-                    createProduct(smartfren, data, "Smartfren 20GB Data Plan", 60000, 30, "Paket Smartfren Kuota 20GB 30 hari"),
+                    createProduct(smartfren, data, "Smartfren 20GB / 30 Hari", 60000, 30, "Paket Smartfren Kuota 20GB 30 hari"),
                     createProduct(axis, data, "Axis Bronet 8GB 30 Hari", 28000, 50, "Paket Axis Bronet 8GB 24 jam"),
 
                     // Token PLN & Aksesori
@@ -315,16 +317,16 @@ public class DataDummy implements CommandLineRunner {
                 // 6 Hari lalu
                 createTransaction(rizky, "Telkomsel 10.000", 10500.0, TransactionStatus.SUCCESS, now.minusDays(6).plusHours(2)),
                 createTransaction(salsa, "Indosat 10.000", 10200.0, TransactionStatus.SUCCESS, now.minusDays(6).plusHours(5)),
-                createTransaction(budi, "XL 15GB Data Plan", 45000.0, TransactionStatus.SUCCESS, now.minusDays(6).plusHours(8)),
+                createTransaction(budi, "XL 15GB / 30 Hari", 45000.0, TransactionStatus.SUCCESS, now.minusDays(6).plusHours(8)),
 
                 // 5 Hari lalu
-                createTransaction(dinda, "Telkomsel 5GB Data Plan", 30000.0, TransactionStatus.SUCCESS, now.minusDays(5).plusHours(3)),
+                createTransaction(dinda, "Telkomsel 5GB / 30 Hari", 30000.0, TransactionStatus.SUCCESS, now.minusDays(5).plusHours(3)),
                 createTransaction(maya, "Token Listrik PLN 50.000", 51500.0, TransactionStatus.SUCCESS, now.minusDays(5).plusHours(7)),
                 createTransaction(bagas, "Axis 5.000", 5200.0, TransactionStatus.SUCCESS, now.minusDays(5).plusHours(10)),
 
                 // 4 Hari lalu
                 createTransaction(rizky, "Tri 25.000", 25100.0, TransactionStatus.SUCCESS, now.minusDays(4).plusHours(1)),
-                createTransaction(salsa, "Smartfren 20GB Data Plan", 60000.0, TransactionStatus.SUCCESS, now.minusDays(4).plusHours(4)),
+                createTransaction(salsa, "Smartfren 20GB / 30 Hari", 60000.0, TransactionStatus.SUCCESS, now.minusDays(4).plusHours(4)),
                 createTransaction(budi, "Token Listrik PLN 100.000", 101500.0, TransactionStatus.SUCCESS, now.minusDays(4).plusHours(9)),
 
                 // 3 Hari lalu
@@ -345,8 +347,8 @@ public class DataDummy implements CommandLineRunner {
                 createTransaction(bagas, "Tri Happy 12GB 30 Hari", 38000.0, TransactionStatus.SUCCESS, now.minusDays(1).plusHours(11)),
 
                 // Hari ini
-                createTransaction(dinda, "Telkomsel 5GB Data Plan", 30000.0, TransactionStatus.SUCCESS, now.minusHours(5)),
-                createTransaction(budi, "Indosat 10GB Data Plan", 35000.0, TransactionStatus.SUCCESS, now.minusHours(3)),
+                createTransaction(dinda, "Telkomsel 5GB / 30 Hari", 30000.0, TransactionStatus.SUCCESS, now.minusHours(5)),
+                createTransaction(budi, "Indosat 10GB / 30 Hari", 35000.0, TransactionStatus.SUCCESS, now.minusHours(3)),
                 createTransaction(maya, "Headset Bass 3.5mm", 35000.0, TransactionStatus.SUCCESS, now.minusHours(2)),
                 createTransaction(rizky, "Telkomsel 100.000", 100000.0, TransactionStatus.SUCCESS, now.minusMinutes(45)),
                 createTransaction(salsa, "Smartfren 25.000", 25200.0, TransactionStatus.SUCCESS, now.minusMinutes(15))

@@ -16,6 +16,11 @@ public class UserProfileRequest {
     @Pattern(regexp = "^08\\d{7,15}$", message = "Nomor HP harus diawali 08 dan berisi 9-17 digit.")
     private String phoneNumber;
 
+    /** Optional; blank keeps the current name. Case-insensitive unique like login (docs/sql/009). */
+    @Pattern(regexp = "^$|^[\\p{L}\\p{N} ._-]{3,30}$",
+            message = "Nama pengguna 3-30 karakter: huruf, angka, spasi, titik, garis bawah, atau strip.")
+    private String username;
+
     private String currentPassword;
 
     @Size(min = 6, message = "Password baru minimal 6 karakter.")

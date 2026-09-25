@@ -86,12 +86,25 @@ public class TransactionHistoryService {
      *
      * Pricing order: flash sale price first, then the voucher is applied to that price.
      *
-     * customerNumber is the destination: phone number for pulsa/data, meter number for PLN.
-     * Products without a destination (accessories) record the buyer's own phone number.
+     * customerNumber is the destination: phone number, PLN meter or game ID (see PurchaseTarget).
+     * Physical goods (no target) are sold at the counter only and are rejected here.
      */
     @Transactional(rollbackFor = Exception.class)
     public TransactionHistory purchaseProduct(Integer productId, String usernameOrEmail, String voucherCode,
                                               String customerNumber) throws Exception {
+        return purchaseProduct(productId, usernameOrEmail, voucherCode, customerNumber, "SALDO", 0, null);
+    }
+
+    /**
+     * Same purchase, recording how it was paid. OrderService uses XENDIT: the invoice amount was
+     * credited to the balance just before, so the debit below still guards the money atomically.
+     * maxCharge (the invoiced price) stops a price rise, e.g. a flash sale that ended while the
+     * customer was paying, from quietly taking the difference out of their older balance.
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public TransactionHistory purchaseProduct(Integer productId, String usernameOrEmail, String voucherCode,
+                                              String customerNumber, String paymentMethod, int adminFee,
+                                              Integer maxCharge) throws Exception {
 
         User user = userRepository.findByUsername(usernameOrEmail)
                 .or(() -> userRepository.findByEmail(usernameOrEmail))
@@ -100,7 +113,10 @@ public class TransactionHistoryService {
                 .orElseThrow(() -> new Exception("Produk tidak ditemukan"));
 
         PurchaseTarget target = PurchaseTarget.of(product);
-        String destination = target == null ? user.getPhoneNumber() : target.normalize(customerNumber);
+        if (target == null) {
+            throw new Exception("Produk '" + product.getName() + "' hanya dijual langsung di konter Zelatan Cell.");
+        }
+        String destination = target.normalize(customerNumber);
 
         double basePrice = product.getPrice();
         double activePrice = basePrice;
@@ -118,30 +134,7 @@ public class TransactionHistoryService {
         double voucherDiscount = 0.0;
         Voucher appliedVoucher = null;
         if (voucherCode != null && !voucherCode.trim().isEmpty()) {
-            Voucher voucher = voucherRepository.findByCode(voucherCode.trim().toUpperCase())
-                    .orElseThrow(() -> new Exception("Kode voucher '" + voucherCode + "' tidak valid!"));
-
-            if (!voucher.isActive()) {
-                throw new Exception("Voucher " + voucher.getCode() + " sudah tidak aktif.");
-            }
-
-            LocalDateTime now = LocalDateTime.now();
-            if (voucher.getStartAt() != null && now.isBefore(voucher.getStartAt())) {
-                throw new Exception("Voucher " + voucher.getCode() + " belum dapat digunakan.");
-            }
-            if (voucher.getEndAt() != null && now.isAfter(voucher.getEndAt())) {
-                throw new Exception("Voucher " + voucher.getCode() + " sudah kedaluwarsa.");
-            }
-
-            if (voucher.getMinPurchase() != null && voucher.getMinPurchase() > 0 && activePrice < voucher.getMinPurchase()) {
-                throw new Exception(String.format(ID, "Minimal transaksi untuk voucher %s adalah Rp %,.0f (harga produk saat ini: Rp %,.0f).",
-                        voucher.getCode(), voucher.getMinPurchase(), activePrice));
-            }
-
-            if (voucherUsageRepository.existsByVoucherIdAndUserId(voucher.getId(), user.getId())) {
-                throw new Exception("Voucher " + voucher.getCode() + " sudah pernah Anda pakai. Satu voucher hanya bisa dipakai sekali per pelanggan.");
-            }
-
+            Voucher voucher = checkVoucher(voucherCode, user, activePrice);
             if (voucherRepository.claimUsage(voucher.getId()) == 0) {
                 throw new Exception("Kuota pemakaian voucher " + voucher.getCode() + " sudah habis.");
             }
@@ -152,6 +145,10 @@ public class TransactionHistoryService {
 
         double finalPrice = Math.max(0.0, activePrice - voucherDiscount);
         int charge = (int) Math.round(finalPrice);
+        if (maxCharge != null && charge > maxCharge) {
+            throw new Exception(String.format(ID, "Harga produk berubah menjadi Rp %,d, lebih tinggi dari tagihan Rp %,d.",
+                    charge, maxCharge));
+        }
 
         // 3. Balance: check and debit in one statement.
         if (userRepository.debitBalance(user.getId(), charge) == 0) {
@@ -172,9 +169,11 @@ public class TransactionHistoryService {
         history.setTimestamp(LocalDateTime.now());
         history.setStatus(TransactionStatus.SUCCESS);
         history.setTransactionId(generateUniqueTransactionId());
-        history.setSerialNumber(generateUniqueSN(target == null ? 16 : target.codeLength()));
+        history.setSerialNumber(generateUniqueSN(target.codeLength()));
         history.setVoucherCode(appliedVoucher != null ? appliedVoucher.getCode() : null);
         history.setDiscountAmount(flashDiscount + voucherDiscount);
+        history.setPaymentMethod(paymentMethod);
+        history.setAdminFee((double) adminFee);
 
         Double cost = product.getCostPrice() != null ? Double.valueOf(product.getCostPrice()) : basePrice * 0.9;
         history.setCostPrice(cost);
@@ -196,8 +195,59 @@ public class TransactionHistoryService {
         long discountTotal = Math.round(flashDiscount + voucherDiscount);
         EmailService.afterCommit(() -> emailService.sendPurchaseReceipt(user.getEmail(), user.getUsername(),
                 product.getName(), target, destination, Math.round(basePrice), discountTotal, voucherUsed,
-                charge, newBalance, saved.getTransactionId(), saved.getSerialNumber(), saved.getTimestamp()));
+                charge, paymentMethod, adminFee, newBalance, saved.getTransactionId(), saved.getSerialNumber(),
+                saved.getTimestamp()));
         return saved;
+    }
+
+    /**
+     * Price the customer would pay right now (flash sale, then voucher), without claiming anything.
+     * Used for the Xendit invoice; the purchase itself re-checks and claims when the payment arrives.
+     */
+    @Transactional(readOnly = true)
+    public int quote(Product product, User user, String voucherCode) throws Exception {
+        double activePrice = flashSaleRepository.findRunningForProduct(product.getId(), LocalDateTime.now()).stream()
+                .findFirst()
+                .map(fs -> fs.getFlashPrice().doubleValue())
+                .orElse((double) product.getPrice());
+        double voucherDiscount = 0.0;
+        if (voucherCode != null && !voucherCode.trim().isEmpty()) {
+            Voucher voucher = checkVoucher(voucherCode, user, activePrice);
+            if (voucher.getUsageLimit() != null && voucher.getUsedCount() != null
+                    && voucher.getUsedCount() >= voucher.getUsageLimit()) {
+                throw new Exception("Kuota pemakaian voucher " + voucher.getCode() + " sudah habis.");
+            }
+            voucherDiscount = voucher.calculateDiscount(activePrice);
+        }
+        return (int) Math.round(Math.max(0.0, activePrice - voucherDiscount));
+    }
+
+    /** Every voucher rule except the quota, which is claimed atomically by the caller. */
+    private Voucher checkVoucher(String voucherCode, User user, double activePrice) throws Exception {
+        Voucher voucher = voucherRepository.findByCode(voucherCode.trim().toUpperCase())
+                .orElseThrow(() -> new Exception("Kode voucher '" + voucherCode + "' tidak valid!"));
+
+        if (!voucher.isActive()) {
+            throw new Exception("Voucher " + voucher.getCode() + " sudah tidak aktif.");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        if (voucher.getStartAt() != null && now.isBefore(voucher.getStartAt())) {
+            throw new Exception("Voucher " + voucher.getCode() + " belum dapat digunakan.");
+        }
+        if (voucher.getEndAt() != null && now.isAfter(voucher.getEndAt())) {
+            throw new Exception("Voucher " + voucher.getCode() + " sudah kedaluwarsa.");
+        }
+
+        if (voucher.getMinPurchase() != null && voucher.getMinPurchase() > 0 && activePrice < voucher.getMinPurchase()) {
+            throw new Exception(String.format(ID, "Minimal transaksi untuk voucher %s adalah Rp %,.0f (harga produk saat ini: Rp %,.0f).",
+                    voucher.getCode(), voucher.getMinPurchase(), activePrice));
+        }
+
+        if (voucherUsageRepository.existsByVoucherIdAndUserId(voucher.getId(), user.getId())) {
+            throw new Exception("Voucher " + voucher.getCode() + " sudah pernah Anda pakai. Satu voucher hanya bisa dipakai sekali per pelanggan.");
+        }
+        return voucher;
     }
 
     public List<TransactionHistory> getTransactionHistoryByUser(User user) {
